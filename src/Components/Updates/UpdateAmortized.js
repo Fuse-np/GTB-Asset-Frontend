@@ -9,42 +9,7 @@ function UpdateAmortized() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
     useEffect(() => {
-      checkToken();
       axios
         .get(`${process.env.REACT_APP_API_URL}/readhw-amortized/` + id)
         .then((res) => {
@@ -57,7 +22,7 @@ function UpdateAmortized() {
             user: res.data[0].user,
             location: res.data[0].location,
             spec: res.data[0].spec,
-            sn: res.data[0].sn,
+            sn: res.data[0].serialnumber,
             software: res.data[0].software,
             price: res.data[0].price,
             receivedate: res.data[0].receivedate,
@@ -76,7 +41,7 @@ function UpdateAmortized() {
       user: "",
       location: "",
       spec: "",
-      sn: "",
+      serialnumber: "",
       software: "",
       price: "",
       receivedate: "",
@@ -88,7 +53,7 @@ function UpdateAmortized() {
     const handleUpdate = (event) => {
       event.preventDefault();
       const requiredFields = [
-        `assetnum`, `brand`, `model`, `user`, `location`, `spec`, `sn`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
+        `assetnum`, `brand`, `model`, `user`, `location`, `spec`, `serialnumber`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
       ];
       for (const field of requiredFields) {
         if (!amortzied[field] && amortzied[field] !== 0) {
@@ -159,7 +124,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
                 Asset ID
               </label>
               <input
@@ -174,7 +139,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputBrand" className="form-label fs-5">
                 Brand
               </label>
               <input
@@ -189,7 +154,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputModel" className="form-label fs-5">
                 Model
               </label>
               <input
@@ -204,7 +169,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputUser" className="form-label fs-5">
                 User
               </label>
               <input
@@ -217,7 +182,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputLocation" className="form-label fs-5">
                 Location
               </label>
               <input
@@ -232,7 +197,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputSpec" className="form-label fs-5">
                 Spec
               </label>
               <input
@@ -245,7 +210,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputSerialnumber" className="form-label fs-5">
                 Serial Number
               </label>
               <input
@@ -253,12 +218,12 @@ function UpdateAmortized() {
                 className="form-control rounded-0 borderc"
                 id="inputSerialnumber"
                 placeholder="Enter Serialnumber"
-                value={amortzied.sn}
-                onChange={(e) => setAmortzied({ ...amortzied, sn: e.target.value })}
+                value={amortzied.serialnumber}
+                onChange={(e) => setAmortzied({ ...amortzied, serialnumber: e.target.value })}
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputSoftwareinstall" className="form-label fs-5">
                 Softwere Install
               </label>
               <input
@@ -273,7 +238,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
                 Price
               </label>
               <input
@@ -290,7 +255,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputReceiveDate" className="form-label fs-5">
                 Recieve Date
               </label>
               <input
@@ -305,7 +270,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputInvoiceNumber" className="form-label fs-5">
                 Invoid Number
               </label>
               <input
@@ -320,7 +285,7 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPONumber" className="form-label fs-5">
                 PO Number
               </label>
               <input

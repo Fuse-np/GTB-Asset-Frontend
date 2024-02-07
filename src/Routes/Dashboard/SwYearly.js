@@ -11,42 +11,7 @@ function SwYearly() {
     const [itemsPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
     useEffect(() => {
-      checkToken();
       axios
         .get(`${process.env.REACT_APP_API_URL}/sw-yearly`)
         .then((res) => {
@@ -180,8 +145,8 @@ function SwYearly() {
               <tr>
                 <th className="text-danger fs-5">Name</th>
                 <th className="text-danger fs-5">Asset Install</th>
-                <th className="text-danger fs-5">Expire Date</th>
                 <th className="text-danger fs-5">Receive Date</th>
+                <th className="text-danger fs-5">Expire Date</th>
                 <th className="text-danger fs-5">Action</th>
               </tr>
             </thead>
@@ -191,8 +156,8 @@ function SwYearly() {
                   <tr key={index}>
                     <td>{sw_yearly.name}</td>
                     <td>{sw_yearly.assetinstall}</td>
-                    <td>{sw_yearly.expiredate}</td>
                     <td>{sw_yearly.receivedate}</td>
+                    <td>{sw_yearly.expiredate}</td>
                     <td>
                       <Link
                         to={`/dashboard/readswyearly/${sw_yearly.id}`}

@@ -68,46 +68,8 @@ function AddSwyearly() {
             });
         }
       });
-    };
-  
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
-    useEffect(() => {
-      checkToken();
-    }, []);
-  
+    }; 
+
     return (
       <div className="d-flex justify-content-center align-items-center mt-3">
         <div className="p-3 rounded w-50 border bg-white borderc">

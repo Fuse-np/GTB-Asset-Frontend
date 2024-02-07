@@ -14,7 +14,7 @@ function AddHwasset() {
       user: "",
       location: "",
       spec: "",
-      sn: "",
+      serialnumber: "",
       software: "",
       price: "",
       receivedate: "",
@@ -26,7 +26,7 @@ function AddHwasset() {
       e.preventDefault();
       const requiredFields = [
         'assetnum', 'brand', 'model', 'user', 'location', 'spec',
-        'sn', 'software', 'price', 'receivedate', 'invoicenum', 'ponum'
+        'serialnumber', 'software', 'price', 'receivedate', 'invoicenum', 'ponum'
       ];
       for (const field of requiredFields) {
         if (!hwasset[field] && hwasset[field] !== 0) {
@@ -75,44 +75,6 @@ function AddHwasset() {
         }
       });
     };
-  
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
-    useEffect(() => {
-      checkToken();
-    }, []);
   
     return (
       <div className="d-flex justify-content-center align-items-center mt-3">
@@ -200,7 +162,7 @@ function AddHwasset() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
+            <label for="inputSerialnumber" className="form-label fs-5">
                 Serial Number
               </label>
               <input
@@ -208,7 +170,7 @@ function AddHwasset() {
                 className="form-control rounded-0 borderc"
                 id="inputSerialnumber"
                 placeholder="Enter Serialnumber"
-                onChange={(e) => setHwasset({ ...hwasset, sn: e.target.value })}
+                onChange={(e) => setHwasset({ ...hwasset, serialnumber: e.target.value })}
               />
             </div>
             <div className="col-12">

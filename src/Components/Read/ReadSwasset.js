@@ -10,42 +10,7 @@ function ReadSwasset() {
     const [swasset, setSwasset] = useState([]);
     const navigate = useNavigate();
   
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
     useEffect(() => {
-      checkToken();
       axios
         .get(`${process.env.REACT_APP_API_URL}/readsw-asset/` + id)
         .then((res) => {
@@ -93,6 +58,10 @@ function ReadSwasset() {
               <tr>
                 <th className="text-center">Softwere Name</th>
                 <td className="text-center fs-5">{swasset.name}</td>
+              </tr>
+              <tr>
+                <th className="text-center">Serial Number</th>
+                <td className="text-center fs-5">{swasset.serialnumber}</td>
               </tr>
               <tr>
                 <th className="text-center">Softwere Key</th>

@@ -14,7 +14,7 @@ function AddAmortized() {
       user: "",
       location: "",
       spec: "",
-      sn: "",
+      serialnumber: "",
       software: "",
       price: "",
       receivedate: "",
@@ -26,7 +26,7 @@ function AddAmortized() {
     const handleSubmit = (e) => {
       e.preventDefault();
       const requiredFields = [
-        `assetnum`, `brand`, `model`, `user`, `location`, `spec`, `sn`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
+        `assetnum`, `brand`, `model`, `user`, `location`, `spec`, `serialnumber`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
       ];
       for (const field of requiredFields) {
         if (!amortzied[field] && amortzied[field] !== 0) {
@@ -75,46 +75,6 @@ function AddAmortized() {
         }
       });
     };
-  
-  
-  
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") {
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
-    useEffect(() => {
-      checkToken();
-    }, []);
   
     return (
       <div className="d-flex justify-content-center align-items-center mt-3">
@@ -230,7 +190,7 @@ function AddAmortized() {
                 id="inputSerialnumber"
                 placeholder="Enter Serialnumber"
                 onChange={(e) =>
-                  setAmortzied({ ...amortzied, sn: e.target.value })
+                  setAmortzied({ ...amortzied, serialnumber: e.target.value })
                 }
               />
             </div>

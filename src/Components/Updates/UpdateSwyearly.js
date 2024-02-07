@@ -8,43 +8,8 @@ import './style.css'
 function UpdateSwyearly() {
     const { id } = useParams();
     const navigate = useNavigate();
-  
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
     
     useEffect(() => {
-      checkToken();
       axios
         .get(`${process.env.REACT_APP_API_URL}/readsw-yearly/` + id)
         .then((res) => {
@@ -132,7 +97,7 @@ function UpdateSwyearly() {
           <h2 className="text-center">Update Softwere Asset</h2>
           <form className="row g-1" onSubmit={handleUpdate}>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputSoftwereName" className="form-label fs-5">
                 Softwere Name
               </label>
               <input
@@ -147,7 +112,7 @@ function UpdateSwyearly() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputAssetInstall" className="form-label fs-5">
                 Asset Install 
               </label>
               <input
@@ -162,7 +127,22 @@ function UpdateSwyearly() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputReceiveDate" className="form-label fs-5">
+                Recieve Date
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-0 borderc"
+                id="inputReceiveDate"
+                placeholder="Enter Receive Date"
+                value={swyearly.receivedate}
+                onChange={(e) =>
+                    setSwyearly({ ...swyearly, receivedate: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12">
+            <label for="inputExpiredate" className="form-label fs-5">
                 Expiredate
               </label>
               <input
@@ -176,9 +156,8 @@ function UpdateSwyearly() {
                 }
               />
             </div>
-  
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
                 Price
               </label>
               <input
@@ -195,22 +174,7 @@ function UpdateSwyearly() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
-                Recieve Date
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputReceiveDate"
-                placeholder="Enter Receive Date"
-                value={swyearly.receivedate}
-                onChange={(e) =>
-                    setSwyearly({ ...swyearly, receivedate: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputInvoiceNumber" className="form-label fs-5">
                 Invoid Number
               </label>
               <input
@@ -225,7 +189,7 @@ function UpdateSwyearly() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPONumber" className="form-label fs-5">
                 PO Number
               </label>
               <input

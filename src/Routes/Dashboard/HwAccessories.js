@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css"
 
 function HwAccessories() {
-    const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
   const [searchTerm, setSearchTerm] = useState('');

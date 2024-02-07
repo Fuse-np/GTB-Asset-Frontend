@@ -8,43 +8,8 @@ import './style.css'
 function UpdateAccessories() {
     const { id } = useParams();
     const navigate = useNavigate();
-  
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "ok") { 
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Authentication Failed",
-              text: "Please login again",
-              showCancelButton: false,
-              confirmButtonText: "Back to Login",
-              allowOutsideClick: false, 
-              allowEscapeKey: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem("token");
-                window.location = "/";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    };
-  
+
     useEffect(() => {
-      checkToken();
       axios
         .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
         .then((res) => {
@@ -53,7 +18,7 @@ function UpdateAccessories() {
             ...accessories,
             type: res.data[0].type,
             detail: res.data[0].detail,
-            sn: res.data[0].sn,
+            sn: res.data[0].serialnumber,
             assetinstall: res.data[0].assetinstall,
             location: res.data[0].location,
             price: res.data[0].price,
@@ -68,7 +33,7 @@ function UpdateAccessories() {
     const [accessories, setAccessories] = useState({
       type: "",
       detail: "",
-      sn: "",
+      serialnumber: "",
       assetinstall: "",
       location: "",
       price: "",
@@ -80,7 +45,7 @@ function UpdateAccessories() {
     const handleUpdate = (event) => {
       event.preventDefault();
       const requiredFields = [
-        `type`, `detail`, `sn`, `assetinstall`, `location`, `price`, `receivedate`, `invoicenum`, `ponum`
+        `type`, `detail`, `serialnumber`, `assetinstall`, `location`, `price`, `receivedate`, `invoicenum`, `ponum`
       ];
       for (const field of requiredFields) {
         if (!accessories[field] && accessories[field] !== 0) {
@@ -136,7 +101,7 @@ function UpdateAccessories() {
           <h2 className="text-center">Update Asset</h2>
           <form className="row g-1" onSubmit={handleUpdate}>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputAssetType" className="form-label fs-5">
                 Asset Type
               </label>
               <input
@@ -151,7 +116,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputAssetDetail" className="form-label fs-5">
                 Asset Detail
               </label>
               <input
@@ -166,7 +131,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputSerialNumber" className="form-label fs-5">
                 Serial Number
               </label>
               <input
@@ -174,15 +139,15 @@ function UpdateAccessories() {
                 className="form-control rounded-0 borderc"
                 id="inputSerialNumber"
                 placeholder="Enter Serial Number"
-                value={accessories.sn}
+                value={accessories.serialnumber}
                 onChange={(e) =>
-                    setAccessories({ ...accessories, sn: e.target.value })
+                    setAccessories({ ...accessories, serialnumber: e.target.value })
                 }
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
-                Asset Install (Asset ID)
+            <label for="inputAssetInstall" className="form-label fs-5">
+                Asset Install 
               </label>
               <input
                 type="text"
@@ -196,7 +161,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputLocation" className="form-label fs-5">
                 Location
               </label>
               <input
@@ -211,7 +176,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
                 Price
               </label>
               <input
@@ -228,7 +193,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputReceiveDate" className="form-label fs-5">
                 Recieve Date
               </label>
               <input
@@ -243,7 +208,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputInvoiceNumber" className="form-label fs-5">
                 Invoid Number
               </label>
               <input
@@ -258,7 +223,7 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAmortizedDate" className="form-label fs-5">
+            <label for="inputPONumber" className="form-label fs-5">
                 PO Number
               </label>
               <input

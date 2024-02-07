@@ -32,6 +32,8 @@ import UpdateAccessories from "./Components/Updates/UpdateAccessories"
 import UpdateSwasset from "./Components/Updates/UpdateSwasset"
 import UpdateSwyearly from "./Components/Updates/UpdateSwyearly"
 import UpdateAmortized from "./Components/Updates/UpdateAmortized"
+//Route
+import PrivateRoute from "./Routes/Bar/PrivateRoute";
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
       <Route path="/register" element={<Register />}></Route>
       <Route path="/forgopassword" element={<ForgotPassword />}></Route>
       <Route path="/resetpassword/:id" element={<ResetPassword />}></Route>
+      <Route element={<PrivateRoute/>}>
       <Route path="/dashboard" element={<PageLayout />}>
       <Route path="" element={<Dashboard />}></Route>
          {/* Page */}
@@ -67,6 +70,7 @@ function App() {
           <Route path="/dashboard/updateswasset/:id" element={<UpdateSwasset />}></Route>
           <Route path="/dashboard/updateswyearly/:id" element={<UpdateSwyearly />}></Route>
           <Route path="/dashboard/updateamortized/:id" element={<UpdateAmortized />}></Route>
+      </Route>
       </Route>
       </Routes>
     </BrowserRouter>
