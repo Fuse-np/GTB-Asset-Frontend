@@ -1,0 +1,81 @@
+.textcenter{
+    text-align: center;
+}
+
+/* Define pastel colors */
+.btndetail {
+    background-color: #aed9e0;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+  
+  .btnedit {
+    background-color: #c7e3c1;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+  
+  .btndelete {
+    background-color: #f4a0a0;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+
+  .headtext{
+    color: #2A2827;
+  }
+
+  .marl{
+    margin-left: 0%;
+  }
+
+  .custom-card {
+    border-color: #2A2827;
+  }
+
+  .pagination > li > a
+{
+    background-color: white;
+    color: #2A2827;
+    border-color: #2A2827;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: white;
+    background-color: #2A2827;
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: #2A2827;
+    border: solid 1px #2A2827;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #2A2827;
+    border: solid 1px #2A2827;
+}
+
+/* In your CSS file or style tag */
+.custom-border-left-1 {
+  border-left: 10px solid rgba(255, 99, 132, 0.7); /* Replace #007bff with your desired color */
+}
+
+.custom-border-left-2 {
+  border-left: 10px solid rgba(54, 162, 235, 0.7); /* Replace #007bff with your desired color */
+}
+
+.custom-border-left-3 {
+  border-left: 10px solid rgba(255, 206, 86, 0.7); /* Replace #007bff with your desired color */
+}
+
+.custom-border-left-4 {
+  border-left: 10px solid rgba(75, 192, 192, 0.7); /* Replace #007bff with your desired color */
+}

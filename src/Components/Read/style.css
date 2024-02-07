@@ -1,0 +1,27 @@
+.custom-table {
+    border-color: black;
+  }
+
+  .btndetail {
+    background-color: #aed9e0;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+  
+  .btnedit {
+    background-color: #c7e3c1;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+  
+  .btndelete {
+    background-color: #f4a0a0;
+    border-color: #2A2827;
+    color: #2A2827;
+  }
+
+  @media print {
+    .sidebar {
+      display: none !important;
+    }
+  }
