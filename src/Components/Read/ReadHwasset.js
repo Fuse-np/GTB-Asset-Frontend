@@ -75,12 +75,16 @@ function ReadHwasset() {
                 <td className="text-center fs-5">{hwasset.location}</td>
               </tr>
               <tr>
+                <th className="text-center">Dev</th>
+                <td className="text-center fs-5">{hwasset.dev}</td>
+              </tr>
+              <tr>
                 <th className="text-center">Spec</th>
                 <td className="text-center fs-5">{hwasset.spec}</td>
               </tr>
               <tr>
                 <th className="text-center">Serial Number</th>
-                <td className="text-center fs-5">{hwasset.sn}</td>
+                <td className="text-center fs-5">{hwasset.serialnumber}</td>
               </tr>
               <tr>
                 <th className="text-center">Software Install</th>
@@ -88,11 +92,11 @@ function ReadHwasset() {
               </tr>
               <tr>
                 <th className="text-center">Price</th>
-                <td className="text-center fs-5">{hwasset.price ? hwasset.price.toLocaleString() : ''}</td>
+                <td className="text-center fs-5">{hwasset.price !== undefined && hwasset.price !== null ? hwasset.price.toLocaleString() : '0'}</td>
               </tr>
               <tr>
                 <th className="text-center">Receive Date</th>
-                <td className="text-center fs-5">{hwasset.receivedate}</td>
+                <td className="text-center fs-5">{new Date(hwasset.receivedate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Invoice Number</th>

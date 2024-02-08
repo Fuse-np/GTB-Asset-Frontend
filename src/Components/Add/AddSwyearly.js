@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./style.css"
 import Swal from "sweetalert2";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function AddSwyearly() {
     const navigate = useNavigate();
     const [swyearly, setSwyearly] = useState({
       name: "",
+      serialnumber:"",
       assetinstall: "",
       expiredate: "",
       price: "",
@@ -16,11 +19,36 @@ function AddSwyearly() {
       invoicenum: "",
       ponum: "",
     });
+
+    const handleDateChange = (date) => {
+      if (date) {
+        const selectedDate = new Date(date);
+        selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+        selectedDate.setDate(selectedDate.getDate());
+        const formattedDate = selectedDate.toISOString().substring(0, 10);
+        setSwyearly((prev) => ({
+          ...prev,
+          receivedate: formattedDate,
+        }));
+      }
+    };
+    const handleDateChange2 = (date) => {
+      if (date) {
+        const selectedDate = new Date(date);
+        selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+        selectedDate.setDate(selectedDate.getDate());
+        const formattedDate = selectedDate.toISOString().substring(0, 10);
+        setSwyearly((prev) => ({
+          ...prev,
+          expiredate: formattedDate,
+        }));
+      }
+    };
   
     const handleSubmit = (e) => {
       e.preventDefault();
       const requiredFields = [
-        `name`, `assetinstall`, `expiredate`, `price`, `receivedate`, `invoicenum`, `ponum`
+        `name`, `assetinstall`, `serialnumber`, `expiredate`, `price`, `receivedate`, `invoicenum`, `ponum`
       ];
       for (const field of requiredFields) {
         if (!swyearly[field] && swyearly[field] !== 0) {
@@ -77,7 +105,7 @@ function AddSwyearly() {
           <form className="row g-1" onSubmit={handleSubmit}>
             <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-                Softwere Name
+                Software Name
               </label>
               <input
                 type="text"
@@ -86,6 +114,20 @@ function AddSwyearly() {
                 placeholder="Enter Softwere Name"
                 onChange={(e) =>
                     setSwyearly({ ...swyearly, name: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12">
+            <label for="inputSerialNumber" className="form-label fs-5">
+                Serial Number
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-0 borderc"
+                id="inputSerialNumber"
+                placeholder="Enter Serial Number"
+                onChange={(e) =>
+                    setSwyearly({ ...swyearly, serialnumber: e.target.value })
                 }
               />
             </div>
@@ -104,20 +146,35 @@ function AddSwyearly() {
               />
             </div>
             <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-                Expiredate
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Receive Date
               </label>
-              <input
-                type="text"
+              <DatePicker
+                selected={swyearly.receivedate}
+                onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
-                id="inputExpiredate"
-                placeholder="Enter Expiredate"
-                onChange={(e) =>
-                    setSwyearly({ ...swyearly, expiredate: e.target.value })
-                }
+                id="inputReceiveDate"
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
-  
+          </div>
+          <div className="col-12">
+            <div className="d-flex flex-column">
+              <label htmlFor="inputExpiredate" className="form-label fs-5">
+                Expiredate
+              </label>
+              <DatePicker
+                selected={swyearly.expiredate}
+                onChange={handleDateChange2}
+                className="form-control rounded-0 borderc"
+                id="input Expiredate"
+                placeholderText="Enter  Expire Date"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
+          </div>
             <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
                 Price
@@ -132,20 +189,6 @@ function AddSwyearly() {
                   const numericValue = parseFloat(inputValue.replace(/,/g, '')); 
                   setSwyearly({ ...swyearly, price: isNaN(numericValue) ? '' : numericValue });
               }}
-              />
-            </div>
-            <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-                Recieve Date
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputRecieveDate"
-                placeholder="Enter Recieve Date"
-                onChange={(e) =>
-                    setSwyearly({ ...swyearly, receivedate: e.target.value })
-                }
               />
             </div>
             <div className="col-12">

@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
 import "./style.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function UpdateSwasset() {
   const { id } = useParams();
@@ -92,11 +94,19 @@ function UpdateSwasset() {
         axios
           .put(`${process.env.REACT_APP_API_URL}/updatesw-asset/` + id, swasset)
           .then((res) => {
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else{
             Swal.fire("Updated!", "", "success").then(() => {
               console.log(res);
               navigate("/dashboard/readswasset/" + id, swasset);
             });
-          })
+          }
+        })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -109,20 +119,33 @@ function UpdateSwasset() {
     });
   };
 
+  const handleDateChange = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setSwasset((prev) => ({
+        ...prev,
+        receivedate: formattedDate,
+      }));
+    }
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border borderc bg-white">
         <h2 className="text-center">Update Softwere Asset</h2>
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Asset ID
+            <label for="inputAssetNumber" className="form-label fs-5">
+            Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputAssetID"
-              placeholder="Enter Asset ID"
+              id="inputAssetNumber"
+              placeholder="Enter Asset Number"
               value={swasset.assetnum}
               onChange={(e) =>
                 setSwasset({ ...swasset, assetnum: e.target.value })
@@ -238,19 +261,19 @@ function UpdateSwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputReceiveDate" className="form-label fs-5">
-              Recieve Date
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputReceiveDate"
-              placeholder="Enter Receive Date"
-              value={swasset.receivedate}
-              onChange={(e) =>
-                setSwasset({ ...swasset, receivedate: e.target.value })
-              }
-            />
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Receive Date
+              </label>
+              <DatePicker
+                selected={swasset.receivedate}
+                onChange={handleDateChange}
+                className="form-control rounded-0 borderc"
+                id="inputReceiveDate"
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">

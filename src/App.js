@@ -14,6 +14,7 @@ import Accessories from "./Routes/Dashboard/HwAccessories"
 import Swasset from "./Routes/Dashboard/SwAsset"
 import Swyearly from "./Routes/Dashboard/SwYearly"
 import Amortized from "./Routes/Dashboard/HwAmortized"
+import User from "./Routes/Dashboard/User";
 //Read
 import ReadHwasset from "./Components/Read/ReadHwasset"
 import ReadAccessories from "./Components/Read/ReadAccessories"
@@ -26,12 +27,14 @@ import AddAccessories from "./Components/Add/AddAccessories"
 import AddSwasset from "./Components/Add/AddSwasset"
 import AddSwyearly from "./Components/Add/AddSwyearly"
 import AddAmortized from "./Components/Add/AddAmortized"
+import AddUser from "./Components/Add/AddUser";
 //Update
 import UpdateHwasset from "./Components/Updates/UpdateHwasset"
 import UpdateAccessories from "./Components/Updates/UpdateAccessories"
 import UpdateSwasset from "./Components/Updates/UpdateSwasset"
 import UpdateSwyearly from "./Components/Updates/UpdateSwyearly"
 import UpdateAmortized from "./Components/Updates/UpdateAmortized"
+import UpdateUser from "./Components/Updates/UpdateUser";
 //Route
 import PrivateRoute from "./Routes/Bar/PrivateRoute";
 
@@ -52,12 +55,14 @@ function App() {
           <Route path="/dashboard/swasset" element={<Swasset />}></Route>
           <Route path="/dashboard/swyearly" element={<Swyearly />}></Route>
           <Route path="/dashboard/amortized" element={<Amortized />}></Route>
+          <Route path="/dashboard/user" element={<User />}></Route>
           {/* Add */}
           <Route path="/dashboard/addhwasset" element={<AddHwasset />}></Route>
           <Route path="/dashboard/addacessories" element={<AddAccessories />}></Route>
           <Route path="/dashboard/addswasset" element={<AddSwasset />}></Route>
           <Route path="/dashboard/addswyearly" element={<AddSwyearly />}></Route>
           <Route path="/dashboard/addamortized" element={<AddAmortized  />}></Route>
+          <Route path="/dashboard/adduser" element={<AddUser  />}></Route>
           {/* Read */}
           <Route path="/dashboard/readhwasset/:id" element={<ReadHwasset />}></Route>
           <Route path="/dashboard/readacessories/:id" element={<ReadAccessories />}></Route>
@@ -70,6 +75,7 @@ function App() {
           <Route path="/dashboard/updateswasset/:id" element={<UpdateSwasset />}></Route>
           <Route path="/dashboard/updateswyearly/:id" element={<UpdateSwyearly />}></Route>
           <Route path="/dashboard/updateamortized/:id" element={<UpdateAmortized />}></Route>
+          <Route path="/dashboard/updateuser/:id" element={<UpdateUser />}></Route>
       </Route>
       </Route>
       </Routes>

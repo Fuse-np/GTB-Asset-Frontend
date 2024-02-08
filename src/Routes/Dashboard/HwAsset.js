@@ -86,38 +86,59 @@ function HwAsset() {
         confirmButtonText: "Move",
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.post(`${process.env.REACT_APP_API_URL}/movetohw-amortized/${id}`)
-            .then((res) => {
-              console.log(res);
+          axios
+            .post(`${process.env.REACT_APP_API_URL}/movetohw-amortized/${id}`)
+             .then((res) => {
+            if (res.data.status === "error") {
               Swal.fire({
-                title: "Success",
-                text: "Move to Amortized successfully!",
-                icon: "success",
-                confirmButtonColor: "#28a745",
-              }).then((result) => {
-                if (result.isConfirmed || result.isDismissed) {
-                  axios.delete(`${process.env.REACT_APP_API_URL}/deletehw-asset/${id}`)
-                  .then((res) => {
-                    window.location ='/dashboard/amortized'
-                  })
-                  .catch((err) => console.log(err));
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else {
+                Swal.fire({
+                  title: "Success",
+                  text: "Move to Amortized Asset successfully!",
+                  icon: "success",
+                  confirmButtonColor: "#28a745",
+                }).then((result) => {
+                  if (result.isConfirmed || result.isDismissed) {
+                    axios
+                      .delete(
+                        `${process.env.REACT_APP_API_URL}/deletehw-asset/${id}`
+                      )
+                      .then((res) => {
+                        window.location = "/dashboard/amortized";
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        Swal.fire({
+                          title: "Error",
+                          text: "Failed to delete Hardware asset",
+                          icon: "error",
+                          allowOutsideClick: false,
+                          allowEscapeKey: false,
+                          confirmButtonColor: "#dc3545",
+                        });
+                      });
+                  }
+                });
               }
+            })
+            .catch((err) => {
+              console.log(err);
+              Swal.fire({
+                title: "Error",
+                text: "Failed to move data to Amortized asset",
+                icon: "error",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonColor: "#dc3545",
+              });
             });
-          })
-          .catch((err) => {
-            console.log(err);
-            Swal.fire({
-              title: "Error",
-              text: "Failed to delete Hardwere asset",
-              icon: "error",
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              confirmButtonColor: "#dc3545",
-            });
-          });
-      }
-    });
-  };
+        }
+      });
+    };
         
     const handleSearch = (e) => {
       setSearchTerm(e.target.value);
@@ -157,6 +178,14 @@ function HwAsset() {
   
     const goToFirstPage = () => setCurrentPage(1);
     const goToLastPage = () => setCurrentPage(totalPageCount);
+
+    const handleClearSearch = () => {
+      setSearchTerm('');
+    };
+  
+    const handleRefreshPage = () => {
+      window.location.reload();
+    };
   
     return (
       <div className="container px-5 mt-3">
@@ -167,8 +196,14 @@ function HwAsset() {
              Hardware Asset List 
           </h3>
         </div>
-        <Link to="/dashboard/addhwasset" className="btn btn-success mb-3 custom-card">
+        <Link to="/dashboard/addhwasset" className="btn btn-success mb-3 mr-3 custom-card">
           Add Asset
+        </Link>
+        <Link onClick={handleClearSearch} className="btn btn-danger mb-3 mr-3 custom-card position-end">
+        ClearSearch
+        </Link>
+        <Link onClick={handleRefreshPage} className="btn btn-primary mb-3 custom-card">
+        Refresh
         </Link>
   
         {/* Search Bar */}
@@ -186,7 +221,7 @@ function HwAsset() {
           <table className="table table-bordered custom-table">
             <thead className="bg-primary text-white text-center">
               <tr>
-                <th className="text-danger fs-5">Asset ID</th>
+                <th className="text-danger fs-5">Asset Number</th>
                 <th className="text-danger fs-5">Brand</th>
                 <th className="text-danger fs-5">User</th>
                 <th className="text-danger fs-5">Location</th>
@@ -202,7 +237,7 @@ function HwAsset() {
                     <td>{hw_asset.brand}</td>
                     <td>{hw_asset.user}</td>
                     <td>{hw_asset.location}</td>
-                    <td>{hw_asset.receivedate}</td>
+                    <td>{new Date(hw_asset.receivedate).toLocaleDateString('en-GB')}</td>
                     <td>
                       <Link
                         to={`/dashboard/readhwasset/${hw_asset.id}`}

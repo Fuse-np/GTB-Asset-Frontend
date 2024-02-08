@@ -114,6 +114,13 @@ function SwYearly() {
     const goToFirstPage = () => setCurrentPage(1);
     const goToLastPage = () => setCurrentPage(totalPageCount);
   
+    const handleClearSearch = () => {
+      setSearchTerm('');
+    };
+  
+    const handleRefreshPage = () => {
+      window.location.reload();
+    };
   
     return (
       <div className="container px-5 mt-3">
@@ -126,6 +133,12 @@ function SwYearly() {
       </div>
         <Link to="/dashboard/addswyearly" className="btn btn-success mb-3 custom-card">
           Add Software
+        </Link>
+        <Link onClick={handleClearSearch} className="btn btn-danger mb-3 mr-3 custom-card position-end">
+        ClearSearch
+        </Link>
+        <Link onClick={handleRefreshPage} className="btn btn-primary mb-3 custom-card">
+        Refresh
         </Link>
   
         {/* Search Bar */}
@@ -156,7 +169,7 @@ function SwYearly() {
                   <tr key={index}>
                     <td>{sw_yearly.name}</td>
                     <td>{sw_yearly.assetinstall}</td>
-                    <td>{sw_yearly.receivedate}</td>
+                    <td>{new Date(sw_yearly.receivedate).toLocaleDateString('en-GB')}</td>
                     <td>{sw_yearly.expiredate}</td>
                     <td>
                       <Link

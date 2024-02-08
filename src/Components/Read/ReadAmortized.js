@@ -56,7 +56,7 @@ function ReadAmortized() {
             <tbody>
               <tr>
                 <th className="text-center">Amortized Date</th>
-                <td className="text-center fs-5">{amortized.amortizeddate}</td>
+                <td className="text-center fs-5">{new Date(amortized.amortizeddate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Asset ID</th>
@@ -79,12 +79,16 @@ function ReadAmortized() {
                 <td className="text-center fs-5">{amortized.location}</td>
               </tr>
               <tr>
+                <th className="text-center">Location</th>
+                <td className="text-center fs-5">{amortized.dev}</td>
+              </tr>
+              <tr>
                 <th className="text-center">Spec</th>
                 <td className="text-center fs-5">{amortized.spec}</td>
               </tr>
               <tr>
                 <th className="text-center">Serial Number</th>
-                <td className="text-center fs-5">{amortized.sn}</td>
+                <td className="text-center fs-5">{amortized.serialnumber}</td>
               </tr>
               <tr>
                 <th className="text-center">Software Install</th>
@@ -92,11 +96,11 @@ function ReadAmortized() {
               </tr>
               <tr>
                 <th className="text-center">Price</th>
-                <td className="text-center fs-5">{amortized.price ? amortized.price.toLocaleString() : ''}</td>
+                <td className="text-center fs-5">{amortized.price  !== undefined && amortized.price !== null ? amortized.price.toLocaleString() : '0'}</td>
               </tr>
               <tr>
                 <th className="text-center">Receive Date</th>
-                <td className="text-center fs-5">{amortized.receivedate}</td>
+                <td className="text-center fs-5">{new Date(amortized.receivedate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Invoice Number</th>

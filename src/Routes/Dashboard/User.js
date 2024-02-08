@@ -1,56 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function HwAccessories() {
+function User() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(9);
+  const [itemsPerPage] = useState(7);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const checkToken = () => {
-    const token = localStorage.getItem("token");
-    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "ok") {
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Authentication Failed",
-            text: "Please login again",
-            showCancelButton: false,
-            confirmButtonText: "Back to Login",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              localStorage.removeItem("token");
-              window.location = "/";
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
-  };
-
   useEffect(() => {
-    checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/hw-accessories`)
+      .get(`${process.env.REACT_APP_API_URL}/user`)
       .then((res) => {
         setData(res.data);
+        console.log(data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -58,7 +24,7 @@ function HwAccessories() {
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
-      text: "Data will be delete from None Hardwere Asset?",
+      text: "Data will be delete from Softwere Yearly?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#dc3545",
@@ -70,18 +36,18 @@ function HwAccessories() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/deletehw-accessories/${id}`)
+          .delete(`${process.env.REACT_APP_API_URL}/deletesw-yearly/` + id)
           .then((res) => {
             console.log(res);
             Swal.fire({
               title: "Success",
-              text: "Hardwere Accessories delete successfully!",
+              text: "Softwere Yearly delete successfully!",
               icon: "success",
               confirmButtonColor: "#28a745",
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/hw-accessories`)
+                  .get(`${process.env.REACT_APP_API_URL}/sw-yearly`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -99,7 +65,7 @@ function HwAccessories() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete amortized asset",
+              text: "Failed to delete None softwere asset",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -115,8 +81,8 @@ function HwAccessories() {
     setCurrentPage(1);
   };
 
-  const filteredData = data.filter((hw_accessories) =>
-    Object.values(hw_accessories).some((value) =>
+  const filteredData = data.filter((sw_yearly) =>
+    Object.values(sw_yearly).some((value) =>
       value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -166,13 +132,13 @@ function HwAccessories() {
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
-        <h3 className="text-uppercase display-5">Accessories Asset List</h3>
+        <h3 className="text-uppercase display-5">User management</h3>
       </div>
       <Link
-        to="/dashboard/addacessories"
+        to="/dashboard/adduser"
         className="btn btn-success mb-3 custom-card"
       >
-        Add Asset
+        Add User
       </Link>
       <Link
         onClick={handleClearSearch}
@@ -202,36 +168,26 @@ function HwAccessories() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
-              <th className="text-danger fs-5">Asset Type</th>
-              <th className="text-danger fs-5">Detail</th>
-              <th className="text-danger fs-5">Asset Install</th>
-              <th className="text-danger fs-5">Location</th>
-              <th className="text-danger fs-5">Receive Date</th>
+              <th className="text-danger fs-5">Name</th>
+              <th className="text-danger fs-5">Role</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((hw_accessories, index) => (
+              currentData.map((user, index) => (
                 <tr key={index}>
-                  <td>{hw_accessories.type}</td>
-                  <td>{hw_accessories.detail}</td>
-                  <td>{hw_accessories.assetinstall}</td>
-                  <td>{hw_accessories.location}</td>
-                  <td>
-                    {new Date(hw_accessories.receivedate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </td>
+                  <td>{user.fullname}</td>
+                  <td>{user.role}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readacessories/${hw_accessories.id}`}
+                      to={`/dashboard/readswyearly/${user.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
-                      Detail
+                      Edit
                     </Link>
                     <button
-                      onClick={() => handleDelete(hw_accessories.id)}
+                      onClick={() => handleDelete(user.id)}
                       className="btn btndelete btn-sm"
                     >
                       Delete
@@ -241,7 +197,7 @@ function HwAccessories() {
               ))
             ) : (
               <tr>
-                <td colSpan="6">No assets available</td>
+                <td colSpan="3">No user available</td>
               </tr>
             )}
           </tbody>
@@ -294,4 +250,4 @@ function HwAccessories() {
   );
 }
 
-export default HwAccessories;
+export default User;

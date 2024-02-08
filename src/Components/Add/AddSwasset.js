@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function AddSwasset() {
   const navigate = useNavigate();
@@ -20,6 +22,19 @@ function AddSwasset() {
     invoicenum: "",
     ponum: "",
   });
+
+  const handleDateChange = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setSwasset((prev) => ({
+        ...prev,
+        receivedate: formattedDate,
+      }));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,11 +82,19 @@ function AddSwasset() {
         axios
           .post(`${process.env.REACT_APP_API_URL}/addsw-asset`, swasset)
           .then((res) => {
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else {
             Swal.fire("Add!", "", "success").then(() => {
               console.log(res);
               navigate("/dashboard/swasset");
             });
-          })
+          }
+        })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -90,14 +113,14 @@ function AddSwasset() {
         <h2 className="text-center">Add Softwere Asset</h2>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Asset ID
+            <label for="inputAssetNumber" className="form-label fs-5">
+            Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputAssetID"
-              placeholder="Enter Asset ID"
+              id="inputAssetNumber"
+              placeholder="Enter Asset Number"
               onChange={(e) =>
                 setSwasset({ ...swasset, assetnum: e.target.value })
               }
@@ -105,7 +128,7 @@ function AddSwasset() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Softwere Name
+              Software Name
             </label>
             <input
               type="text"
@@ -114,63 +137,61 @@ function AddSwasset() {
               placeholder="Enter Softwere Name"
               onChange={(e) => setSwasset({ ...swasset, name: e.target.value })}
             />
-            </div>
-            <div className="col-12">
-              <label for="inputAssetID" className="form-label fs-5">
-                Serial Number
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputSerialnumber"
-                placeholder="Enter Serialnumber"
-                onChange={(e) =>
-                  setSwasset({ ...swasset, serialnumber: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-              <label for="inputAssetID" className="form-label fs-5">
-                Softwere Key
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputSoftwereKey"
-                placeholder="Enter Softwere Key"
-                onChange={(e) =>
-                  setSwasset({ ...swasset, swkey: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-              <label for="inputAssetID" className="form-label fs-5">
-                User
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputUser"
-                placeholder="Enter User"
-                onChange={(e) =>
-                  setSwasset({ ...swasset, user: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-              <label for="inputAssetID" className="form-label fs-5">
-                Asset Install (Asset ID)
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputAssetInstal"
-                placeholder="Enter Asset Install"
-                onChange={(e) =>
-                  setSwasset({ ...swasset, assetinstall: e.target.value })
-                }
-              />
-            </div>
+          </div>
+          <div className="col-12">
+            <label for="inputAssetID" className="form-label fs-5">
+              Serial Number
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSerialnumber"
+              placeholder="Enter Serialnumber"
+              onChange={(e) =>
+                setSwasset({ ...swasset, serialnumber: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputAssetID" className="form-label fs-5">
+              Softwere Key
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSoftwereKey"
+              placeholder="Enter Softwere Key"
+              onChange={(e) =>
+                setSwasset({ ...swasset, swkey: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputAssetID" className="form-label fs-5">
+              User
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputUser"
+              placeholder="Enter User"
+              onChange={(e) => setSwasset({ ...swasset, user: e.target.value })}
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputAssetID" className="form-label fs-5">
+              Asset Install
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputAssetInstal"
+              placeholder="Enter Asset Install"
+              onChange={(e) =>
+                setSwasset({ ...swasset, assetinstall: e.target.value })
+              }
+            />
+          </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
               Location
@@ -205,18 +226,19 @@ function AddSwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Recieve Date
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputReceiveDate"
-              placeholder="Enter Receive Date"
-              onChange={(e) =>
-                setSwasset({ ...swasset, receivedate: e.target.value })
-              }
-            />
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Receive Date
+              </label>
+              <DatePicker
+                selected={swasset.receivedate}
+                onChange={handleDateChange}
+                className="form-control rounded-0 borderc"
+                id="inputReceiveDate"
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">

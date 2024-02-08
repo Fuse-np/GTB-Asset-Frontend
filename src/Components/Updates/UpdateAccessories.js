@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from 'sweetalert2'
 import './style.css'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function UpdateAccessories() {
     const { id } = useParams();
@@ -18,7 +20,7 @@ function UpdateAccessories() {
             ...accessories,
             type: res.data[0].type,
             detail: res.data[0].detail,
-            sn: res.data[0].serialnumber,
+            serialnumber: res.data[0].serialnumber,
             assetinstall: res.data[0].assetinstall,
             location: res.data[0].location,
             price: res.data[0].price,
@@ -93,6 +95,19 @@ function UpdateAccessories() {
             });
         }
       });
+    };
+
+    const handleDateChange = (date) => {
+      if (date) {
+        const selectedDate = new Date(date);
+        selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+        selectedDate.setDate(selectedDate.getDate());
+        const formattedDate = selectedDate.toISOString().substring(0, 10);
+        setAccessories((prev) => ({
+          ...prev,
+          receivedate: formattedDate,
+        }));
+      }
     };
   
     return (
@@ -193,20 +208,20 @@ function UpdateAccessories() {
               />
             </div>
             <div className="col-12">
-            <label for="inputReceiveDate" className="form-label fs-5">
-                Recieve Date
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Receive Date
               </label>
-              <input
-                type="text"
+              <DatePicker
+                selected={accessories.receivedate}
+                onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputReceiveDate"
-                placeholder="Enter Receive Date"
-                value={accessories.receivedate}
-                onChange={(e) =>
-                    setAccessories({ ...accessories, receivedate: e.target.value })
-                }
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
+          </div>
             <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
                 Invoid Number

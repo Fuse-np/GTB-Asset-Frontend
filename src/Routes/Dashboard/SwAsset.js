@@ -119,6 +119,14 @@ function SwAsset() {
   
     const goToFirstPage = () => setCurrentPage(1);
     const goToLastPage = () => setCurrentPage(totalPageCount);
+
+    const handleClearSearch = () => {
+      setSearchTerm('');
+    };
+  
+    const handleRefreshPage = () => {
+      window.location.reload();
+    };
   
     return (
       <div className="container px-5 mt-3">
@@ -131,6 +139,12 @@ function SwAsset() {
         </div>
         <Link to="/dashboard/addswasset" className="btn btn-success mb-3 custom-card">
           Add Software
+        </Link>
+        <Link onClick={handleClearSearch} className="btn btn-danger mb-3 mr-3 custom-card position-end">
+        ClearSearch
+        </Link>
+        <Link onClick={handleRefreshPage} className="btn btn-primary mb-3 custom-card">
+        Refresh
         </Link>
   
         {/* Search Bar */}
@@ -148,7 +162,7 @@ function SwAsset() {
           <table className="table table-bordered custom-table">
             <thead className="bg-primary text-white text-center">
               <tr>
-                <th className="text-danger fs-5">Asset ID</th>
+                <th className="text-danger fs-5">Asset Number</th>
                 <th className="text-danger fs-5">Name</th>
                 <th className="text-danger fs-5">User</th>
                 <th className="text-danger fs-5">Asset Install</th>
@@ -164,7 +178,7 @@ function SwAsset() {
                     <td>{sw_asset.name}</td>
                     <td>{sw_asset.user}</td>
                     <td>{sw_asset.assetinstall}</td>
-                    <td>{sw_asset.receivedate}</td>
+                    <td>{new Date(sw_asset.receivedate).toLocaleDateString('en-GB')}</td>
                     <td>
                       <Link
                         to={`/dashboard/readswasset/${sw_asset.id}`}

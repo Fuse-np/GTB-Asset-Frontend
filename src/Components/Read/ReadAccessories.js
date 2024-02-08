@@ -64,7 +64,7 @@ function ReadAccessories() {
               </tr>
               <tr>
                 <th className="text-center">Serial Number</th>
-                <td className="text-center fs-5">{accessories.sn}</td>
+                <td className="text-center fs-5">{accessories.serialnumber}</td>
               </tr>
               <tr>
                 <th className="text-center">Location</th>
@@ -72,11 +72,11 @@ function ReadAccessories() {
               </tr>
               <tr>
                 <th className="text-center">Price</th>
-                <td className="text-center fs-5">{accessories.price ? accessories.price.toLocaleString() : ''}</td>
+                <td className="text-center fs-5">{accessories.price  !== undefined && accessories.price !== null ? accessories.price.toLocaleString() : '0'}</td>
               </tr>
               <tr>
                 <th className="text-center">Receive Date</th>
-                <td className="text-center fs-5">{accessories.receivedate}</td>
+                <td className="text-center fs-5">{new Date(accessories.receivedate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Invoice Number</th>

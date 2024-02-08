@@ -60,19 +60,23 @@ function ReadSwyearly() {
               </tr>
               <tr>
                 <th className="text-center">Asset Install</th>
+                <td className="text-center fs-5">{swyearly.serialnumber}</td>
+              </tr>
+              <tr>
+                <th className="text-center">Asset Install</th>
                 <td className="text-center fs-5">{swyearly.assetinstall}</td>
               </tr>
               <tr>
+                <th className="text-center">Receive Date</th>
+                <td className="text-center fs-5">{new Date(swyearly.receivedate).toLocaleDateString('en-GB')}</td>
+              </tr>
+              <tr>
                 <th className="text-center">Expiredate</th>
-                <td className="text-center fs-5">{swyearly.expiredate}</td>
+                <td className="text-center fs-5">{new Date(swyearly.expiredate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Price</th>
-                <td className="text-center fs-5">{swyearly.price ? swyearly.price.toLocaleString() : ''}</td>
-              </tr>
-              <tr>
-                <th className="text-center">Receive Date</th>
-                <td className="text-center fs-5">{swyearly.receivedate}</td>
+                <td className="text-center fs-5">{swyearly.price  !== undefined && swyearly.price !== null ? swyearly.price.toLocaleString() : '0'}</td>
               </tr>
               <tr>
                 <th className="text-center">Invoice Number</th>

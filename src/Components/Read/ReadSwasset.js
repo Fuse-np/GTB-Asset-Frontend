@@ -81,11 +81,11 @@ function ReadSwasset() {
               </tr>
               <tr>
                 <th className="text-center">Price</th>
-                <td className="text-center fs-5">{swasset.price ? swasset.price.toLocaleString() : ''}</td>
+                <td className="text-center fs-5">{swasset.price  !== undefined && swasset.price !== null ? swasset.price.toLocaleString() : '0'}</td>
               </tr>
               <tr>
                 <th className="text-center">Receive Date</th>
-                <td className="text-center fs-5">{swasset.receivedate}</td>
+                <td className="text-center fs-5">{new Date(swasset.receivedate).toLocaleDateString('en-GB')}</td>
               </tr>
               <tr>
                 <th className="text-center">Invoice Number</th>

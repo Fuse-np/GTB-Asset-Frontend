@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from 'sweetalert2'
 import './style.css'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function UpdateAmortized() {
     const { id } = useParams();
@@ -21,8 +23,9 @@ function UpdateAmortized() {
             model: res.data[0].model,
             user: res.data[0].user,
             location: res.data[0].location,
+            dev: res.data[0].dev,
             spec: res.data[0].spec,
-            sn: res.data[0].serialnumber,
+            serialnumber: res.data[0].serialnumber,
             software: res.data[0].software,
             price: res.data[0].price,
             receivedate: res.data[0].receivedate,
@@ -40,6 +43,7 @@ function UpdateAmortized() {
       model: "",
       user: "",
       location: "",
+      dev: "",
       spec: "",
       serialnumber: "",
       software: "",
@@ -50,10 +54,35 @@ function UpdateAmortized() {
       amortizeddate:""
     });
   
+    const handleDateChange = (date) => {
+      if (date) {
+        const selectedDate = new Date(date);
+        selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+        selectedDate.setDate(selectedDate.getDate());
+        const formattedDate = selectedDate.toISOString().substring(0, 10);
+        setAmortzied((prev) => ({
+          ...prev,
+          receivedate: formattedDate,
+        }));
+      }
+    };
+    const handleDateChange2 = (date) => {
+      if (date) {
+        const selectedDate = new Date(date);
+        selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+        selectedDate.setDate(selectedDate.getDate());
+        const formattedDate = selectedDate.toISOString().substring(0, 10);
+        setAmortzied((prev) => ({
+          ...prev,
+          amortizeddate: formattedDate,
+        }));
+      }
+    };;
+
     const handleUpdate = (event) => {
       event.preventDefault();
       const requiredFields = [
-        `assetnum`, `brand`, `model`, `user`, `location`, `spec`, `serialnumber`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
+        `assetnum`, `brand`, `model`, `user`, `location`, `dev`, `spec`, `serialnumber`, `software`, `price`, `receivedate`, `invoicenum`, `ponum`, `amortizeddate`
       ];
       for (const field of requiredFields) {
         if (!amortzied[field] && amortzied[field] !== 0) {
@@ -84,12 +113,20 @@ function UpdateAmortized() {
       }).then((result) => {
         if (result.isConfirmed) {
           axios.put(`${process.env.REACT_APP_API_URL}/updatehw-amortized/` + id, amortzied)
-            .then((res) => {
+          .then((res) => {
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else{
               Swal.fire("Updated!", "", "success")
                 .then(() => {
                   console.log(res);
                   navigate("/dashboard/readamortized/" + id, amortzied);
                 });
+              }
             })
             .catch((err) => {
               console.log(err);
@@ -109,20 +146,20 @@ function UpdateAmortized() {
           <h2 className="text-center">Update Asset</h2>
           <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
-              <label for="inputAmortizedDate" className="form-label fs-5">
-                Amortized Date
+            <div className="d-flex flex-column">
+              <label htmlFor="inputAmortiedDate" className="form-label fs-5">
+               Amortied Date
               </label>
-              <input
-                type="text"
+              <DatePicker
+                selected={amortzied.amortizeddate}
+                onChange={handleDateChange2}
                 className="form-control rounded-0 borderc"
-                id="inputAmortizedDate"
-                placeholder="Enter Amortized Date"
-                value={amortzied.amortizeddate}
-                onChange={(e) =>
-                  setAmortzied({ ...amortzied, amortizeddate: e.target.value })
-                }
+                id="inputAmortiedDate"
+                placeholderText="Enter Amortied Date"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
+          </div>
             <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
                 Asset ID
@@ -197,6 +234,21 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
+            <label for="inputDev" className="form-label fs-5">
+                Dev
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-0 borderc"
+                id="inputDev"
+                placeholder="Enter Dev"
+                value={amortzied.dev}
+                onChange={(e) =>
+                  setAmortzied({ ...amortzied, dev: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12">
             <label for="inputSpec" className="form-label fs-5">
                 Spec
               </label>
@@ -255,20 +307,20 @@ function UpdateAmortized() {
               />
             </div>
             <div className="col-12">
-            <label for="inputReceiveDate" className="form-label fs-5">
-                Recieve Date
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Receive Date
               </label>
-              <input
-                type="text"
+              <DatePicker
+                 selected={amortzied.receivedate}
+                onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
-                id="inputReceiveDate"
-                placeholder="Enter Receive Date"
-                value={amortzied.receivedate}
-                onChange={(e) =>
-                  setAmortzied({ ...amortzied, receivedate: e.target.value })
-                }
+                id="inputAmortiedDate"
+                placeholderText="Enter Amortied Date"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
+          </div>
             <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
                 Invoid Number
