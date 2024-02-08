@@ -7,60 +7,40 @@ import Swal from "sweetalert2";
 
 function AddUser() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState({
+  const [user, setUser] = useState({
     fullname: "",
     username: "",
     password: "",
     role: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const requiredFields = ["fullname", "username", "password", "role"];
-    for (const field of requiredFields) {
-      if (!users[field] && users[field] !== 0) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: `${field} is required.`,
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/adduser`, user);
+      if (response.data.status === "ok") {
+        Swal.fire("Add!", "", "success").then(() => {
+          navigate("/dashboard/user");
         });
-        return;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Server Error",
+          text: response.data.message || "Error adding user on the server.",
+        });
       }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Error adding user on the server.",
+      });
     }
-    Swal.fire({
-      title: "Confirm Add Data?",
-      showCancelButton: true,
-      confirmButtonText: "Add",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.post(`${process.env.REACT_APP_API_URL}/adduser`)
-          .then((res) => {
-            if (res.status === 'ok') { 
-              Swal.fire("Add!", "", "success")
-                .then(() => {
-                  console.log(res);
-                  navigate("/dashboard/user");
-                });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Server Error',
-                text: 'Error Add data on the server.',
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Server Error',
-              text: 'Error updating data on the server.',
-            });
-          });
-      }
-    });
   };
 
   return (
@@ -76,8 +56,10 @@ function AddUser() {
               type="text"
               className="form-control rounded-0 borderc"
               id="inputFullname"
+              name="fullname"
+              value={user.fullname}
               placeholder="Enter Fullname"
-              onChange={(e) => setUsers({ ...users, fullname: e.target.value })}
+              onChange={handleChange}
             />
           </div>
           <div className="col-12">
@@ -88,8 +70,10 @@ function AddUser() {
               type="text"
               className="form-control rounded-0 borderc"
               id="inputUsername"
+              name="username"
+              value={user.username}
               placeholder="Enter Username"
-              onChange={(e) => setUsers({ ...users, username: e.target.value })}
+              onChange={handleChange}
             />
           </div>
           <div className="col-12">
@@ -100,8 +84,10 @@ function AddUser() {
               type="password"
               className="form-control rounded-0 borderc"
               id="inputPassword"
+              name="password"
+              value={user.password}
               placeholder="Enter Password"
-              onChange={(e) => setUsers({ ...users, password: e.target.value })}
+              onChange={handleChange}
             />
           </div>
           <div className="col-12">
@@ -111,14 +97,17 @@ function AddUser() {
             <select
               className="form-select rounded-0 borderc"
               id="inputRole"
-              onChange={(e) => setUsers({ ...users, role: e.target.value })}
+              name="role"
+              value={user.role}
+              onChange={handleChange}
             >
               <option value="">Select Role</option>
               <option value="Admin">Admin</option>
               <option value="User">User</option>
             </select>
           </div>
-          <button className="btn btn-success w-100 rounded-0 mb-2 borderc">
+          <p></p>
+          <button className="btn btn-success w-100 rounded-0 mb-2 borderc" type="submit">
             Add User
           </button>
         </form>
