@@ -105,13 +105,19 @@ function AddAmortized() {
                 title: "Error",
                 text: `Asset number already exists.`,
               });
+            } else if (res.data.status === "errorhardware") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists in Hardware asset.`,
+              });
             } else {
-            Swal.fire("Add!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/amortized");
-            });
-          }
-        })
+              Swal.fire("Add!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/amortized");
+              });
+            }
+          })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -132,7 +138,7 @@ function AddAmortized() {
           <div className="col-12">
             <div className="d-flex flex-column">
               <label htmlFor="inputAmortiedDate" className="form-label fs-5">
-               Amortied Date
+                Amortied Date
               </label>
               <DatePicker
                 selected={amortzied.amortizeddate}
@@ -141,6 +147,7 @@ function AddAmortized() {
                 id="inputAmortiedDate"
                 placeholderText="Enter Amortied Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>
@@ -295,12 +302,13 @@ function AddAmortized() {
                 Receive Date
               </label>
               <DatePicker
-                 selected={amortzied.receivedate}
+                selected={amortzied.receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
                 placeholderText="Enter Amortied Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>

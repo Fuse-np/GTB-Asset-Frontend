@@ -6,9 +6,12 @@ import "./style.css";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 function AddHwasset() {
   const navigate = useNavigate();
+  const [swasset, setSwasset] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [hwasset, setHwasset] = useState({
     assetnum: "",
     brand: "",
@@ -25,6 +28,16 @@ function AddHwasset() {
     ponum: "",
   });
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+      .then((res) => {
+        console.log(res);
+        setSwasset(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
@@ -49,7 +62,6 @@ function AddHwasset() {
       "dev",
       "spec",
       "serialnumber",
-      "software",
       "price",
       "receivedate",
       "invoicenum",
@@ -83,14 +95,31 @@ function AddHwasset() {
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        const dataToSend = {
+          ...hwasset,
+          software: selectedOptions.map((option) => option.value),
+        };
         axios
-          .post(`${process.env.REACT_APP_API_URL}/addhw-asset`, hwasset)
+          .post(`${process.env.REACT_APP_API_URL}/addhw-asset`, dataToSend)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: `Asset number already exists.`,
+              });
+            } else if (res.data.status === "erroramortized") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists in amortized asset.`,
+              });
+            }else if (res.data.status === "errorsoftware") {
+              const assetnum = res.data.duplicateAssets;
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Software already exists in asset number ${assetnum}.`,
               });
             } else {
               Swal.fire("Add!", "", "success").then(() => {
@@ -109,6 +138,10 @@ function AddHwasset() {
           });
       }
     });
+  };
+
+  const handleChange = (selectedOptions) => {
+    setSelectedOptions(selectedOptions || []);
   };
 
   return (
@@ -200,7 +233,7 @@ function AddHwasset() {
             <label for="inputAssetID" className="form-label fs-5">
               Spec
             </label>
-            <input
+            <textarea
               type="text"
               className="form-control rounded-0 borderc"
               id="inputSpec"
@@ -223,16 +256,29 @@ function AddHwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Softwere Install
+            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
+              Software Install
             </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputSoftwareinstall"
-              placeholder="Enter Software install"
-              onChange={(e) =>
-                setHwasset({ ...hwasset, software: e.target.value })
+            <Select
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              options={swasset
+                .filter(
+                  (sw_asset) =>
+                    !selectedOptions.some(
+                      (selectedOption) =>
+                        selectedOption.value === sw_asset.assetnum
+                    )
+                )
+                .map((sw_asset) => ({
+                  value: sw_asset.assetnum,
+                  label: `${sw_asset.assetnum} (${sw_asset.name})`,
+                }))}
+              onChange={handleChange}
+              value={selectedOptions}
+              filterOption={(option, inputValue) =>
+                option.label.toLowerCase().includes(inputValue.toLowerCase())
               }
             />
           </div>
@@ -267,6 +313,7 @@ function AddHwasset() {
                 id="inputReceiveDate"
                 placeholderText="Enter Receive Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>

@@ -237,6 +237,7 @@ function AddSwasset() {
                 id="inputReceiveDate"
                 placeholderText="Enter Receive Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>

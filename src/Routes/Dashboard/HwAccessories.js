@@ -58,7 +58,7 @@ function HwAccessories() {
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
-      text: "Data will be delete from None Hardwere Asset?",
+      text: "Data will be delete from Accessories?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#dc3545",
@@ -99,7 +99,7 @@ function HwAccessories() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete amortized asset",
+              text: "Failed to delete Accessories",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,

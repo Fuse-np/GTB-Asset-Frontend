@@ -64,7 +64,7 @@ function SwYearly() {
               console.log(err);
               Swal.fire({
                 title: "Error",
-                text: "Failed to delete None softwere asset",
+                text: "Failed to delete Softwere Yearly",
                 icon: "error",
                 allowOutsideClick: false,
                 allowEscapeKey: false,

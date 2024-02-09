@@ -6,12 +6,28 @@ import Swal from "sweetalert2";
 import "./style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 function UpdateHwasset() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [swasset, setSwasset] = useState([]);
+  const [selectedSoftware, setSelectedSoftware] = useState([]);
+  const [softwareAssets, setSoftwareAssets] = useState([]);
+
+  function getSoft() {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+      .then((res) => {
+        console.log(res);
+        setSwasset(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
 
   useEffect(() => {
+    fetchSoftwareAssetsFromDatabase();
+    getSoft();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id)
       .then((res) => {
@@ -45,9 +61,9 @@ function UpdateHwasset() {
     dev: "",
     spec: "",
     serialnumber: "",
-    software: "",
+    software: [],
     price: "",
-    receivedate: new Date(),
+    receivedate: "",
     invoicenum: "",
     ponum: "",
   });
@@ -106,13 +122,13 @@ function UpdateHwasset() {
                 title: "Error",
                 text: `Asset number already exists.`,
               });
-            } else{
-            Swal.fire("Updated!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/readhwasset/" + id, hwasset);
-            });
-          }
-        })
+            } else {
+              Swal.fire("Updated!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/readhwasset/" + id, hwasset);
+              });
+            }
+          })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -138,6 +154,25 @@ function UpdateHwasset() {
     }
   };
 
+  const fetchSoftwareAssetsFromDatabase = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id);
+      const data = response.data.map(hw_asset => ({
+        value: hw_asset.software,
+        label: `${hw_asset.software} `
+      }));
+      setSoftwareAssets(data);
+    } catch (error) {
+      console.error('Error fetching software assets:', error);
+    }
+  };
+
+  const handleChange = (selectedOptions) => {
+    setSelectedSoftware(selectedOptions);
+  };
+
+
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border borderc bg-white">
@@ -145,7 +180,7 @@ function UpdateHwasset() {
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-            Asset Number
+              Asset Number
             </label>
             <input
               type="text"
@@ -233,7 +268,7 @@ function UpdateHwasset() {
             <label for="inputSpec" className="form-label fs-5">
               Spec
             </label>
-            <input
+            <textarea
               type="text"
               className="form-control rounded-0 borderc"
               id="inputSpec"
@@ -258,38 +293,40 @@ function UpdateHwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputSoftwareinstall" className="form-label fs-5">
-              Softwere Install
+            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
+              Software Install
             </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputSoftwareinstall"
-              placeholder="Enter Software install"
-              value={hwasset.software}
-              onChange={(e) =>
-                setHwasset({ ...hwasset, software: e.target.value })
+            <Select
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              options={swasset.map((sw_asset) => ({
+                value: sw_asset.assetnum,
+                label: `${sw_asset.assetnum} (${sw_asset.name})`,
+              }))}
+              onChange={handleChange}
+              value={swasset.filter((option) =>
+                hwasset.software.includes(option.value)
+              )}
+              filterOption={(option, inputValue) =>
+                option.label.toLowerCase().includes(inputValue.toLowerCase())
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputPrice" className="form-label fs-5">
-              Price
+            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
+              Software Install
             </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputPrice"
-              placeholder="Enter Price"
-              value={hwasset.price}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setHwasset({
-                  ...hwasset,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
-              }}
+            <Select
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              options={softwareAssets}
+              onChange={handleChange}
+              value={selectedSoftware}
+              filterOption={(option, inputValue) =>
+                option.label.toLowerCase().includes(inputValue.toLowerCase())
+              }
             />
           </div>
           <div className="col-12">

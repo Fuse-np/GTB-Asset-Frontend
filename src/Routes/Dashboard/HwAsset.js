@@ -222,7 +222,6 @@ function HwAsset() {
             <thead className="bg-primary text-white text-center">
               <tr>
                 <th className="text-danger fs-5">Asset Number</th>
-                <th className="text-danger fs-5">Brand</th>
                 <th className="text-danger fs-5">User</th>
                 <th className="text-danger fs-5">Location</th>
                 <th className="text-danger fs-5">Receive Date</th>
@@ -234,7 +233,6 @@ function HwAsset() {
                 currentData.map((hw_asset, index) => (
                   <tr key={index}>
                     <td>{hw_asset.assetnum}</td>
-                    <td>{hw_asset.brand}</td>
                     <td>{hw_asset.user}</td>
                     <td>{hw_asset.location}</td>
                     <td>{new Date(hw_asset.receivedate).toLocaleDateString('en-GB')}</td>

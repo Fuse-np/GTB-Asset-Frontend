@@ -65,7 +65,7 @@ function User() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete None softwere asset",
+              text: "Failed to delete ",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -175,7 +175,10 @@ function User() {
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((user, index) => (
+              [
+                ...currentData.filter((user) => user.role === "Admin"),
+                ...currentData.filter((user) => user.role === "User"),
+              ].map((user, index) => (
                 <tr key={index}>
                   <td>{user.fullname}</td>
                   <td>{user.role}</td>
