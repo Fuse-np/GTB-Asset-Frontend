@@ -170,7 +170,7 @@ function SwYearly() {
                     <td>{sw_yearly.name}</td>
                     <td>{sw_yearly.assetinstall}</td>
                     <td>{new Date(sw_yearly.receivedate).toLocaleDateString('en-GB')}</td>
-                    <td>{sw_yearly.expiredate}</td>
+                    <td>{new Date(sw_yearly.expiredate).toLocaleDateString('en-GB')}</td>
                     <td>
                       <Link
                         to={`/dashboard/readswyearly/${sw_yearly.id}`}

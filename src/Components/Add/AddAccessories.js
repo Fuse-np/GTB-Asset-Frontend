@@ -15,8 +15,9 @@ function AddAccessories() {
     serialnumber: "",
     assetinstall: "",
     location: "",
+    dev: "",
     price: "",
-    receivedate: "",
+    receivedate: new Date(),
     invoicenum: "",
     ponum: "",
   });
@@ -42,6 +43,7 @@ function AddAccessories() {
       `serialnumber`,
       `assetinstall`,
       `location`,
+      `dev`,
       `price`,
       `receivedate`,
       `invoicenum`,
@@ -174,8 +176,22 @@ function AddAccessories() {
             />
           </div>
           <div className="col-12">
+            <label for="inputDev" className="form-label fs-5">
+              Dev
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputDev"
+              placeholder="Enter Dev"
+              onChange={(e) =>
+                setAccessories({ ...accessories, dev: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Price
+              Price (If not have enter 0)
             </label>
             <input
               type="text"

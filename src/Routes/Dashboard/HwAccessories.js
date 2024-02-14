@@ -205,7 +205,6 @@ function HwAccessories() {
               <th className="text-danger fs-5">Asset Type</th>
               <th className="text-danger fs-5">Detail</th>
               <th className="text-danger fs-5">Asset Install</th>
-              <th className="text-danger fs-5">Location</th>
               <th className="text-danger fs-5">Receive Date</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
@@ -217,7 +216,6 @@ function HwAccessories() {
                   <td>{hw_accessories.type}</td>
                   <td>{hw_accessories.detail}</td>
                   <td>{hw_accessories.assetinstall}</td>
-                  <td>{hw_accessories.location}</td>
                   <td>
                     {new Date(hw_accessories.receivedate).toLocaleDateString(
                       "en-GB"

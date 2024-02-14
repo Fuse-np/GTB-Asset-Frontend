@@ -19,6 +19,7 @@ function UpdateSwyearly() {
           setSwyearly({
             ...swyearly,
             name: res.data[0].name,
+            serialnumber:res.data[0].serialnumber,
             assetinstall: res.data[0].assetinstall,
             expiredate: res.data[0].expiredate,
             price: res.data[0].price,
@@ -125,21 +126,6 @@ function UpdateSwyearly() {
           <h2 className="text-center">Update Softwere Asset</h2>
           <form className="row g-1" onSubmit={handleUpdate}>
             <div className="col-12">
-            <label for="inputSerialNumber" className="form-label fs-5">
-                Serial Number
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputSerialNumber"
-                placeholder="Enter Serial Number"
-                value={swyearly.serialnumber}
-                onChange={(e) =>
-                    setSwyearly({ ...swyearly, serialnumber: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
             <label for="inputSoftwereName" className="form-label fs-5">
                 Softwere Name
               </label>
@@ -151,6 +137,21 @@ function UpdateSwyearly() {
                 value={swyearly.name}
                 onChange={(e) =>
                     setSwyearly({ ...swyearly, name: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12">
+            <label for="inputSerialNumber" className="form-label fs-5">
+                Serial Number
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-0 borderc"
+                id="inputSerialNumber"
+                placeholder="Enter Serial Number"
+                value={swyearly.serialnumber}
+                onChange={(e) =>
+                    setSwyearly({ ...swyearly, serialnumber: e.target.value })
                 }
               />
             </div>

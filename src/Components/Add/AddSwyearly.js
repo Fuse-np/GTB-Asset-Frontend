@@ -1,7 +1,7 @@
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css"
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
@@ -13,9 +13,9 @@ function AddSwyearly() {
       name: "",
       serialnumber:"",
       assetinstall: "",
-      expiredate: "",
+      receivedate: new Date(),
+      expiredate: new Date(),
       price: "",
-      receivedate: "",
       invoicenum: "",
       ponum: "",
     });
@@ -98,6 +98,7 @@ function AddSwyearly() {
       });
     }; 
 
+
     return (
       <div className="d-flex justify-content-center align-items-center mt-3">
         <div className="p-3 rounded w-50 border bg-white borderc">
@@ -178,7 +179,7 @@ function AddSwyearly() {
           </div>
             <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-                Price
+                Price (If not have enter 0)
               </label>
               <input
                 type="text"

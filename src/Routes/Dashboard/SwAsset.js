@@ -166,7 +166,6 @@ function SwAsset() {
                 <th className="text-danger fs-5">Name</th>
                 <th className="text-danger fs-5">User</th>
                 <th className="text-danger fs-5">Asset Install</th>
-                <th className="text-danger fs-5">Receive Date</th>
                 <th className="text-danger fs-5">Action</th>
               </tr>
             </thead>
@@ -178,7 +177,6 @@ function SwAsset() {
                     <td>{sw_asset.name}</td>
                     <td>{sw_asset.user}</td>
                     <td>{sw_asset.assetinstall}</td>
-                    <td>{new Date(sw_asset.receivedate).toLocaleDateString('en-GB')}</td>
                     <td>
                       <Link
                         to={`/dashboard/readswasset/${sw_asset.id}`}

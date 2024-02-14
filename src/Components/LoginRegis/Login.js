@@ -43,7 +43,10 @@ function Login() {
             }
         );
         if (response.data.status === "ok") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem('role', response.data.role);
             window.location = "/dashboard";
         } else {
             Swal.fire({

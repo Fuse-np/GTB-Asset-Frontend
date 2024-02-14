@@ -59,7 +59,7 @@ function ReadSwyearly() {
                 <td className="text-center fs-5">{swyearly.name}</td>
               </tr>
               <tr>
-                <th className="text-center">Asset Install</th>
+                <th className="text-center">Serial Number</th>
                 <td className="text-center fs-5">{swyearly.serialnumber}</td>
               </tr>
               <tr>

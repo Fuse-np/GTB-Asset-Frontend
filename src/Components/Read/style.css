@@ -19,9 +19,3 @@
     border-color: #2A2827;
     color: #2A2827;
   }
-
-  @media print {
-    .sidebar {
-      display: none !important;
-    }
-  }

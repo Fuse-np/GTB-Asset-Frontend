@@ -23,6 +23,7 @@ function UpdateAccessories() {
             serialnumber: res.data[0].serialnumber,
             assetinstall: res.data[0].assetinstall,
             location: res.data[0].location,
+            dev: res.data[0].dev,
             price: res.data[0].price,
             receivedate: res.data[0].receivedate,
             invoicenum: res.data[0].invoicenum,
@@ -38,6 +39,7 @@ function UpdateAccessories() {
       serialnumber: "",
       assetinstall: "",
       location: "",
+      dev: "",
       price: "",
       receivedate: "",
       invoicenum: "",
@@ -47,7 +49,7 @@ function UpdateAccessories() {
     const handleUpdate = (event) => {
       event.preventDefault();
       const requiredFields = [
-        `type`, `detail`, `serialnumber`, `assetinstall`, `location`, `price`, `receivedate`, `invoicenum`, `ponum`
+        `type`, `detail`, `serialnumber`, `assetinstall`, `location`, `dev`, `price`, `receivedate`, `invoicenum`, `ponum`
       ];
       for (const field of requiredFields) {
         if (!accessories[field] && accessories[field] !== 0) {
@@ -187,6 +189,21 @@ function UpdateAccessories() {
                 value={accessories.location}
                 onChange={(e) =>
                     setAccessories({ ...accessories, location: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12">
+            <label for="inputDev" className="form-label fs-5">
+                Dev
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-0 borderc"
+                id="inputDev"
+                placeholder="Enter Dev"
+                value={accessories.dev}
+                onChange={(e) =>
+                    setAccessories({ ...accessories, dev: e.target.value })
                 }
               />
             </div>

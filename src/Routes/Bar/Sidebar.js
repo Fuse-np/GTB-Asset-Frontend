@@ -22,6 +22,7 @@ function Sidebar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("token");
+        localStorage.removeItem("role");
         window.location = "/";
       }
     });
@@ -31,6 +32,8 @@ function Sidebar() {
     onClick={() => handleReload("/dashboard/hwasset")}
   };
  */
+  const Role = localStorage.getItem("role");
+
   return (
     <div className="col-auto bg-dark">
       <div className="d-flex flex-column align-items-center justify-content-center px-3 pt-2 text-white min-vh-100">
@@ -104,6 +107,8 @@ function Sidebar() {
               <span className="ms-2 d-none d-sm-inline">AmortizedAssets</span>
             </Link>
           </li>
+          {Role === "Admin" && (
+            <>
           <li className="w-100">
             <Link
               to="/dashboard/user"
@@ -114,6 +119,8 @@ function Sidebar() {
               <span className="ms-2 d-none d-sm-inline">User</span>
             </Link>
           </li>
+          </>
+          )}
           <li className="w-100 mt-auto mb-4">
             <Link
               onClick={handleLogout}

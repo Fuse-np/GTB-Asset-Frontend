@@ -18,7 +18,7 @@ function AddSwasset() {
     assetinstall: "",
     location: "",
     price: "",
-    receivedate: "",
+    receivedate: new Date(),
     invoicenum: "",
     ponum: "",
   });
@@ -208,7 +208,7 @@ function AddSwasset() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Price
+              Price (If not have enter 0)
             </label>
             <input
               type="text"

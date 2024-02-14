@@ -71,6 +71,10 @@ function ReadAccessories() {
                 <td className="text-center fs-5">{accessories.location}</td>
               </tr>
               <tr>
+                <th className="text-center">Dev</th>
+                <td className="text-center fs-5">{accessories.dev}</td>
+              </tr>
+              <tr>
                 <th className="text-center">Price</th>
                 <td className="text-center fs-5">{accessories.price  !== undefined && accessories.price !== null ? accessories.price.toLocaleString() : '0'}</td>
               </tr>

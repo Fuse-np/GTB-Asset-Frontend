@@ -12,21 +12,27 @@ function UpdateHwasset() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [swasset, setSwasset] = useState([]);
-  const [selectedSoftware, setSelectedSoftware] = useState([]);
-  const [softwareAssets, setSoftwareAssets] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [options, setOptions] = useState([]);
 
   function getSoft() {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+      .get(`${process.env.REACT_APP_API_URL}/sw`)
       .then((res) => {
         console.log(res);
         setSwasset(res.data);
       })
       .catch((err) => console.log(err));
   }
+  const mergedOptions = [
+    ...options,
+    ...swasset.map((item) => ({
+      value: item.assetnum, 
+      label: `${item.assetnum} (${item.name})`, 
+    })),
+  ];
 
   useEffect(() => {
-    fetchSoftwareAssetsFromDatabase();
     getSoft();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id)
@@ -113,14 +119,28 @@ function UpdateHwasset() {
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        const software =
+          Array.isArray(hwasset.software) && hwasset.software.length > 0
+            ? hwasset.software.map((option) => option.value).join(", ")
+            : hwasset.software;
         axios
-          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, hwasset)
+          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, {
+            ...hwasset,
+            software,
+          })
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: `Asset number already exists.`,
+              });
+            } else if (res.data.status === "errorsoftware") {
+              const assetnum = res.data.duplicateAssets;
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Software already exists in ${assetnum}`,
               });
             } else {
               Swal.fire("Updated!", "", "success").then(() => {
@@ -154,24 +174,28 @@ function UpdateHwasset() {
     }
   };
 
-  const fetchSoftwareAssetsFromDatabase = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id);
-      const data = response.data.map(hw_asset => ({
-        value: hw_asset.software,
-        label: `${hw_asset.software} `
-      }));
-      setSoftwareAssets(data);
-    } catch (error) {
-      console.error('Error fetching software assets:', error);
-    }
-  };
-
   const handleChange = (selectedOptions) => {
-    setSelectedSoftware(selectedOptions);
+    setSelectedOption(selectedOptions);
   };
 
+  async function fetchData() {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/hw-software/`+ id);
+    const dataString = await response.text();
+    const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
+    const dataArray = cleanedDataString.split(", ");
 
+    return dataArray;
+  }
+  useEffect(() => {
+    fetchData().then((data) => {
+      const formattedOptions = data.map((item) => ({
+        value: item,
+        label: item,
+      }));
+      setOptions(formattedOptions);
+      setSelectedOption(formattedOptions);
+    });
+  }, []);
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -297,36 +321,11 @@ function UpdateHwasset() {
               Software Install
             </label>
             <Select
-              className="basic-multi-select"
-              classNamePrefix="select"
               isMulti
-              options={swasset.map((sw_asset) => ({
-                value: sw_asset.assetnum,
-                label: `${sw_asset.assetnum} (${sw_asset.name})`,
-              }))}
+              value={selectedOption}
               onChange={handleChange}
-              value={swasset.filter((option) =>
-                hwasset.software.includes(option.value)
-              )}
-              filterOption={(option, inputValue) =>
-                option.label.toLowerCase().includes(inputValue.toLowerCase())
-              }
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
-              Software Install
-            </label>
-            <Select
-              className="basic-multi-select"
-              classNamePrefix="select"
-              isMulti
-              options={softwareAssets}
-              onChange={handleChange}
-              value={selectedSoftware}
-              filterOption={(option, inputValue) =>
-                option.label.toLowerCase().includes(inputValue.toLowerCase())
-              }
+              options={mergedOptions}
+              defaultValue={options}
             />
           </div>
           <div className="col-12">
@@ -341,6 +340,7 @@ function UpdateHwasset() {
                 id="inputReceiveDate"
                 placeholderText="Enter Receive Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>
