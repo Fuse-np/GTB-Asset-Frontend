@@ -1,6 +1,6 @@
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
@@ -17,11 +17,14 @@ function AddUser() {
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-
+  //Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/adduser`, user);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/adduser`,
+        user
+      );
       if (response.data.status === "ok") {
         Swal.fire("Add!", "", "success").then(() => {
           navigate("/dashboard/user");
@@ -42,6 +45,32 @@ function AddUser() {
       });
     }
   };
+
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -107,7 +136,10 @@ function AddUser() {
             </select>
           </div>
           <p></p>
-          <button className="btn btn-success w-100 rounded-0 mb-2 borderc" type="submit">
+          <button
+            className="btn btn-success w-100 rounded-0 mb-2 borderc"
+            type="submit"
+          >
             Add User
           </button>
         </form>

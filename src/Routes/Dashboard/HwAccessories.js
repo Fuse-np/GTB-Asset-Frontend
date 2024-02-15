@@ -11,6 +11,7 @@ function HwAccessories() {
   const [itemsPerPage] = useState(9);
   const [searchTerm, setSearchTerm] = useState("");
 
+  //authen
   const checkToken = () => {
     const token = localStorage.getItem("token");
     fetch(`${process.env.REACT_APP_API_URL}/authen`, {
@@ -24,20 +25,7 @@ function HwAccessories() {
       .then((data) => {
         if (data.status === "ok") {
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Authentication Failed",
-            text: "Please login again",
-            showCancelButton: false,
-            confirmButtonText: "Back to Login",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              localStorage.removeItem("token");
-              window.location = "/";
-            }
-          });
+          window.location = "/blank";
         }
       })
       .catch((error) => {
@@ -55,6 +43,7 @@ function HwAccessories() {
       .catch((err) => console.log(err));
   }, []);
 
+  //delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
@@ -114,7 +103,6 @@ function HwAccessories() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-
   const filteredData = data.filter((hw_accessories) =>
     Object.values(hw_accessories).some((value) =>
       value.toString().toLowerCase().includes(searchTerm.toLowerCase())
@@ -159,10 +147,6 @@ function HwAccessories() {
     setSearchTerm("");
   };
 
-  const handleRefreshPage = () => {
-    window.location.reload();
-  };
-
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
@@ -179,12 +163,6 @@ function HwAccessories() {
         className="btn btn-danger mb-3 mr-3 custom-card position-end"
       >
         ClearSearch
-      </Link>
-      <Link
-        onClick={handleRefreshPage}
-        className="btn btn-primary mb-3 custom-card"
-      >
-        Refresh
       </Link>
 
       {/* Search Bar */}

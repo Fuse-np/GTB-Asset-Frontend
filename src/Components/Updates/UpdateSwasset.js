@@ -12,6 +12,7 @@ function UpdateSwasset() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    checkToken();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readsw-asset/` + id)
       .then((res) => {
@@ -48,6 +49,7 @@ function UpdateSwasset() {
     ponum: "",
   });
 
+  //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
@@ -100,13 +102,13 @@ function UpdateSwasset() {
                 title: "Error",
                 text: `Asset number already exists.`,
               });
-            } else{
-            Swal.fire("Updated!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/readswasset/" + id, swasset);
-            });
-          }
-        })
+            } else {
+              Swal.fire("Updated!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/readswasset/" + id, swasset);
+              });
+            }
+          })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -119,6 +121,7 @@ function UpdateSwasset() {
     });
   };
 
+  //date
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
@@ -132,6 +135,28 @@ function UpdateSwasset() {
     }
   };
 
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border borderc bg-white">
@@ -139,7 +164,7 @@ function UpdateSwasset() {
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-            Asset Number
+              Asset Number
             </label>
             <input
               type="text"

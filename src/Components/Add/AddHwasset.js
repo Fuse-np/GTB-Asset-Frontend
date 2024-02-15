@@ -22,13 +22,14 @@ function AddHwasset() {
     spec: "",
     serialnumber: "",
     software: "",
-    price: "",
+    price: "0",
     receivedate: new Date(),
     invoicenum: "",
     ponum: "",
   });
 
   useEffect(() => {
+    checkToken();
     axios
       .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
       .then((res) => {
@@ -37,7 +38,7 @@ function AddHwasset() {
       })
       .catch((err) => console.log(err));
   }, []);
-  
+
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
@@ -51,6 +52,7 @@ function AddHwasset() {
     }
   };
 
+  //sumiy
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
@@ -114,7 +116,7 @@ function AddHwasset() {
                 title: "Error",
                 text: `Asset number already exists in amortized asset.`,
               });
-            }else if (res.data.status === "errorsoftware") {
+            } else if (res.data.status === "errorsoftware") {
               const assetnum = res.data.duplicateAssets;
               Swal.fire({
                 icon: "error",
@@ -140,14 +142,37 @@ function AddHwasset() {
     });
   };
 
+  //select
   const handleChange = (selectedOptions) => {
     setSelectedOptions(selectedOptions || []);
+  };
+
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border bg-white borderc">
-        <h2 className="text-center">Add Asset</h2>
+        <h2 className="text-center">Add Hardware Asset</h2>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
@@ -283,14 +308,15 @@ function AddHwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Price (If not have enter 0)
+            <label htmlFor="inputPrice" className="form-label fs-5">
+              Price
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
+              value={hwasset.price === 0 ? "" : hwasset.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
                 const numericValue = parseFloat(inputValue.replace(/,/g, ""));

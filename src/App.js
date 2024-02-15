@@ -1,4 +1,3 @@
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 //Login-regis
@@ -35,8 +34,8 @@ import UpdateSwasset from "./Components/Updates/UpdateSwasset"
 import UpdateSwyearly from "./Components/Updates/UpdateSwyearly"
 import UpdateAmortized from "./Components/Updates/UpdateAmortized"
 import UpdateUser from "./Components/Updates/UpdateUser";
-//Route
-import PrivateRoute from "./Routes/Bar/PrivateRoute";
+//blank
+import Blank from "./Routes/Bar/Blank";
 
 function App() {
   return (
@@ -46,7 +45,7 @@ function App() {
       <Route path="/register" element={<Register />}></Route>
       <Route path="/forgopassword" element={<ForgotPassword />}></Route>
       <Route path="/resetpassword/:id" element={<ResetPassword />}></Route>
-      <Route element={<PrivateRoute/>}>
+      <Route path="/blank" element={<Blank/>}></Route>
       <Route path="/dashboard" element={<PageLayout />}>
       <Route path="" element={<Dashboard />}></Route>
          {/* Page */}
@@ -76,7 +75,6 @@ function App() {
           <Route path="/dashboard/updateswyearly/:id" element={<UpdateSwyearly />}></Route>
           <Route path="/dashboard/updateamortized/:id" element={<UpdateAmortized />}></Route>
           <Route path="/dashboard/updateuser/:id" element={<UpdateUser />}></Route>
-      </Route>
       </Route>
       </Routes>
     </BrowserRouter>

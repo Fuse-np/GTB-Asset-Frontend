@@ -1,7 +1,7 @@
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
@@ -17,12 +17,13 @@ function AddSwasset() {
     user: "",
     assetinstall: "",
     location: "",
-    price: "",
+    price: "0",
     receivedate: new Date(),
     invoicenum: "",
     ponum: "",
   });
 
+  //date
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
@@ -89,12 +90,12 @@ function AddSwasset() {
                 text: `Asset number already exists.`,
               });
             } else {
-            Swal.fire("Add!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/swasset");
-            });
-          }
-        })
+              Swal.fire("Add!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/swasset");
+              });
+            }
+          })
           .catch((err) => {
             console.log(err);
             Swal.fire({
@@ -107,6 +108,32 @@ function AddSwasset() {
     });
   };
 
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+  
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border bg-white borderc">
@@ -114,7 +141,7 @@ function AddSwasset() {
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-            Asset Number
+              Asset Number
             </label>
             <input
               type="text"
@@ -207,19 +234,19 @@ function AddSwasset() {
             />
           </div>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Price (If not have enter 0)
+            <label htmlFor="inputPrice" className="form-label fs-5">
+              Price
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
+              value={swasset.price === 0 ? "" : swasset.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
                 const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setSwasset({
-                  ...swasset,
+                setSwasset({ ...swasset,
                   price: isNaN(numericValue) ? "" : numericValue,
                 });
               }}

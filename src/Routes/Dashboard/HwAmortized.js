@@ -12,6 +12,7 @@ function HwAmortized() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    checkToken();
     axios
       .get(`${process.env.REACT_APP_API_URL}/hw-amortized`)
       .then((res) => {
@@ -20,6 +21,29 @@ function HwAmortized() {
       .catch((err) => console.log(err));
   }, []);
 
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
+  //delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
@@ -75,6 +99,7 @@ function HwAmortized() {
     });
   };
 
+  //moveback
   const handleMove = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -177,10 +202,6 @@ function HwAmortized() {
     setSearchTerm("");
   };
 
-  const handleRefreshPage = () => {
-    window.location.reload();
-  };
-
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
@@ -198,12 +219,6 @@ function HwAmortized() {
         className="btn btn-danger mb-3 mr-3 custom-card position-end"
       >
         ClearSearch
-      </Link>
-      <Link
-        onClick={handleRefreshPage}
-        className="btn btn-primary mb-3 custom-card"
-      >
-        Refresh
       </Link>
 
       {/* Search Bar */}

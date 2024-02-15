@@ -15,6 +15,7 @@ function UpdateHwasset() {
   const [selectedOption, setSelectedOption] = useState([]);
   const [options, setOptions] = useState([]);
 
+  //select software
   function getSoft() {
     axios
       .get(`${process.env.REACT_APP_API_URL}/sw`)
@@ -27,12 +28,13 @@ function UpdateHwasset() {
   const mergedOptions = [
     ...options,
     ...swasset.map((item) => ({
-      value: item.assetnum, 
-      label: `${item.assetnum} (${item.name})`, 
+      value: item.assetnum,
+      label: `${item.assetnum} (${item.name})`,
     })),
   ];
 
   useEffect(() => {
+    checkToken();
     getSoft();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id)
@@ -74,6 +76,7 @@ function UpdateHwasset() {
     ponum: "",
   });
 
+  //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
@@ -161,6 +164,7 @@ function UpdateHwasset() {
     });
   };
 
+  //date
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
@@ -174,12 +178,16 @@ function UpdateHwasset() {
     }
   };
 
+  //select
   const handleChange = (selectedOptions) => {
     setSelectedOption(selectedOptions);
   };
 
+  //fetch software
   async function fetchData() {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/hw-software/`+ id);
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/hw-software/` + id
+    );
     const dataString = await response.text();
     const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
     const dataArray = cleanedDataString.split(", ");
@@ -196,6 +204,28 @@ function UpdateHwasset() {
       setSelectedOption(formattedOptions);
     });
   }, []);
+
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">

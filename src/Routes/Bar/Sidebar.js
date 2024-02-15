@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 /* import 'bootstrap/dist/css/bootstrap.min.css'; */
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Sidebar.css";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 function Sidebar() {
+  //logout
   const handleLogout = (event) => {
     event.preventDefault();
     Swal.fire({
@@ -27,12 +29,26 @@ function Sidebar() {
       }
     });
   };
- /*  const handleReload = (path) => {
-    window.location.href = path;
-    onClick={() => handleReload("/dashboard/hwasset")}
-  };
- */
-  const Role = localStorage.getItem("role");
+
+  const [data, setData] = useState([]);
+  const [role, setRole] = useState(null);
+  //data
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/user`)
+      .then((res) => {
+        setData(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  //role
+  useEffect(() => {
+    if (data.length > 0) {
+      const userRole = data[0].role;
+      setRole(userRole);
+    }
+  }, [data]);
 
   return (
     <div className="col-auto bg-dark">
@@ -48,6 +64,10 @@ function Sidebar() {
         >
           <li className="w-100">
             <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard" &&
+                window.location.reload()
+              }
               to="/dashboard"
               className="nav-link whitetext px-0 align-middle"
             >
@@ -57,8 +77,11 @@ function Sidebar() {
           </li>
           <li className="w-100">
             <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/hwasset" &&
+                window.location.reload()
+              }
               to="/dashboard/hwasset"
-              
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill ms-2"></i>
@@ -67,30 +90,39 @@ function Sidebar() {
           </li>
           <li className="w-100">
             <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/acessories" &&
+                window.location.reload()
+              }
               to="/dashboard/acessories"
-              
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill-dash ms-2"></i>
               <span className="ms-2 d-none d-sm-inline">Accessories</span>
             </Link>
           </li>
-         
-            <li className="w-100">
-              <Link
-                to="/dashboard/swasset"
-                
-                className="nav-link whitetext px-0 align-middle"
-              >
-                <i className="fs-4 bi-card-list ms-2"></i>
-                <span className="ms-2 d-none d-sm-inline">Software Asset</span>
-              </Link>
-            </li>
-         
+
           <li className="w-100">
             <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/swasset" &&
+                window.location.reload()
+              }
+              to="/dashboard/swasset"
+              className="nav-link whitetext px-0 align-middle"
+            >
+              <i className="fs-4 bi-card-list ms-2"></i>
+              <span className="ms-2 d-none d-sm-inline">Software Asset</span>
+            </Link>
+          </li>
+
+          <li className="w-100">
+            <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/swyearly" &&
+                window.location.reload()
+              }
               to="/dashboard/swyearly"
-              
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-card-checklist ms-2"></i>
@@ -99,27 +131,33 @@ function Sidebar() {
           </li>
           <li className="w-100">
             <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/amortized" &&
+                window.location.reload()
+              }
               to="/dashboard/amortized"
-              
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill-x ms-2"></i>
               <span className="ms-2 d-none d-sm-inline">AmortizedAssets</span>
             </Link>
           </li>
-          {Role === "Admin" && (
+          {role === "Admin" && (
             <>
-          <li className="w-100">
-            <Link
-              to="/dashboard/user"
-              
-              className="nav-link whitetext px-0 align-middle"
-            >
-              <i className="fs-4 bi-people-fill ms-2"></i>
-              <span className="ms-2 d-none d-sm-inline">User</span>
-            </Link>
-          </li>
-          </>
+              <li className="w-100">
+                <Link
+                  onClick={() =>
+                    window.location.pathname === "/dashboard/user" &&
+                    window.location.reload()
+                  }
+                  to="/dashboard/user"
+                  className="nav-link whitetext px-0 align-middle"
+                >
+                  <i className="fs-4 bi-people-fill ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">User</span>
+                </Link>
+              </li>
+            </>
           )}
           <li className="w-100 mt-auto mb-4">
             <Link

@@ -12,6 +12,7 @@ function User() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    checkToken();
     axios
       .get(`${process.env.REACT_APP_API_URL}/user`)
       .then((res) => {
@@ -21,6 +22,29 @@ function User() {
       .catch((err) => console.log(err));
   }, []);
 
+  //authen
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.REACT_APP_API_URL}/authen`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "ok") {
+        } else {
+          window.location = "/blank";
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+  
+  //delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
@@ -125,9 +149,6 @@ function User() {
     setSearchTerm("");
   };
 
-  const handleRefreshPage = () => {
-    window.location.reload();
-  };
 
   return (
     <div className="container px-5 mt-3">
@@ -146,12 +167,7 @@ function User() {
       >
         ClearSearch
       </Link>
-      <Link
-        onClick={handleRefreshPage}
-        className="btn btn-primary mb-3 custom-card"
-      >
-        Refresh
-      </Link>
+
 
       {/* Search Bar */}
       <div className="input-group mb-3">
