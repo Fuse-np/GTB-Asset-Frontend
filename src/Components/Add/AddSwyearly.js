@@ -10,14 +10,14 @@ import "react-datepicker/dist/react-datepicker.css";
 function AddSwyearly() {
   const navigate = useNavigate();
   const [swyearly, setSwyearly] = useState({
-    name: "",
-    serialnumber: "",
-    assetinstall: "",
+    name: "-",
+    serialnumber: "-",
+    assetinstall: "-",
     receivedate: new Date(),
     expiredate: new Date(),
     price: "0",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "-",
+    ponumber: "-",
   });
 
   //date
@@ -56,8 +56,8 @@ function AddSwyearly() {
       `expiredate`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!swyearly[field] && swyearly[field] !== 0) {
@@ -147,6 +147,7 @@ function AddSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputSoftwereName"
               placeholder="Enter Softwere Name"
+              value={swyearly.name}
               onChange={(e) =>
                 setSwyearly({ ...swyearly, name: e.target.value })
               }
@@ -161,6 +162,7 @@ function AddSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputSerialNumber"
               placeholder="Enter Serial Number"
+              value={swyearly.serialnumber}
               onChange={(e) =>
                 setSwyearly({ ...swyearly, serialnumber: e.target.value })
               }
@@ -175,6 +177,7 @@ function AddSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputAssetInstall"
               placeholder="Enter Asset Install"
+              value={swyearly.assetinstall}
               onChange={(e) =>
                 setSwyearly({ ...swyearly, assetinstall: e.target.value })
               }
@@ -233,15 +236,16 @@ function AddSwyearly() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
+              value={swyearly.invoicenumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, invoicenum: e.target.value })
+                setSwyearly({ ...swyearly, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -254,8 +258,9 @@ function AddSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
+              value={swyearly.ponumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, ponum: e.target.value })
+                setSwyearly({ ...swyearly, ponumber: e.target.value })
               }
             />
           </div>

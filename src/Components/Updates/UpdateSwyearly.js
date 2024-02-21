@@ -25,8 +25,8 @@ function UpdateSwyearly() {
           expiredate: res.data[0].expiredate,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
-          invoicenum: res.data[0].invoicenum,
-          ponum: res.data[0].ponum,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
         });
       })
       .catch((err) => console.log(err));
@@ -39,8 +39,8 @@ function UpdateSwyearly() {
     expiredate: "",
     price: "",
     receivedate: "",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "",
+    ponumber: "",
   });
 
   //update
@@ -53,8 +53,8 @@ function UpdateSwyearly() {
       `expiredate`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!swyearly[field] && swyearly[field] !== 0) {
@@ -257,16 +257,16 @@ function UpdateSwyearly() {
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={swyearly.invoicenum}
+              value={swyearly.invoicenumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, invoicenum: e.target.value })
+                setSwyearly({ ...swyearly, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -279,15 +279,15 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={swyearly.ponum}
+              value={swyearly.ponumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, ponum: e.target.value })
+                setSwyearly({ ...swyearly, ponumber: e.target.value })
               }
             />
           </div>
           <p></p>
           <button className="btn btn-success w-100 rounded-0 mb-2 borderc">
-            Update Softwere Data
+            Update SoftwereYearly
           </button>
         </form>
       </div>

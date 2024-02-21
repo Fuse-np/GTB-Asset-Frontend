@@ -112,11 +112,11 @@ function ReadSwyearly() {
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{swyearly.invoicenum}</td>
+              <td className="text-center fs-5">{swyearly.invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{swyearly.ponum}</td>
+              <td className="text-center fs-5">{swyearly.ponumber}</td>
             </tr>
           </tbody>
         </table>

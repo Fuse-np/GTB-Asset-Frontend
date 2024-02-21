@@ -88,7 +88,7 @@ function ReadAmortized() {
             </tr>
             <tr>
               <th className="text-center">Asset ID</th>
-              <td className="text-center fs-5">{amortized.assetnum}</td>
+              <td className="text-center fs-5">{amortized.hwassetnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Brand</th>
@@ -119,10 +119,6 @@ function ReadAmortized() {
               <td className="text-center fs-5">{amortized.serialnumber}</td>
             </tr>
             <tr>
-              <th className="text-center">Software Install</th>
-              <td className="text-center fs-5">{amortized.software}</td>
-            </tr>
-            <tr>
               <th className="text-center">Price</th>
               <td className="text-center fs-5">
                 {amortized.price !== undefined && amortized.price !== null
@@ -138,11 +134,11 @@ function ReadAmortized() {
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{amortized.invoicenum}</td>
+              <td className="text-center fs-5">{amortized.invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{amortized.ponum}</td>
+              <td className="text-center fs-5">{amortized.ponumber}</td>
             </tr>
           </tbody>
         </table>

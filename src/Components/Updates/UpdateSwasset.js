@@ -19,51 +19,51 @@ function UpdateSwasset() {
         console.log(res);
         setSwasset({
           ...swasset,
-          assetnum: res.data[0].assetnum,
+          swassetnumber: res.data[0]. swassetnumber,
           name: res.data[0].name,
           serialnumber: res.data[0].serialnumber,
-          swkey: res.data[0].swkey,
+          softwarekey: res.data[0].softwarekey,
           user: res.data[0].user,
           assetinstall: res.data[0].assetinstall,
           location: res.data[0].location,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
-          invoicenum: res.data[0].invoicenum,
-          ponum: res.data[0].ponum,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
         });
       })
       .catch((err) => console.log(err));
   }, []);
 
   const [swasset, setSwasset] = useState({
-    assetnum: "",
+    swassetnumber: "",
     name: "",
     serialnumber: "",
-    swkey: "",
+    softwarekey: "",
     user: "",
     assetinstall: "",
     location: "",
     price: "",
     receivedate: "",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "",
+    ponumber: "",
   });
 
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
-      `assetnum`,
+      `swassetnumber`,
       `name`,
       `serialnumber`,
-      `swkey`,
+      `softwarekey`,
       `user`,
       `assetinstall`,
       `location`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!swasset[field] && swasset[field] !== 0) {
@@ -164,16 +164,16 @@ function UpdateSwasset() {
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-              Asset Number
+              Software Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputAssetNumber"
               placeholder="Enter Asset Number"
-              value={swasset.assetnum}
+              value={swasset.swassetnumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, assetnum: e.target.value })
+                setSwasset({ ...swasset, swassetnumber: e.target.value })
               }
             />
           </div>
@@ -189,6 +189,7 @@ function UpdateSwasset() {
               value={swasset.name}
               onChange={(e) => setSwasset({ ...swasset, name: e.target.value })}
             />
+          </div>
             <div className="col-12">
               <label for="inputSerialNumber" className="form-label fs-5">
                 Serial Number
@@ -213,9 +214,9 @@ function UpdateSwasset() {
                 className="form-control rounded-0 borderc"
                 id="inputSoftwereKey"
                 placeholder="Enter Softwere Key"
-                value={swasset.swkey}
+                value={swasset.softwarekey}
                 onChange={(e) =>
-                  setSwasset({ ...swasset, swkey: e.target.value })
+                  setSwasset({ ...swasset, softwarekey: e.target.value })
                 }
               />
             </div>
@@ -234,22 +235,6 @@ function UpdateSwasset() {
                 }
               />
             </div>
-            <div className="col-12">
-              <label for="inputAssetInstall" className="form-label fs-5">
-                Asset Install
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputAssetInstall"
-                placeholder="Enter Asset Install"
-                value={swasset.assetinstall}
-                onChange={(e) =>
-                  setSwasset({ ...swasset, assetinstall: e.target.value })
-                }
-              />
-            </div>
-          </div>
           <div className="col-12">
             <label for="inputLocation" className="form-label fs-5">
               Location
@@ -302,16 +287,16 @@ function UpdateSwasset() {
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={swasset.invoicenum}
+              value={swasset.invoicenumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, invoicenum: e.target.value })
+                setSwasset({ ...swasset, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -324,9 +309,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={swasset.ponum}
+              value={swasset.ponumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, ponum: e.target.value })
+                setSwasset({ ...swasset, ponumber: e.target.value })
               }
             />
           </div>

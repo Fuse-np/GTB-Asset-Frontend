@@ -250,8 +250,7 @@ function HwAsset() {
             <tr>
               <th className="text-danger fs-5">Asset Number</th>
               <th className="text-danger fs-5">User</th>
-              <th className="text-danger fs-5">Location</th>
-              <th className="text-danger fs-5">Receive Date</th>
+              <th className="text-danger fs-5">Software Install</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
           </thead>
@@ -259,12 +258,9 @@ function HwAsset() {
             {currentData && currentData.length > 0 ? (
               currentData.map((hw_asset, index) => (
                 <tr key={index}>
-                  <td>{hw_asset.assetnum}</td>
+                  <td>{hw_asset.hwassetnumber}</td>
                   <td>{hw_asset.user}</td>
-                  <td>{hw_asset.location}</td>
-                  <td>
-                    {new Date(hw_asset.receivedate).toLocaleDateString("en-GB")}
-                  </td>
+                  <td>{hw_asset.softwareinstall}</td>
                   <td>
                     <Link
                       to={`/dashboard/readhwasset/${hw_asset.id}`}

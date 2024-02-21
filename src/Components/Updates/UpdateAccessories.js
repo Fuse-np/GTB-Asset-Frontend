@@ -27,8 +27,8 @@ function UpdateAccessories() {
           dev: res.data[0].dev,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
-          invoicenum: res.data[0].invoicenum,
-          ponum: res.data[0].ponum,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
         });
       })
       .catch((err) => console.log(err));
@@ -43,8 +43,8 @@ function UpdateAccessories() {
     dev: "",
     price: "",
     receivedate: "",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "",
+    ponumber: "",
   });
 
   //update
@@ -59,8 +59,8 @@ function UpdateAccessories() {
       `dev`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!accessories[field] && accessories[field] !== 0) {
@@ -152,11 +152,11 @@ function UpdateAccessories() {
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border borderc bg-white">
-        <h2 className="text-center">Update Asset</h2>
+        <h2 className="text-center">Update Accessories</h2>
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
             <label for="inputAssetType" className="form-label fs-5">
-              Asset Type
+              Accessories Type
             </label>
             <input
               type="text"
@@ -171,7 +171,7 @@ function UpdateAccessories() {
           </div>
           <div className="col-12">
             <label for="inputAssetDetail" className="form-label fs-5">
-              Asset Detail
+              Detail
             </label>
             <input
               type="text"
@@ -281,16 +281,16 @@ function UpdateAccessories() {
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={accessories.invoicenum}
+              value={accessories.invoicenumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, invoicenum: e.target.value })
+                setAccessories({ ...accessories, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -303,9 +303,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={accessories.ponum}
+              value={accessories.ponumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, ponum: e.target.value })
+                setAccessories({ ...accessories, ponumber: e.target.value })
               }
             />
           </div>

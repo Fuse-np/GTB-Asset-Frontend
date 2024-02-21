@@ -19,7 +19,7 @@ function UpdateAmortized() {
         console.log(res);
         setAmortzied({
           ...amortzied,
-          assetnum: res.data[0].assetnum,
+          hwassetnumber: res.data[0].hwassetnumber,
           brand: res.data[0].brand,
           model: res.data[0].model,
           user: res.data[0].user,
@@ -30,8 +30,8 @@ function UpdateAmortized() {
           software: res.data[0].software,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
-          invoicenum: res.data[0].invoicenum,
-          ponum: res.data[0].ponum,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
           amortizeddate: res.data[0].amortizeddate,
         });
       })
@@ -39,7 +39,7 @@ function UpdateAmortized() {
   }, []);
 
   const [amortzied, setAmortzied] = useState({
-    assetnum: "",
+    hwassetnumber: "",
     brand: "",
     model: "",
     user: "",
@@ -47,11 +47,10 @@ function UpdateAmortized() {
     dev: "",
     spec: "",
     serialnumber: "",
-    software: "",
     price: "",
     receivedate: "",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "",
+    ponumber: "",
     amortizeddate: "",
   });
 
@@ -85,7 +84,7 @@ function UpdateAmortized() {
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
-      `assetnum`,
+      `hwassetnumber`,
       `brand`,
       `model`,
       `user`,
@@ -93,11 +92,10 @@ function UpdateAmortized() {
       `dev`,
       `spec`,
       `serialnumber`,
-      `software`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
       `amortizeddate`,
     ];
     for (const field of requiredFields) {
@@ -203,16 +201,16 @@ function UpdateAmortized() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Asset ID
+              Hardware Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputAssetID"
               placeholder="Enter AssetID"
-              value={amortzied.assetnum}
+              value={amortzied.hwassetnumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, assetnum: e.target.value })
+                setAmortzied({ ...amortzied, hwassetnumber: e.target.value })
               }
             />
           </div>
@@ -373,16 +371,16 @@ function UpdateAmortized() {
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={amortzied.invoicenum}
+              value={amortzied.invoicenumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, invoicenum: e.target.value })
+                setAmortzied({ ...amortzied, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -395,9 +393,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={amortzied.ponum}
+              value={amortzied.ponumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, ponum: e.target.value })
+                setAmortzied({ ...amortzied, ponumber: e.target.value })
               }
             />
           </div>

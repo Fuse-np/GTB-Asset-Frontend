@@ -80,7 +80,7 @@ function ReadHwasset() {
           <tbody>
             <tr>
               <th className="text-center">Asset ID</th>
-              <td className="text-center fs-5">{hwasset.assetnum}</td>
+              <td className="text-center fs-5">{hwasset.hwassetnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Brand</th>
@@ -130,11 +130,11 @@ function ReadHwasset() {
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{hwasset.invoicenum}</td>
+              <td className="text-center fs-5">{hwasset.invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{hwasset.ponum}</td>
+              <td className="text-center fs-5">{hwasset.ponumber}</td>
             </tr>
           </tbody>
         </table>

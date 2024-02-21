@@ -75,6 +75,7 @@ function Sidebar() {
               <span className="ms-2 d-none d-sm-inline">DashBoard</span>
             </Link>
           </li>
+
           <li className="w-100">
             <Link
               onClick={() =>
@@ -86,19 +87,6 @@ function Sidebar() {
             >
               <i className="fs-4 bi-database-fill ms-2"></i>
               <span className="ms-2 d-none d-sm-inline">Hardware Asset</span>
-            </Link>
-          </li>
-          <li className="w-100">
-            <Link
-              onClick={() =>
-                window.location.pathname === "/dashboard/acessories" &&
-                window.location.reload()
-              }
-              to="/dashboard/acessories"
-              className="nav-link whitetext px-0 align-middle"
-            >
-              <i className="fs-4 bi-database-fill-dash ms-2"></i>
-              <span className="ms-2 d-none d-sm-inline">Accessories</span>
             </Link>
           </li>
 
@@ -119,6 +107,20 @@ function Sidebar() {
           <li className="w-100">
             <Link
               onClick={() =>
+                window.location.pathname === "/dashboard/acessories" &&
+                window.location.reload()
+              }
+              to="/dashboard/acessories"
+              className="nav-link whitetext px-0 align-middle"
+            >
+              <i className="fs-4 bi-database-fill-dash ms-2"></i>
+              <span className="ms-2 d-none d-sm-inline">Accessories</span>
+            </Link>
+          </li>
+
+          <li className="w-100">
+            <Link
+              onClick={() =>
                 window.location.pathname === "/dashboard/swyearly" &&
                 window.location.reload()
               }
@@ -129,6 +131,7 @@ function Sidebar() {
               <span className="ms-2 d-none d-sm-inline">Software Yearly</span>
             </Link>
           </li>
+
           <li className="w-100">
             <Link
               onClick={() =>
@@ -142,6 +145,7 @@ function Sidebar() {
               <span className="ms-2 d-none d-sm-inline">AmortizedAssets</span>
             </Link>
           </li>
+
           {role === "Admin" && (
             <>
               <li className="w-100">
@@ -159,6 +163,7 @@ function Sidebar() {
               </li>
             </>
           )}
+          
           <li className="w-100 mt-auto mb-4">
             <Link
               onClick={handleLogout}

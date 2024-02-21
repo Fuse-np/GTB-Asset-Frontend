@@ -28,8 +28,8 @@ function UpdateHwasset() {
   const mergedOptions = [
     ...options,
     ...swasset.map((item) => ({
-      value: item.assetnum,
-      label: `${item.assetnum} (${item.name})`,
+      value: item.swassetnumber,
+      label: `${item.swassetnumber} (${item.name})`,
     })),
   ];
 
@@ -42,26 +42,25 @@ function UpdateHwasset() {
         console.log(res);
         setHwasset({
           ...hwasset,
-          assetnum: res.data[0].assetnum,
+          hwassetnumber: res.data[0].hwassetnumber,
           brand: res.data[0].brand,
-          model: res.data[0].model,
+          model: res.data[0].model, 
           user: res.data[0].user,
           location: res.data[0].location,
           dev: res.data[0].dev,
           spec: res.data[0].spec,
           serialnumber: res.data[0].serialnumber,
-          software: res.data[0].software,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
-          invoicenum: res.data[0].invoicenum,
-          ponum: res.data[0].ponum,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
         });
       })
       .catch((err) => console.log(err));
   }, []);
 
   const [hwasset, setHwasset] = useState({
-    assetnum: "",
+    hwassetnumber: "",
     brand: "",
     model: "",
     user: "",
@@ -69,30 +68,28 @@ function UpdateHwasset() {
     dev: "",
     spec: "",
     serialnumber: "",
-    software: [],
     price: "",
     receivedate: "",
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "",
+    ponumber: "",
   });
 
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
-      "assetnum",
-      "brand",
-      "model",
-      "user",
-      "location",
-      "dev",
-      "spec",
-      "serialnumber",
-      "software",
-      "price",
-      "receivedate",
-      "invoicenum",
-      "ponum",
+      `hwassetnumber`,
+      `brand`,
+      `model`,
+      `user`,
+      `location`,
+      `dev`,
+      `spec`,
+      `serialnumber`,
+      `price`,
+      `receivedate`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!hwasset[field] && hwasset[field] !== 0) {
@@ -122,15 +119,12 @@ function UpdateHwasset() {
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        const software =
-          Array.isArray(hwasset.software) && hwasset.software.length > 0
-            ? hwasset.software.map((option) => option.value).join(", ")
-            : hwasset.software;
+        const dataToSend = {
+          ...hwasset,
+          softwareinstall: selectedOption.map((option) => option.value),
+        };
         axios
-          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, {
-            ...hwasset,
-            software,
-          })
+          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, dataToSend)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
@@ -185,9 +179,7 @@ function UpdateHwasset() {
 
   //fetch software
   async function fetchData() {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/hw-software/` + id
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/hw-softwareinstall/` + id);
     const dataString = await response.text();
     const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
     const dataArray = cleanedDataString.split(", ");
@@ -234,16 +226,16 @@ function UpdateHwasset() {
         <form className="row g-1" onSubmit={handleUpdate}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-              Asset Number
+              Hardware Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputAssetNumber"
               placeholder="Enter Asset Number"
-              value={hwasset.assetnum}
+              value={hwasset.hwassetnumber}
               onChange={(e) =>
-                setHwasset({ ...hwasset, assetnum: e.target.value })
+                setHwasset({ ...hwasset, hwassetnumber: e.target.value })
               }
             />
           </div>
@@ -376,16 +368,16 @@ function UpdateHwasset() {
           </div>
           <div className="col-12">
             <label for="inputInvoiceNumber" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={hwasset.invoicenum}
+              value={hwasset.invoicenumber}
               onChange={(e) =>
-                setHwasset({ ...hwasset, invoicenum: e.target.value })
+                setHwasset({ ...hwasset, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -398,9 +390,9 @@ function UpdateHwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={hwasset.ponum}
+              value={hwasset.ponumber}
               onChange={(e) =>
-                setHwasset({ ...hwasset, ponum: e.target.value })
+                setHwasset({ ...hwasset, ponumber: e.target.value })
               }
             />
           </div>

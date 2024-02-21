@@ -13,19 +13,19 @@ function AddHwasset() {
   const [swasset, setSwasset] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [hwasset, setHwasset] = useState({
-    assetnum: "",
-    brand: "",
-    model: "",
-    user: "",
-    location: "",
-    dev: "",
-    spec: "",
-    serialnumber: "",
-    software: "",
+    hwassetnumber: "",
+    brand: "-",
+    model: "-",
+    user: "-",
+    location: "-",
+    dev: "-",
+    spec: "-",
+    serialnumber: "-",
+    softwareinstall: "",
     price: "0",
     receivedate: new Date(),
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "-",
+    ponumber: "-",
   });
 
   useEffect(() => {
@@ -52,11 +52,11 @@ function AddHwasset() {
     }
   };
 
-  //sumiy
+  //submit
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
-      "assetnum",
+      "hwassetnumber",
       "brand",
       "model",
       "user",
@@ -66,8 +66,8 @@ function AddHwasset() {
       "serialnumber",
       "price",
       "receivedate",
-      "invoicenum",
-      "ponum",
+      "invoicenumber",
+      "ponumber",
     ];
     for (const field of requiredFields) {
       if (!hwasset[field] && hwasset[field] !== 0) {
@@ -90,7 +90,7 @@ function AddHwasset() {
       }
     }
     Swal.fire({
-      title: "Confirm Add Data?",
+      title: `Confirm Add ${hwasset.hwassetnumber}?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
@@ -99,7 +99,7 @@ function AddHwasset() {
       if (result.isConfirmed) {
         const dataToSend = {
           ...hwasset,
-          software: selectedOptions.map((option) => option.value),
+          softwareinstall: selectedOptions.map((option) => option.value),
         };
         axios
           .post(`${process.env.REACT_APP_API_URL}/addhw-asset`, dataToSend)
@@ -176,7 +176,7 @@ function AddHwasset() {
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
-              Asset Number
+              Hardware Asset Number
             </label>
             <input
               type="text"
@@ -184,7 +184,7 @@ function AddHwasset() {
               id="inputAssetNumber"
               placeholder="Enter Asset Number"
               onChange={(e) =>
-                setHwasset({ ...hwasset, assetnum: e.target.value })
+                setHwasset({ ...hwasset, hwassetnumber: e.target.value })
               }
             />
           </div>
@@ -197,6 +197,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputBrand"
               placeholder="Enter Brand"
+              value={hwasset.brand}
               onChange={(e) =>
                 setHwasset({ ...hwasset, brand: e.target.value })
               }
@@ -211,6 +212,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputModel"
               placeholder="Enter Model"
+              value={hwasset.model}
               onChange={(e) =>
                 setHwasset({ ...hwasset, model: e.target.value })
               }
@@ -225,6 +227,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
+              value={hwasset.user}
               onChange={(e) => setHwasset({ ...hwasset, user: e.target.value })}
             />
           </div>
@@ -237,6 +240,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
+              value={hwasset.location}
               onChange={(e) =>
                 setHwasset({ ...hwasset, location: e.target.value })
               }
@@ -251,6 +255,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
+              value={hwasset.dev}
               onChange={(e) => setHwasset({ ...hwasset, dev: e.target.value })}
             />
           </div>
@@ -263,6 +268,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputSpec"
               placeholder="Enter Spec"
+              value={hwasset.spec}
               onChange={(e) => setHwasset({ ...hwasset, spec: e.target.value })}
             />
           </div>
@@ -275,6 +281,7 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
+              value={hwasset.serialnumber}
               onChange={(e) =>
                 setHwasset({ ...hwasset, serialnumber: e.target.value })
               }
@@ -293,12 +300,12 @@ function AddHwasset() {
                   (sw_asset) =>
                     !selectedOptions.some(
                       (selectedOption) =>
-                        selectedOption.value === sw_asset.assetnum
+                        selectedOption.value === sw_asset.swassetnumber
                     )
                 )
                 .map((sw_asset) => ({
-                  value: sw_asset.assetnum,
-                  label: `${sw_asset.assetnum} (${sw_asset.name})`,
+                  value: sw_asset.swassetnumber,
+                  label: `${sw_asset.swassetnumber} (${sw_asset.name})`,
                 }))}
               onChange={handleChange}
               value={selectedOptions}
@@ -345,15 +352,16 @@ function AddHwasset() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
+              value={hwasset.invoicenumber}
               onChange={(e) =>
-                setHwasset({ ...hwasset, invoicenum: e.target.value })
+                setHwasset({ ...hwasset, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -366,8 +374,9 @@ function AddHwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
+              value={hwasset.ponumber}
               onChange={(e) =>
-                setHwasset({ ...hwasset, ponum: e.target.value })
+                setHwasset({ ...hwasset, ponumber: e.target.value })
               }
             />
           </div>

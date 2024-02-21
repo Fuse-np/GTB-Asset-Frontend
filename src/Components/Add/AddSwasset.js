@@ -10,17 +10,17 @@ import "react-datepicker/dist/react-datepicker.css";
 function AddSwasset() {
   const navigate = useNavigate();
   const [swasset, setSwasset] = useState({
-    assetnum: "",
-    name: "",
-    serialnumber: "",
-    swkey: "",
-    user: "",
-    assetinstall: "",
-    location: "",
+    swassetnumber: "",
+    name: "-",
+    serialnumber: "-",
+    softwarekey: "-",
+    user: "-",
+    location: "-",
+    dev: "-",
     price: "0",
     receivedate: new Date(),
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "-",
+    ponumber: "-",
   });
 
   //date
@@ -40,17 +40,17 @@ function AddSwasset() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
-      `assetnum`,
+      `swassetnumber`,
       `name`,
       `serialnumber`,
-      `swkey`,
+      `softwarekey`,
       `user`,
-      `assetinstall`,
       `location`,
+      `dev`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!swasset[field] && swasset[field] !== 0) {
@@ -73,7 +73,7 @@ function AddSwasset() {
       }
     }
     Swal.fire({
-      title: "Confirm Add Data?",
+      title: `Confirm Add ${swasset.swassetnumber}?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
@@ -140,16 +140,16 @@ function AddSwasset() {
         <h2 className="text-center">Add Softwere Asset</h2>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputAssetNumber" className="form-label fs-5">
-              Asset Number
+            <label for="inputSoftwereAssetNumber" className="form-label fs-5">
+              Softwere Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputAssetNumber"
-              placeholder="Enter Asset Number"
+              id="inputSoftwereAssetNumber"
+              placeholder="Enter Softwere Asset Number"
               onChange={(e) =>
-                setSwasset({ ...swasset, assetnum: e.target.value })
+                setSwasset({ ...swasset, swassetnumber: e.target.value })
               }
             />
           </div>
@@ -162,6 +162,7 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputSoftwereName"
               placeholder="Enter Softwere Name"
+              value={swasset.name}
               onChange={(e) => setSwasset({ ...swasset, name: e.target.value })}
             />
           </div>
@@ -174,6 +175,7 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
+              value={swasset.serialnumber}
               onChange={(e) =>
                 setSwasset({ ...swasset, serialnumber: e.target.value })
               }
@@ -188,8 +190,9 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputSoftwereKey"
               placeholder="Enter Softwere Key"
+              value={swasset.softwarekey}
               onChange={(e) =>
-                setSwasset({ ...swasset, swkey: e.target.value })
+                setSwasset({ ...swasset, softwarekey: e.target.value })
               }
             />
           </div>
@@ -202,21 +205,8 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
+              value={swasset.user}
               onChange={(e) => setSwasset({ ...swasset, user: e.target.value })}
-            />
-          </div>
-          <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Asset Install
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputAssetInstal"
-              placeholder="Enter Asset Install"
-              onChange={(e) =>
-                setSwasset({ ...swasset, assetinstall: e.target.value })
-              }
             />
           </div>
           <div className="col-12">
@@ -228,8 +218,24 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
+              value={swasset.location}
               onChange={(e) =>
                 setSwasset({ ...swasset, location: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputDev" className="form-label fs-5">
+              Dev
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputDev"
+              placeholder="Enter Dev"
+              value={swasset.dev}
+              onChange={(e) =>
+                setSwasset({ ...swasset, dev: e.target.value })
               }
             />
           </div>
@@ -270,15 +276,16 @@ function AddSwasset() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
+              value={swasset.invoicenumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, invoicenum: e.target.value })
+                setSwasset({ ...swasset, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -291,8 +298,9 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
+              value={swasset.ponumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, ponum: e.target.value })
+                setSwasset({ ...swasset, ponumber: e.target.value })
               }
             />
           </div>

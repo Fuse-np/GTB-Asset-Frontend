@@ -10,20 +10,19 @@ import "react-datepicker/dist/react-datepicker.css";
 function AddAmortized() {
   const navigate = useNavigate();
   const [amortzied, setAmortzied] = useState({
-    assetnum: "",
-    brand: "",
-    model: "",
-    user: "",
-    location: "",
-    dev: "",
-    spec: "",
-    serialnumber: "",
-    software: "",
+    hwassetnumber: "",
+    brand: "-",
+    model: "-",
+    user: "-",
+    location: "-",
+    dev: "-",
+    spec: "-",
+    serialnumber: "-",
     price: "0",
     receivedate: new Date(),
-    invoicenum: "",
-    ponum: "",
-    amortizeddate: "",
+    invoicenumber: "-",
+    ponumber: "-",
+    amortizeddate: new Date(),
   });
 
   //date
@@ -58,18 +57,18 @@ function AddAmortized() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
-      `assetnum`,
-      `brand`,
-      `model`,
-      `user`,
-      `location`,
-      `spec`,
-      `serialnumber`,
-      `software`,
-      `price`,
-      `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      "hwassetnumber",
+      "brand",
+      "model",
+      "user",
+      "location",
+      "dev",
+      "spec",
+      "serialnumber",
+      "price",
+      "receivedate",
+      "invoicenumber",
+      "ponumber",
       `amortizeddate`,
     ];
     for (const field of requiredFields) {
@@ -183,7 +182,7 @@ function AddAmortized() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Asset ID
+              Hardware Asset Number
             </label>
             <input
               type="text"
@@ -191,7 +190,7 @@ function AddAmortized() {
               id="inputAssetID"
               placeholder="Enter AssetID"
               onChange={(e) =>
-                setAmortzied({ ...amortzied, assetnum: e.target.value })
+                setAmortzied({ ...amortzied, hwassetnumber: e.target.value })
               }
             />
           </div>
@@ -204,6 +203,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputBrand"
               placeholder="Enter Brand"
+              value={amortzied.brand}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, brand: e.target.value })
               }
@@ -218,6 +218,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputModel"
               placeholder="Enter Model"
+              value={amortzied.model}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, model: e.target.value })
               }
@@ -232,6 +233,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
+              value={amortzied.user}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, user: e.target.value })
               }
@@ -246,6 +248,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
+              value={amortzied.location}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, location: e.target.value })
               }
@@ -260,6 +263,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
+              value={amortzied.dev}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, dev: e.target.value })
               }
@@ -274,6 +278,7 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSpec"
               placeholder="Enter Spec"
+              value={amortzied.spec}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, spec: e.target.value })
               }
@@ -288,22 +293,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
+              value={amortzied.serialnumber}
               onChange={(e) =>
                 setAmortzied({ ...amortzied, serialnumber: e.target.value })
-              }
-            />
-          </div>
-          <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Softwere Install
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputSoftwareinstall"
-              placeholder="Enter Software install"
-              onChange={(e) =>
-                setAmortzied({ ...amortzied, software: e.target.value })
               }
             />
           </div>
@@ -345,15 +337,16 @@ function AddAmortized() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
+              value={amortzied.invoicenumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, invoicenum: e.target.value })
+                setAmortzied({ ...amortzied, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -366,8 +359,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
+              value={amortzied.ponumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, ponum: e.target.value })
+                setAmortzied({ ...amortzied, ponumber: e.target.value })
               }
             />
           </div>

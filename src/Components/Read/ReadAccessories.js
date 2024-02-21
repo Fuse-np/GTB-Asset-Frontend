@@ -116,11 +116,11 @@ function ReadAccessories() {
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{accessories.invoicenum}</td>
+              <td className="text-center fs-5">{accessories.invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{accessories.ponum}</td>
+              <td className="text-center fs-5">{accessories.ponumber}</td>
             </tr>
           </tbody>
         </table>

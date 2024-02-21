@@ -246,7 +246,7 @@ function HwAmortized() {
             {currentData && currentData.length > 0 ? (
               currentData.map((hw_amortized, index) => (
                 <tr key={index}>
-                  <td>{hw_amortized.assetnum}</td>
+                  <td>{hw_amortized.hwassetnumber}</td>
                   <td>
                     {new Date(hw_amortized.receivedate).toLocaleDateString(
                       "en-GB"

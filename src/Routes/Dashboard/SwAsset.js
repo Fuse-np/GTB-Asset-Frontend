@@ -194,7 +194,7 @@ function SwAsset() {
             {currentData && currentData.length > 0 ? (
               currentData.map((sw_asset, index) => (
                 <tr key={index}>
-                  <td>{sw_asset.assetnum}</td>
+                  <td>{sw_asset.swassetnumber}</td>
                   <td>{sw_asset.name}</td>
                   <td>{sw_asset.user}</td>
                   <td>{sw_asset.assetinstall}</td>

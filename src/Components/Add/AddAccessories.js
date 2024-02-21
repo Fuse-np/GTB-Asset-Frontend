@@ -10,16 +10,16 @@ import "react-datepicker/dist/react-datepicker.css";
 function AddAccessories() {
   const navigate = useNavigate();
   const [accessories, setAccessories] = useState({
-    type: "",
-    detail: "",
-    serialnumber: "",
-    assetinstall: "",
-    location: "",
-    dev: "",
+    type: "-",
+    detail: "-",
+    serialnumber: "-",
+    assetinstall: "-",
+    location: "-",
+    dev: "-",
     price: "0",
     receivedate: new Date(),
-    invoicenum: "",
-    ponum: "",
+    invoicenumber: "-",
+    ponumber: "-",
   });
   //date
   const handleDateChange = (date) => {
@@ -47,8 +47,8 @@ function AddAccessories() {
       `dev`,
       `price`,
       `receivedate`,
-      `invoicenum`,
-      `ponum`,
+      `invoicenumber`,
+      `ponumber`,
     ];
     for (const field of requiredFields) {
       if (!accessories[field] && accessories[field] !== 0) {
@@ -130,17 +130,18 @@ function AddAccessories() {
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border bg-white borderc">
-        <h2 className="text-center">Add Asset</h2>
+        <h2 className="text-center">Add Accessories</h2>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Asset Type
+            <label for="input AccessoriesID" className="form-label fs-5">
+              Accessories Type
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputAssetType"
-              placeholder="Enter Asset Type"
+              id="input AccessoriesType"
+              placeholder="Enter  Accessories Type"
+              value={accessories.type}
               onChange={(e) =>
                 setAccessories({ ...accessories, type: e.target.value })
               }
@@ -148,13 +149,14 @@ function AddAccessories() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Asset Detail
+             Detail
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputAssetDetail"
-              placeholder="Enter Asset Detail"
+              placeholder="Enter Detail"
+              value={accessories.detail}
               onChange={(e) =>
                 setAccessories({ ...accessories, detail: e.target.value })
               }
@@ -169,6 +171,7 @@ function AddAccessories() {
               className="form-control rounded-0 borderc"
               id="inputSerialNumber"
               placeholder="Enter Serial Number"
+              value={accessories.serialnumber}
               onChange={(e) =>
                 setAccessories({ ...accessories, serialnumber: e.target.value })
               }
@@ -183,6 +186,7 @@ function AddAccessories() {
               className="form-control rounded-0 borderc"
               id="inputAssetInstall"
               placeholder="Enter Asset Install"
+              value={accessories.assetinstall}
               onChange={(e) =>
                 setAccessories({ ...accessories, assetinstall: e.target.value })
               }
@@ -197,6 +201,7 @@ function AddAccessories() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
+              value={accessories.location}
               onChange={(e) =>
                 setAccessories({ ...accessories, location: e.target.value })
               }
@@ -211,6 +216,7 @@ function AddAccessories() {
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
+              value={accessories.dev}
               onChange={(e) =>
                 setAccessories({ ...accessories, dev: e.target.value })
               }
@@ -254,15 +260,16 @@ function AddAccessories() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Invoid Number
+              Invoice Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
+              value={accessories.invoicenumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, invoicenum: e.target.value })
+                setAccessories({ ...accessories, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -275,8 +282,9 @@ function AddAccessories() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
+              value={accessories.ponumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, ponum: e.target.value })
+                setAccessories({ ...accessories, ponumber: e.target.value })
               }
             />
           </div>

@@ -39,7 +39,7 @@ function ReadSwasset() {
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/addswasset");
+        navigate("/dashboard/swasset");
       } else {
       }
     });
@@ -80,7 +80,7 @@ function ReadSwasset() {
           <tbody>
             <tr>
               <th className="text-center">Asset ID</th>
-              <td className="text-center fs-5">{swasset.assetnum}</td>
+              <td className="text-center fs-5">{swasset.swassetnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Softwere Name</th>
@@ -92,7 +92,7 @@ function ReadSwasset() {
             </tr>
             <tr>
               <th className="text-center">Softwere Key</th>
-              <td className="text-center fs-5">{swasset.swkey}</td>
+              <td className="text-center fs-5">{swasset.softwarekey}</td>
             </tr>
             <tr>
               <th className="text-center">User</th>
@@ -105,6 +105,10 @@ function ReadSwasset() {
             <tr>
               <th className="text-center">Location</th>
               <td className="text-center fs-5">{swasset.location}</td>
+            </tr>
+            <tr>
+              <th className="text-center">Dev</th>
+              <td className="text-center fs-5">{swasset.dev}</td>
             </tr>
             <tr>
               <th className="text-center">Price</th>
@@ -122,11 +126,11 @@ function ReadSwasset() {
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{swasset.invoicenum}</td>
+              <td className="text-center fs-5">{swasset.invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{swasset.ponum}</td>
+              <td className="text-center fs-5">{swasset.ponumber}</td>
             </tr>
           </tbody>
         </table>
