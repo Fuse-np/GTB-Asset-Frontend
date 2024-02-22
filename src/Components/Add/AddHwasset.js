@@ -108,13 +108,13 @@ function AddHwasset() {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists.`,
+                text: `Asset number ${hwasset.hwassetnumber} already exists.`,
               });
             } else if (res.data.status === "erroramortized") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists in amortized asset.`,
+                text: `Asset number ${hwasset.hwassetnumber} already exists in amortizedasset.`,
               });
             } else if (res.data.status === "errorsoftware") {
               const assetnum = res.data.duplicateAssets;

@@ -92,7 +92,7 @@ function AddAmortized() {
       }
     }
     Swal.fire({
-      title: "Confirm Add Data?",
+      title: `Confirm Add ${amortzied.hwassetnumber}?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
@@ -106,13 +106,13 @@ function AddAmortized() {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists.`,
+                text: `Asset number ${amortzied.hwassetnumber} already exists.`,
               });
             } else if (res.data.status === "errorhardware") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists in Hardware asset.`,
+                text: `Asset number ${amortzied.hwassetnumber} already exists in Hardware asset.`,
               });
             } else {
               Swal.fire("Add!", "", "success").then(() => {

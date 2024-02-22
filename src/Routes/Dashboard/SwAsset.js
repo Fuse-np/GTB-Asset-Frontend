@@ -7,21 +7,37 @@ import "./style.css";
 
 function SwAsset() {
   const [data, setData] = useState([]);
+  const [install, setInstall] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     checkToken();
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
-      .then((res) => {
-        setData(res.data);
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
+    software();
+    assetinstall();
   }, []);
 
+  //Software
+  const software = () => {
+    axios
+    .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+    .then((res) => {
+      setData(res.data);
+      console.log(data);
+    })
+    .catch((err) => console.log(err));
+  }
+  //install
+  const assetinstall = () => {
+    axios
+    .get(`${process.env.REACT_APP_API_URL}/hw-install`)
+    .then((res) => {
+      setInstall(res.data);
+      console.log(data);
+    })
+    .catch((err) => console.log(err));
+  }
   //authen
   const checkToken = () => {
     const token = localStorage.getItem("token");
@@ -104,13 +120,15 @@ function SwAsset() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-
-  const filteredData = data.filter((sw_asset) =>
-    Object.values(sw_asset).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
+  
+  const filteredData = data.filter((sw_asset) => {
+    return Object.values(sw_asset).some((value) => {
+      if (value !== null && value !== undefined) {
+        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -197,7 +215,7 @@ function SwAsset() {
                   <td>{sw_asset.swassetnumber}</td>
                   <td>{sw_asset.name}</td>
                   <td>{sw_asset.user}</td>
-                  <td>{sw_asset.assetinstall}</td>
+                  <td>{sw_asset.assetinstall || 'Not Install'}</td>
                   <td>
                     <Link
                       to={`/dashboard/readswasset/${sw_asset.id}`}

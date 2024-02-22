@@ -54,7 +54,7 @@ function Sidebar() {
     <div className="col-auto bg-dark">
       <div className="d-flex flex-column align-items-center justify-content-center px-3 pt-2 text-white min-vh-100">
         <h2>
-          <span className="fs-5 fw-bolder d-none d-sm-inline  whitetext">
+          <span className="fs-5 fw-bolder d-none d-sm-inline whitetext mb-4">
             Getabec Asset
           </span>
         </h2>

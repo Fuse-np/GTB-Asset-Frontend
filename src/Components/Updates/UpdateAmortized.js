@@ -119,7 +119,7 @@ function UpdateAmortized() {
       }
     }
     Swal.fire({
-      title: "Confirm Update Data?",
+      title: `Confirm Update ${amortzied.hwassetnumber}?`,
       showCancelButton: true,
       confirmButtonText: "Update",
       allowOutsideClick: false,
@@ -136,7 +136,13 @@ function UpdateAmortized() {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists.`,
+                text: `Asset number ${amortzied.hwassetnumber} already exists.`,
+              });
+            } else if (res.data.status === "errorhardware") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number ${amortzied.hwassetnumber} already exists in Hardware asset.`,
               });
             } else {
               Swal.fire("Updated!", "", "success").then(() => {

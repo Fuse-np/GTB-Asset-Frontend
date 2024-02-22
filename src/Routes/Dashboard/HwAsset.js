@@ -169,12 +169,14 @@ function HwAsset() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-
-  const filteredData = data.filter((hw_asset) =>
-    Object.values(hw_asset).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredData = data.filter((hw_asset) => {
+    return Object.values(hw_asset).some((value) => {
+      if (value !== null && value !== undefined) {
+        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -213,7 +215,6 @@ function HwAsset() {
   const handleClearSearch = () => {
     setSearchTerm("");
   };
-
 
   return (
     <div className="container px-5 mt-3">
@@ -260,7 +261,7 @@ function HwAsset() {
                 <tr key={index}>
                   <td>{hw_asset.hwassetnumber}</td>
                   <td>{hw_asset.user}</td>
-                  <td>{hw_asset.softwareinstall}</td>
+                  <td>{hw_asset.softwareinstall || 'Not Install'}</td>
                   <td>
                     <Link
                       to={`/dashboard/readhwasset/${hw_asset.id}`}

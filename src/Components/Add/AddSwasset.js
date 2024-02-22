@@ -87,7 +87,7 @@ function AddSwasset() {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists.`,
+                text: `Asset number ${swasset.swassetnumber} already exists.`,
               });
             } else {
               Swal.fire("Add!", "", "success").then(() => {

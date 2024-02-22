@@ -104,12 +104,14 @@ function SwYearly() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-
-  const filteredData = data.filter((sw_yearly) =>
-    Object.values(sw_yearly).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredData = data.filter((sw_yearly) => {
+    return Object.values(sw_yearly).some((value) => {
+      if (value !== null && value !== undefined) {
+        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;

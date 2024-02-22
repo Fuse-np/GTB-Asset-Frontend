@@ -158,11 +158,14 @@ function HwAmortized() {
     setCurrentPage(1);
   };
 
-  const filteredData = data.filter((hw_amortized) =>
-    Object.values(hw_amortized).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredData = data.filter((hw_amortized) => {
+    return Object.values(hw_amortized).some((value) => {
+      if (value !== null && value !== undefined) {
+        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;

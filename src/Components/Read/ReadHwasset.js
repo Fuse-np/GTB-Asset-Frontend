@@ -69,7 +69,7 @@ function ReadHwasset() {
 
   return (
     <div className="container px-5 mt-3">
-      <div className="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
+      <div className="d-flex justify-content-center shadow p-3 mb-4 bg-white rounded">
         <h3 className="display-4">Asset Detail</h3>
       </div>
       <div className="mt-3">

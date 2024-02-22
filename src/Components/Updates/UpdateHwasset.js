@@ -183,7 +183,6 @@ function UpdateHwasset() {
     const dataString = await response.text();
     const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
     const dataArray = cleanedDataString.split(", ");
-
     return dataArray;
   }
   useEffect(() => {
