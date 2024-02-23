@@ -8,7 +8,7 @@ import "./style.css";
 function HwAccessories() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(9);
+  const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
 
   //authen
@@ -183,7 +183,7 @@ function HwAccessories() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
-              <th className="text-danger fs-5">Asset Type</th>
+              <th className="text-danger fs-5">Acessories Type</th>
               <th className="text-danger fs-5">Detail</th>
               <th className="text-danger fs-5">Asset Install</th>
               <th className="text-danger fs-5">Receive Date</th>

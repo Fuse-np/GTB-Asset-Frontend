@@ -6,32 +6,40 @@ import Swal from "sweetalert2";
 import "./style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 function UpdateAccessories() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [assetnumber, setAssetnumber] = useState([]);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
-      .then((res) => {
-        console.log(res);
-        setAccessories({
-          ...accessories,
-          type: res.data[0].type,
-          detail: res.data[0].detail,
-          serialnumber: res.data[0].serialnumber,
-          assetinstall: res.data[0].assetinstall,
-          location: res.data[0].location,
-          dev: res.data[0].dev,
-          price: res.data[0].price,
-          receivedate: res.data[0].receivedate,
-          invoicenumber: res.data[0].invoicenumber,
-          ponumber: res.data[0].ponumber,
-        });
-      })
-      .catch((err) => console.log(err));
+    .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
+    .then((res) => {
+      console.log(res);
+      setAccessories({
+        ...accessories,
+        type: res.data[0].type,
+        detail: res.data[0].detail,
+        serialnumber: res.data[0].serialnumber,
+        assetinstall: res.data[0].assetinstall,
+        location: res.data[0].location,
+        dev: res.data[0].dev,
+        price: res.data[0].price,
+        receivedate: res.data[0].receivedate,
+        invoicenumber: res.data[0].invoicenumber,
+        ponumber: res.data[0].ponumber,
+      });
+      getAssetnmber(); // Fetch asset numbers
+      setSelectedAsset({
+        value: res.data[0].assetinstall,
+        label: res.data[0].assetinstall,
+      });
+    })
+    .catch((err) => console.log(err));
   }, []);
 
   const [accessories, setAccessories] = useState({
@@ -148,6 +156,20 @@ function UpdateAccessories() {
         console.error("Error", error);
       });
   };
+  //assetnum
+  const getAssetnmber = () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/hw-assetnumber`)
+      .then((res) => {
+        setAssetnumber(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+  //for select
+  const handleAssetChange = (selectedOption) => {
+    setSelectedAsset(selectedOption);
+    setAccessories({ ...accessories, assetinstall: selectedOption.value });
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -199,21 +221,26 @@ function UpdateAccessories() {
               }
             />
           </div>
-          <div className="col-12">
-            <label for="inputAssetInstall" className="form-label fs-5">
-              Asset Install
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputAssetInstall"
-              placeholder="Enter Asset Install"
-              value={accessories.assetinstall}
-              onChange={(e) =>
-                setAccessories({ ...accessories, assetinstall: e.target.value })
-              }
-            />
-          </div>
+          {assetnumber.length > 0 && (
+            <div className="col-12">
+              <label htmlFor="inputAssetInstall" className="form-label fs-5">
+                Asset Install
+              </label>
+              <Select
+                name="AssetInstall"
+                id="inputAssetInstall"
+                value={selectedAsset}
+                onChange={handleAssetChange}
+                options={[
+                  ...assetnumber.map((asset) => ({
+                    value: asset.hwassetnumber,
+                    label: asset.hwassetnumber,
+                  })),
+                ]}
+                className="borderc"
+              />
+            </div>
+          )}
           <div className="col-12">
             <label for="inputLocation" className="form-label fs-5">
               Location
@@ -249,18 +276,26 @@ function UpdateAccessories() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={accessories.price}
+              value={accessories.price === 0 ? "" : accessories.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setAccessories({
-                  ...accessories,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setAccessories({
+                    ...accessories,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setAccessories({
+                    ...accessories,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>
@@ -290,7 +325,10 @@ function UpdateAccessories() {
               placeholder="Enter Invoice Number"
               value={accessories.invoicenumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, invoicenumber: e.target.value })
+                setAccessories({
+                  ...accessories,
+                  invoicenumber: e.target.value,
+                })
               }
             />
           </div>

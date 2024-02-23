@@ -24,7 +24,6 @@ function UpdateSwasset() {
           serialnumber: res.data[0].serialnumber,
           softwarekey: res.data[0].softwarekey,
           user: res.data[0].user,
-          assetinstall: res.data[0].assetinstall,
           location: res.data[0].location,
           price: res.data[0].price,
           receivedate: res.data[0].receivedate,
@@ -41,7 +40,6 @@ function UpdateSwasset() {
     serialnumber: "",
     softwarekey: "",
     user: "",
-    assetinstall: "",
     location: "",
     price: "",
     receivedate: "",
@@ -58,7 +56,6 @@ function UpdateSwasset() {
       `serialnumber`,
       `softwarekey`,
       `user`,
-      `assetinstall`,
       `location`,
       `price`,
       `receivedate`,
@@ -255,18 +252,26 @@ function UpdateSwasset() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swasset.price}
+              value={swasset.price === 0 ? "" : swasset.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setSwasset({
-                  ...swasset,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setSwasset({
+                    ...swasset,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setSwasset({
+                    ...swasset,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>

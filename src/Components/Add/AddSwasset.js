@@ -83,11 +83,11 @@ function AddSwasset() {
         axios
           .post(`${process.env.REACT_APP_API_URL}/addsw-asset`, swasset)
           .then((res) => {
-            if (res.data.status === "error") {
+            if (res.data.status === "errorsoftware") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number ${swasset.swassetnumber} already exists.`,
+                text: `Asset number already exists.`,
               });
             } else {
               Swal.fire("Add!", "", "success").then(() => {
@@ -244,17 +244,26 @@ function AddSwasset() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
               value={swasset.price === 0 ? "" : swasset.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setSwasset({ ...swasset,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setSwasset({
+                    ...swasset,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setSwasset({
+                    ...swasset,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>

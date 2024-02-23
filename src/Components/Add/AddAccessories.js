@@ -6,14 +6,17 @@ import "./style.css";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 function AddAccessories() {
   const navigate = useNavigate();
+  const [assetnumber, setAssetnumber] = useState([]);
+  const [selectedAsset, setSelectedAsset] = useState(null);
   const [accessories, setAccessories] = useState({
     type: "-",
     detail: "-",
     serialnumber: "-",
-    assetinstall: "-",
+    assetinstall: "",
     location: "-",
     dev: "-",
     price: "0",
@@ -125,7 +128,22 @@ function AddAccessories() {
 
   useEffect(() => {
     checkToken();
+    getAssetnmber();
   }, []);
+
+  const getAssetnmber = () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/hw-assetnumber`)
+      .then((res) => {
+        setAssetnumber(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleAssetChange = (selectedOption) => {
+    setSelectedAsset(selectedOption);
+    setAccessories({ ...accessories, assetinstall: selectedOption.value });
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -149,7 +167,7 @@ function AddAccessories() {
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-             Detail
+              Detail
             </label>
             <input
               type="text"
@@ -177,21 +195,27 @@ function AddAccessories() {
               }
             />
           </div>
-          <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Asset Install
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputAssetInstall"
-              placeholder="Enter Asset Install"
-              value={accessories.assetinstall}
-              onChange={(e) =>
-                setAccessories({ ...accessories, assetinstall: e.target.value })
-              }
-            />
-          </div>
+          {assetnumber.length > 0 && (
+            <div className="col-12">
+              <label htmlFor="inputAssetInstall" className="form-label fs-5">
+                Asset Install
+              </label>
+              <Select
+                name="AssetInstall"
+                id="inputAssetInstall"
+                value={selectedAsset || "-"}
+                defaultValue={"-"}
+                onChange={handleAssetChange}
+                options={[
+                  ...assetnumber.map((asset) => ({
+                    value: asset.hwassetnumber,
+                    label: asset.hwassetnumber,
+                  })),
+                ]}
+                className="borderc"
+              />
+            </div>
+          )}
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
               Location
@@ -227,18 +251,26 @@ function AddAccessories() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
               value={accessories.price === 0 ? "" : accessories.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setAccessories({
-                  ...accessories,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setAccessories({
+                    ...accessories,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setAccessories({
+                    ...accessories,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>
@@ -269,7 +301,10 @@ function AddAccessories() {
               placeholder="Enter Invoice Number"
               value={accessories.invoicenumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, invoicenumber: e.target.value })
+                setAccessories({
+                  ...accessories,
+                  invoicenumber: e.target.value,
+                })
               }
             />
           </div>

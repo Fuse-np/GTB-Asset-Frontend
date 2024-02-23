@@ -72,7 +72,7 @@ function ReadAccessories() {
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-4 bg-white rounded">
-        <h3 className="display-4">Asset Detail</h3>
+        <h3 className="display-4">Accessories Detail</h3>
       </div>
       <div className="mt-3">
         <table
@@ -81,7 +81,7 @@ function ReadAccessories() {
         >
           <tbody>
             <tr>
-              <th className="text-center">Asset Type</th>
+              <th className="text-center">Accessories Type</th>
               <td className="text-center fs-5">{accessories.type}</td>
             </tr>
             <tr>
@@ -91,6 +91,10 @@ function ReadAccessories() {
             <tr>
               <th className="text-center">Serial Number</th>
               <td className="text-center fs-5">{accessories.serialnumber}</td>
+            </tr>
+            <tr>
+              <th className="text-center">Asset Install</th>
+              <td className="text-center fs-5">{accessories.assetinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Location</th>

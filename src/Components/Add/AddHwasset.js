@@ -117,7 +117,7 @@ function AddHwasset() {
                 text: `Asset number ${hwasset.hwassetnumber} already exists in amortizedasset.`,
               });
             } else if (res.data.status === "errorsoftware") {
-              const assetnum = res.data.duplicateAssets;
+              const assetnum = res.data.assetInstall;
               Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -319,18 +319,26 @@ function AddHwasset() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
               value={hwasset.price === 0 ? "" : hwasset.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setHwasset({
-                  ...hwasset,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setHwasset({
+                    ...hwasset,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setHwasset({
+                    ...hwasset,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>

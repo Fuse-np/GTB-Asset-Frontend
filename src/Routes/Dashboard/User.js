@@ -200,7 +200,7 @@ function User() {
                   <td>{user.role}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readswyearly/${user.id}`}
+                      to={`/dashboard/updateuser/${user.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Edit

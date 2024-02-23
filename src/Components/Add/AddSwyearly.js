@@ -90,10 +90,18 @@ function AddSwyearly() {
         axios
           .post(`${process.env.REACT_APP_API_URL}/addsw-yearly`, swyearly)
           .then((res) => {
-            Swal.fire("Add!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/swyearly");
-            });
+            if (res.data.status === "errordate") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Receivedate can't be after expiredate.`,
+              });
+            } else {
+              Swal.fire("Add!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/swyearly");
+              });
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -219,18 +227,26 @@ function AddSwyearly() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
               value={swyearly.price === 0 ? "" : swyearly.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setSwyearly({
-                  ...swyearly,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                 setSwyearly({
+                    ...swyearly,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setSwyearly({
+                    ...swyearly,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>

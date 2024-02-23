@@ -90,10 +90,18 @@ function UpdateSwyearly() {
             swyearly
           )
           .then((res) => {
-            Swal.fire("Updated!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/readswyearly/" + id, swyearly);
-            });
+            if (res.data.status === "errordate") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Receivedate can't be after expiredate.`,
+              });
+            } else {
+              Swal.fire("Updated!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/readswyearly/" + id, swyearly);
+              });
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -240,18 +248,26 @@ function UpdateSwyearly() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swyearly.price}
+              value={swyearly.price === 0 ? "" : swyearly.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setSwyearly({
-                  ...swyearly,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setSwyearly({
+                    ...swyearly,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setSwyearly({
+                    ...swyearly,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>

@@ -87,7 +87,7 @@ function ReadAmortized() {
               </td>
             </tr>
             <tr>
-              <th className="text-center">Asset ID</th>
+              <th className="text-center">Hardware Asset Number</th>
               <td className="text-center fs-5">{amortized.hwassetnumber}</td>
             </tr>
             <tr>

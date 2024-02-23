@@ -39,7 +39,7 @@ function ReadHwasset() {
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/addhwasset");
+        navigate("/dashboard/hwasset");
       } else {
       }
     });
@@ -70,7 +70,7 @@ function ReadHwasset() {
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-4 bg-white rounded">
-        <h3 className="display-4">Asset Detail</h3>
+        <h3 className="display-4">Hardware Asset Detail</h3>
       </div>
       <div className="mt-3">
         <table
@@ -79,7 +79,7 @@ function ReadHwasset() {
         >
           <tbody>
             <tr>
-              <th className="text-center">Asset ID</th>
+              <th className="text-center">Hardware Asset Number</th>
               <td className="text-center fs-5">{hwasset.hwassetnumber}</td>
             </tr>
             <tr>
@@ -112,7 +112,7 @@ function ReadHwasset() {
             </tr>
             <tr>
               <th className="text-center">Software Install</th>
-              <td className="text-center fs-5">{hwasset.software}</td>
+              <td className="text-center fs-5">{hwasset.softwareinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Price</th>

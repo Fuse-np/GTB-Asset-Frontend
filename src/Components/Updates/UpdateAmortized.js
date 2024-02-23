@@ -345,18 +345,26 @@ function UpdateAmortized() {
               Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={amortzied.price}
+              value={amortzied.price === 0 ? "" : amortzied.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
-                const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                setAmortzied({
-                  ...amortzied,
-                  price: isNaN(numericValue) ? "" : numericValue,
-                });
+                if (inputValue !== "") {
+                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+                  setAmortzied({
+                    ...amortzied,
+                    price: isNaN(numericValue) ? "" : numericValue,
+                  });
+                } else {
+                  setAmortzied({
+                    ...amortzied,
+                    price: "",
+                  });
+                }
               }}
             />
           </div>
