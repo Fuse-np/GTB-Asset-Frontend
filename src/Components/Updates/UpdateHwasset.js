@@ -77,19 +77,20 @@ function UpdateHwasset() {
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
+    // Validate required fields
     const requiredFields = [
-      `hwassetnumber`,
-      `brand`,
-      `model`,
-      `user`,
-      `location`,
-      `dev`,
-      `spec`,
-      `serialnumber`,
-      `price`,
-      `receivedate`,
-      `invoicenumber`,
-      `ponumber`,
+      "hwassetnumber",
+      "brand",
+      "model",
+      "user",
+      "location",
+      "dev",
+      "spec",
+      "serialnumber",
+      "price",
+      "receivedate",
+      "invoicenumber",
+      "ponumber",
     ];
     for (const field of requiredFields) {
       if (!hwasset[field] && hwasset[field] !== 0) {
@@ -101,61 +102,40 @@ function UpdateHwasset() {
         return;
       }
     }
-    for (const field in hwasset) {
-      if (hwasset.hasOwnProperty(field) && hwasset[field] === null) {
+    const dataToSend = {
+      ...hwasset,
+      softwareinstall: selectedOption.map((option) => option.value),
+    };
+    axios
+      .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/${id}`, dataToSend)
+      .then((res) => {
+        if (res.data.status === "error") {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Asset number already exists.",
+          });
+        } else if (res.data.status === "errorsoftware") {
+          const assetnum = res.data.duplicateAssets;
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `Software already exists in ${assetnum}`,
+          });
+        } else {
+          Swal.fire("Updated!", "", "success").then(() => {
+            navigate(`/dashboard/readhwasset/${id}`);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
+          title: "Server Error",
+          text: "Error updating data on the server.",
         });
-        return;
-      }
-    }
-    Swal.fire({
-      title: "Confirm Update Data?",
-      showCancelButton: true,
-      confirmButtonText: "Update",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const dataToSend = {
-          ...hwasset,
-          softwareinstall: selectedOption.map((option) => option.value),
-        };
-        axios
-          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, dataToSend)
-          .then((res) => {
-            if (res.data.status === "error") {
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: `Asset number already exists.`,
-              });
-            } else if (res.data.status === "errorsoftware") {
-              const assetnum = res.data.duplicateAssets;
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: `Software already exists in ${assetnum}`,
-              });
-            } else {
-              Swal.fire("Updated!", "", "success").then(() => {
-                console.log(res);
-                navigate("/dashboard/readhwasset/" + id, hwasset);
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            Swal.fire({
-              icon: "error",
-              title: "Server Error",
-              text: "Error updating data on the server.",
-            });
-          });
-      }
-    });
+      });
   };
 
   //date

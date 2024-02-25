@@ -112,7 +112,7 @@ function HwAsset() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${process.env.REACT_APP_API_URL}/movetohw-amortized/${id}`)
+          .put(`${process.env.REACT_APP_API_URL}/movetohw-amortized/${id}`)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
@@ -128,24 +128,7 @@ function HwAsset() {
                 confirmButtonColor: "#28a745",
               }).then((result) => {
                 if (result.isConfirmed || result.isDismissed) {
-                  axios
-                    .delete(
-                      `${process.env.REACT_APP_API_URL}/deletehw-asset/${id}`
-                    )
-                    .then((res) => {
-                      window.location = "/dashboard/amortized";
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                      Swal.fire({
-                        title: "Error",
-                        text: "Failed to delete Hardware asset",
-                        icon: "error",
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        confirmButtonColor: "#dc3545",
-                      });
-                    });
+                  window.location = "/dashboard/amortized";
                 }
               });
             }
@@ -172,7 +155,10 @@ function HwAsset() {
   const filteredData = data.filter((hw_asset) => {
     return Object.values(hw_asset).some((value) => {
       if (value !== null && value !== undefined) {
-        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+        return value
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
       }
       return false;
     });
@@ -261,7 +247,7 @@ function HwAsset() {
                 <tr key={index}>
                   <td>{hw_asset.hwassetnumber}</td>
                   <td>{hw_asset.user}</td>
-                  <td>{hw_asset.softwareinstall || 'Not Install'}</td>
+                  <td>{hw_asset.softwareinstall || "Not Install"}</td>
                   <td>
                     <Link
                       to={`/dashboard/readhwasset/${hw_asset.id}`}
