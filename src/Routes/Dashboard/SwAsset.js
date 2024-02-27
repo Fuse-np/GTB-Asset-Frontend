@@ -7,7 +7,6 @@ import "./style.css";
 
 function SwAsset() {
   const [data, setData] = useState([]);
-  const [install, setInstall] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +14,7 @@ function SwAsset() {
   useEffect(() => {
     checkToken();
     software();
-    assetinstall();
+    
   }, []);
 
   //Software
@@ -28,16 +27,7 @@ function SwAsset() {
     })
     .catch((err) => console.log(err));
   }
-  //install
-  const assetinstall = () => {
-    axios
-    .get(`${process.env.REACT_APP_API_URL}/hw-install`)
-    .then((res) => {
-      setInstall(res.data);
-      console.log(data);
-    })
-    .catch((err) => console.log(err));
-  }
+
   //authen
   const checkToken = () => {
     const token = localStorage.getItem("token");
@@ -201,9 +191,8 @@ function SwAsset() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
-              <th className="text-danger fs-5">Asset Number</th>
+              <th className="text-danger fs-5">Software Asset Number</th>
               <th className="text-danger fs-5">Name</th>
-              <th className="text-danger fs-5">User</th>
               <th className="text-danger fs-5">Asset Install</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
@@ -214,8 +203,7 @@ function SwAsset() {
                 <tr key={index}>
                   <td>{sw_asset.swassetnumber}</td>
                   <td>{sw_asset.name}</td>
-                  <td>{sw_asset.user}</td>
-                  <td>{sw_asset.assetinstall || 'Not Install'}</td>
+                  <td>{sw_asset.assetinstall}</td>
                   <td>
                     <Link
                       to={`/dashboard/readswasset/${sw_asset.id}`}
