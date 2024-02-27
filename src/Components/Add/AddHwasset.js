@@ -79,18 +79,8 @@ function AddHwasset() {
         return;
       }
     }
-    for (const field in hwasset) {
-      if (hwasset.hasOwnProperty(field) && hwasset[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
-        });
-        return;
-      }
-    }
     Swal.fire({
-      title: `Confirm Add ${hwasset.hwassetnumber}?`,
+      title: `Confirm Add ${hwasset.hwassetnumber} ?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
@@ -109,12 +99,6 @@ function AddHwasset() {
                 icon: "error",
                 title: "Error",
                 text: `Asset number ${hwasset.hwassetnumber} already exists.`,
-              });
-            } else if (res.data.status === "erroramortized") {
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: `Asset number ${hwasset.hwassetnumber} already exists in amortizedasset.`,
               });
             } else if (res.data.status === "errorsoftware") {
               const assetnum = res.data.assetInstall;
@@ -138,7 +122,7 @@ function AddHwasset() {
               text: "Error updating data on the server.",
             });
           });
-      }
+       }
     });
   };
 

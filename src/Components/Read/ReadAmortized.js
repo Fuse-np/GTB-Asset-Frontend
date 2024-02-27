@@ -107,7 +107,7 @@ function ReadAmortized() {
               <td className="text-center fs-5">{amortized.location}</td>
             </tr>
             <tr>
-              <th className="text-center">Location</th>
+              <th className="text-center">Dev</th>
               <td className="text-center fs-5">{amortized.dev}</td>
             </tr>
             <tr>
@@ -117,6 +117,10 @@ function ReadAmortized() {
             <tr>
               <th className="text-center">Serial Number</th>
               <td className="text-center fs-5">{amortized.serialnumber}</td>
+            </tr>
+            <tr>
+              <th className="text-center">Software Install</th>
+              <td className="text-center fs-5">{amortized.softwareinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Price</th>
@@ -143,7 +147,7 @@ function ReadAmortized() {
           </tbody>
         </table>
 
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end mb-3">
           <Link
             to={`/dashboard/updateamortized/${amortized.id}`}
             className="btn btnedit btn-lg me-3"

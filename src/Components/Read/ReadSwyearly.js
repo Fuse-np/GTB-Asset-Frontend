@@ -120,7 +120,7 @@ function ReadSwyearly() {
             </tr>
           </tbody>
         </table>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end mb-3">
           <Link
             to={`/dashboard/updateswyearly/${swyearly.id}`}
             className="btn btnedit btn-lg me-3"

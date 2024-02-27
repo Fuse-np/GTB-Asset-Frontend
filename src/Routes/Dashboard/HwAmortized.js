@@ -112,7 +112,7 @@ function HwAmortized() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${process.env.REACT_APP_API_URL}/moveback-hwasset/${id}`)
+          .post(`${process.env.REACT_APP_API_URL}/movebackhw-asset/${id}`)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
@@ -127,14 +127,7 @@ function HwAmortized() {
                 icon: "success",
                 confirmButtonColor: "#28a745",
               }).then(() => {
-                axios
-                  .delete(
-                    `${process.env.REACT_APP_API_URL}/deletehw-amortized/${id}`
-                  )
-                  .then(() => {
-                    window.location = "/dashboard/hwasset";
-                  })
-                  .catch((err) => console.log(err));
+                window.location = "/dashboard/hwasset";
               });
             }
           })

@@ -134,7 +134,7 @@ function ReadSwasset() {
             </tr>
           </tbody>
         </table>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end mb-3">
           <Link
             to={`/dashboard/updateswasset/${swasset.id}`}
             className="btn btnedit btn-lg me-3"

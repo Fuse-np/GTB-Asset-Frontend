@@ -11,22 +11,31 @@ import Select from "react-select";
 function UpdateHwasset() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [hwasset, setHwasset] = useState({
-    hwassetnumber: "",
-    brand: "",
-    model: "",
-    user: "",
-    location: "",
-    dev: "",
-    spec: "",
-    serialnumber: "",
-    price: "",
-    receivedate: "",
-    invoicenumber: "",
-    ponumber: "",
-  });
+  const [swasset, setSwasset] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [options, setOptions] = useState([]);
+
+  //select software
+  function getSoft() {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/sw`)
+      .then((res) => {
+        console.log(res);
+        setSwasset(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
+  const mergedOptions = [
+    ...options,
+    ...swasset.map((item) => ({
+      value: item.swassetnumber,
+      label: `${item.swassetnumber} (${item.name})`,
+    })),
+  ];
+
   useEffect(() => {
     checkToken();
+    getSoft();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id)
       .then((res) => {
@@ -49,6 +58,22 @@ function UpdateHwasset() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const [hwasset, setHwasset] = useState({
+    hwassetnumber: "",
+    brand: "",
+    model: "",
+    user: "",
+    location: "",
+    dev: "",
+    spec: "",
+    serialnumber: "",
+    price: "",
+    receivedate: "",
+    invoicenumber: "",
+    ponumber: "",
+  });
+
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -76,6 +101,16 @@ function UpdateHwasset() {
         return;
       }
     }
+    for (const field in hwasset) {
+      if (hwasset.hasOwnProperty(field) && hwasset[field] === null) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `${field} cannot be null.`,
+        });
+        return;
+      }
+    }
     Swal.fire({
       title: "Confirm Update Data?",
       showCancelButton: true,
@@ -84,12 +119,32 @@ function UpdateHwasset() {
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, hwasset) // Send the updated hwasset object
+        const dataToSend = {
+          ...hwasset,
+          softwareinstall: selectedOption.map((option) => option.value),
+        };
+        axios
+          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, dataToSend)
           .then((res) => {
-            Swal.fire("Updated!", "", "success").then(() => {
-              console.log(res);
-              navigate("/dashboard/readhwasset/" + id, hwasset);
-            });
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else if (res.data.status === "errorsoftware") {
+              const assetnum = res.data.assetInstallValue;
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Software already exists in ${assetnum}`,
+              });
+            } else {
+              Swal.fire("Updated!", "", "success").then(() => {
+                console.log(res);
+                navigate("/dashboard/readhwasset/" + id, hwasset);
+              });
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -102,6 +157,7 @@ function UpdateHwasset() {
       }
     });
   };
+
   //date
   const handleDateChange = (date) => {
     if (date) {
@@ -115,6 +171,31 @@ function UpdateHwasset() {
       }));
     }
   };
+
+  //select
+  const handleChange = (selectedOptions) => {
+    setSelectedOption(selectedOptions);
+  };
+
+  //fetch software
+  async function fetchData() {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/hw-softwareinstall/` + id);
+    const dataString = await response.text();
+    const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
+    const dataArray = cleanedDataString.split(", ");
+    return dataArray;
+  }
+  useEffect(() => {
+    fetchData().then((data) => {
+      const formattedOptions = data.map((item) => ({
+        value: item,
+        label: item,
+      }));
+      setOptions(formattedOptions);
+      setSelectedOption(formattedOptions);
+    });
+  }, []);
+
   //authen
   const checkToken = () => {
     const token = localStorage.getItem("token");
@@ -256,7 +337,7 @@ function UpdateHwasset() {
               }
             />
           </div>
-         {/*  <div className="col-12">
+          <div className="col-12">
             <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
               Software Install
             </label>
@@ -267,7 +348,7 @@ function UpdateHwasset() {
               options={mergedOptions}
               defaultValue={options}
             />
-          </div> */}
+          </div>
           <div className="col-12">
             <label for="inputPrice" className="form-label fs-5">
               Price
@@ -351,5 +432,4 @@ function UpdateHwasset() {
     </div>
   );
 }
-
 export default UpdateHwasset;

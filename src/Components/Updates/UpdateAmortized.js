@@ -6,19 +6,24 @@ import Swal from "sweetalert2";
 import "./style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
 function UpdateAmortized() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [swasset, setSwasset] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
+    getSoft();
     checkToken();
     axios
       .get(`${process.env.REACT_APP_API_URL}/readhw-amortized/` + id)
       .then((res) => {
         console.log(res);
-        setAmortzied({
-          ...amortzied,
+        setAmortized({
+          ...amortized,
           hwassetnumber: res.data[0].hwassetnumber,
           brand: res.data[0].brand,
           model: res.data[0].model,
@@ -38,7 +43,7 @@ function UpdateAmortized() {
       .catch((err) => console.log(err));
   }, []);
 
-  const [amortzied, setAmortzied] = useState({
+  const [amortized, setAmortized] = useState({
     hwassetnumber: "",
     brand: "",
     model: "",
@@ -61,7 +66,7 @@ function UpdateAmortized() {
       selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
       selectedDate.setDate(selectedDate.getDate());
       const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setAmortzied((prev) => ({
+      setAmortized((prev) => ({
         ...prev,
         receivedate: formattedDate,
       }));
@@ -73,7 +78,7 @@ function UpdateAmortized() {
       selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
       selectedDate.setDate(selectedDate.getDate());
       const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setAmortzied((prev) => ({
+      setAmortized((prev) => ({
         ...prev,
         amortizeddate: formattedDate,
       }));
@@ -99,7 +104,7 @@ function UpdateAmortized() {
       `amortizeddate`,
     ];
     for (const field of requiredFields) {
-      if (!amortzied[field] && amortzied[field] !== 0) {
+      if (!amortized[field] && amortized[field] !== 0) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -108,8 +113,8 @@ function UpdateAmortized() {
         return;
       }
     }
-    for (const field in amortzied) {
-      if (amortzied.hasOwnProperty(field) && amortzied[field] === null) {
+    for (const field in amortized) {
+      if (amortized.hasOwnProperty(field) && amortized[field] === null) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -119,35 +124,37 @@ function UpdateAmortized() {
       }
     }
     Swal.fire({
-      title: `Confirm Update ${amortzied.hwassetnumber}?`,
+      title: "Confirm Update Data?",
       showCancelButton: true,
       confirmButtonText: "Update",
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        const dataToSend = {
+          ...amortized,
+          softwareinstall: selectedOption.map((option) => option.value),
+        };
         axios
-          .put(
-            `${process.env.REACT_APP_API_URL}/updatehw-amortized/` + id,
-            amortzied
-          )
+          .put(`${process.env.REACT_APP_API_URL}/updatehw-asset/` + id, dataToSend)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number ${amortzied.hwassetnumber} already exists.`,
+                text: `Asset number already exists.`,
               });
-            } else if (res.data.status === "errorhardware") {
+            } else if (res.data.status === "errorsoftware") {
+              const assetnum = res.data.assetInstallValue;
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number ${amortzied.hwassetnumber} already exists in Hardware asset.`,
+                text: `Software already exists in ${assetnum}`,
               });
             } else {
               Swal.fire("Updated!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/readamortized/" + id, amortzied);
+                navigate("/dashboard/readhwasset/" + id, amortized);
               });
             }
           })
@@ -185,6 +192,50 @@ function UpdateAmortized() {
       });
   };
 
+  //fetch software
+  async function fetchData() {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/hw-softwareinstall/` + id
+    );
+    const dataString = await response.text();
+    const cleanedDataString = dataString.replace(/[\[\]'"]+/g, "");
+    const dataArray = cleanedDataString.split(", ");
+    return dataArray;
+  }
+  useEffect(() => {
+    fetchData().then((data) => {
+      const formattedOptions = data.map((item) => ({
+        value: item,
+        label: item,
+      }));
+      setOptions(formattedOptions);
+      setSelectedOption(formattedOptions);
+    });
+  }, []);
+
+  //select
+  const handleChange = (selectedOptions) => {
+    setSelectedOption(selectedOptions);
+  };
+
+  //select software
+  function getSoft() {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/sw`)
+      .then((res) => {
+        console.log(res);
+        setSwasset(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
+  const mergedOptions = [
+    ...options,
+    ...swasset.map((item) => ({
+      value: item.swassetnumber,
+      label: `${item.swassetnumber} (${item.name})`,
+    })),
+  ];
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border borderc bg-white">
@@ -196,7 +247,7 @@ function UpdateAmortized() {
                 Amortied Date
               </label>
               <DatePicker
-                selected={amortzied.amortizeddate}
+                selected={amortized.amortizeddate}
                 onChange={handleDateChange2}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -214,9 +265,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputAssetID"
               placeholder="Enter AssetID"
-              value={amortzied.hwassetnumber}
+              value={amortized.hwassetnumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, hwassetnumber: e.target.value })
+                setAmortized({ ...amortized, hwassetnumber: e.target.value })
               }
             />
           </div>
@@ -229,9 +280,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputBrand"
               placeholder="Enter Brand"
-              value={amortzied.brand}
+              value={amortized.brand}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, brand: e.target.value })
+                setAmortized({ ...amortized, brand: e.target.value })
               }
             />
           </div>
@@ -244,9 +295,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputModel"
               placeholder="Enter Model"
-              value={amortzied.model}
+              value={amortized.model}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, model: e.target.value })
+                setAmortized({ ...amortized, model: e.target.value })
               }
             />
           </div>
@@ -259,9 +310,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
-              value={amortzied.user}
+              value={amortized.user}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, user: e.target.value })
+                setAmortized({ ...amortized, user: e.target.value })
               }
             />
           </div>
@@ -274,9 +325,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={amortzied.location}
+              value={amortized.location}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, location: e.target.value })
+                setAmortized({ ...amortized, location: e.target.value })
               }
             />
           </div>
@@ -289,9 +340,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
-              value={amortzied.dev}
+              value={amortized.dev}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, dev: e.target.value })
+                setAmortized({ ...amortized, dev: e.target.value })
               }
             />
           </div>
@@ -304,9 +355,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSpec"
               placeholder="Enter Spec"
-              value={amortzied.spec}
+              value={amortized.spec}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, spec: e.target.value })
+                setAmortized({ ...amortized, spec: e.target.value })
               }
             />
           </div>
@@ -319,25 +370,22 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
-              value={amortzied.serialnumber}
+              value={amortized.serialnumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, serialnumber: e.target.value })
+                setAmortized({ ...amortized, serialnumber: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputSoftwareinstall" className="form-label fs-5">
-              Softwere Install
+            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
+              Software Install
             </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputSoftwareinstall"
-              placeholder="Enter Software install"
-              value={amortzied.software}
-              onChange={(e) =>
-                setAmortzied({ ...amortzied, software: e.target.value })
-              }
+            <Select
+              isMulti
+              value={selectedOption}
+              onChange={handleChange}
+              options={mergedOptions}
+              defaultValue={options}
             />
           </div>
           <div className="col-12">
@@ -350,18 +398,17 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={amortzied.price === 0 ? "" : amortzied.price}
+              value={amortized.price === 0 ? "" : amortized.price}
               onChange={(e) => {
                 const inputValue = e.target.value;
                 if (inputValue !== "") {
                   const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setAmortzied({
-                    ...amortzied,
+                  setAmortized({ ...amortized,
                     price: isNaN(numericValue) ? "" : numericValue,
                   });
                 } else {
-                  setAmortzied({
-                    ...amortzied,
+                  setAmortized({
+                    ...amortized,
                     price: "",
                   });
                 }
@@ -374,7 +421,7 @@ function UpdateAmortized() {
                 Receive Date
               </label>
               <DatePicker
-                selected={amortzied.receivedate}
+                selected={amortized.receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -392,9 +439,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={amortzied.invoicenumber}
+              value={amortized.invoicenumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, invoicenumber: e.target.value })
+                setAmortized({ ...amortized, invoicenumber: e.target.value })
               }
             />
           </div>
@@ -407,9 +454,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={amortzied.ponumber}
+              value={amortized.ponumber}
               onChange={(e) =>
-                setAmortzied({ ...amortzied, ponumber: e.target.value })
+                setAmortized({ ...amortized, ponumber: e.target.value })
               }
             />
           </div>
