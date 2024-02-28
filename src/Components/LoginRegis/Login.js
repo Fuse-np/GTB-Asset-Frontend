@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Login() {
-  const [showPassword, setShowPassword] = useState(false); // Initialize showPassword state
+  const [showPassword, setShowPassword] = useState(false); 
 
   const handleSignin = async (event) => {
     event.preventDefault();

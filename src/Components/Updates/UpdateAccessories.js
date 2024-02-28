@@ -17,29 +17,29 @@ function UpdateAccessories() {
   useEffect(() => {
     checkToken();
     axios
-    .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
-    .then((res) => {
-      console.log(res);
-      setAccessories({
-        ...accessories,
-        type: res.data[0].type,
-        detail: res.data[0].detail,
-        serialnumber: res.data[0].serialnumber,
-        assetinstall: res.data[0].assetinstall,
-        location: res.data[0].location,
-        dev: res.data[0].dev,
-        price: res.data[0].price,
-        receivedate: res.data[0].receivedate,
-        invoicenumber: res.data[0].invoicenumber,
-        ponumber: res.data[0].ponumber,
-      });
-      getAssetnmber(); // Fetch asset numbers
-      setSelectedAsset({
-        value: res.data[0].assetinstall,
-        label: res.data[0].assetinstall,
-      });
-    })
-    .catch((err) => console.log(err));
+      .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
+      .then((res) => {
+        console.log(res);
+        setAccessories({
+          ...accessories,
+          type: res.data[0].type,
+          detail: res.data[0].detail,
+          serialnumber: res.data[0].serialnumber,
+          assetinstall: res.data[0].assetinstall,
+          location: res.data[0].location,
+          dev: res.data[0].dev,
+          price: res.data[0].price,
+          receivedate: res.data[0].receivedate,
+          invoicenumber: res.data[0].invoicenumber,
+          ponumber: res.data[0].ponumber,
+        });
+        getAssetnmber();
+        setSelectedAsset({
+          value: res.data[0].assetinstall,
+          label: res.data[0].assetinstall,
+        });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const [accessories, setAccessories] = useState({
@@ -232,6 +232,7 @@ function UpdateAccessories() {
                 value={selectedAsset}
                 onChange={handleAssetChange}
                 options={[
+                  { value: "Not Install", label: "Not Install" },
                   ...assetnumber.map((asset) => ({
                     value: asset.hwassetnumber,
                     label: asset.hwassetnumber,
@@ -281,7 +282,13 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={accessories.price === 0 ? "" : accessories.price}
+              value={
+                accessories.price === ""
+                  ? ""
+                  : accessories.price === 0
+                  ? "0"
+                  : accessories.price
+              }
               onChange={(e) => {
                 const inputValue = e.target.value;
                 if (inputValue !== "") {

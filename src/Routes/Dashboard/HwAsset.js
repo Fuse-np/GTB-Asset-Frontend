@@ -247,7 +247,7 @@ function HwAsset() {
                 <tr key={index}>
                   <td>{hw_asset.hwassetnumber}</td>
                   <td>{hw_asset.user}</td>
-                  <td>{hw_asset.softwareinstall || "Not Install"}</td>
+                  <td>{hw_asset.softwareinstall}</td>
                   <td>
                     <Link
                       to={`/dashboard/readhwasset/${hw_asset.id}`}

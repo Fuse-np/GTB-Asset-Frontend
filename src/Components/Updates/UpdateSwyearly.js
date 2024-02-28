@@ -253,7 +253,13 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swyearly.price === 0 ? "" : swyearly.price}
+              value={
+                swyearly.price === ""
+                  ? ""
+                  : swyearly.price === 0
+                  ? "0"
+                  : swyearly.price
+              }
               onChange={(e) => {
                 const inputValue = e.target.value;
                 if (inputValue !== "") {

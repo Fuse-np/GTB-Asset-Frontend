@@ -122,7 +122,7 @@ function AddHwasset() {
               text: "Error updating data on the server.",
             });
           });
-       }
+      }
     });
   };
 
@@ -279,18 +279,20 @@ function AddHwasset() {
               className="basic-multi-select"
               classNamePrefix="select"
               isMulti
-              options={swasset
-                .filter(
-                  (sw_asset) =>
-                    !selectedOptions.some(
-                      (selectedOption) =>
-                        selectedOption.value === sw_asset.swassetnumber
-                    )
-                )
-                .map((sw_asset) => ({
-                  value: sw_asset.swassetnumber,
-                  label: `${sw_asset.swassetnumber} (${sw_asset.name})`,
-                }))}
+              options={[
+                ...swasset
+                  .filter(
+                    (sw_asset) =>
+                      !selectedOptions.some(
+                        (selectedOption) =>
+                          selectedOption.value === sw_asset.swassetnumber
+                      )
+                  )
+                  .map((sw_asset) => ({
+                    value: sw_asset.swassetnumber,
+                    label: `${sw_asset.swassetnumber} (${sw_asset.name})`,
+                  })),
+              ]}
               onChange={handleChange}
               value={selectedOptions}
               filterOption={(option, inputValue) =>

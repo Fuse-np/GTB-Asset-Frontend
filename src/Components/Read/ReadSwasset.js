@@ -99,10 +99,6 @@ function ReadSwasset() {
               <td className="text-center fs-5">{swasset.user}</td>
             </tr>
             <tr>
-              <th className="text-center">Asset Install</th>
-              <td className="text-center fs-5">{swasset.assetinstall}</td>
-            </tr>
-            <tr>
               <th className="text-center">Location</th>
               <td className="text-center fs-5">{swasset.location}</td>
             </tr>

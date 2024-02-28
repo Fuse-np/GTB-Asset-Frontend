@@ -4,7 +4,7 @@ import "./style.css";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import Swal from "sweetalert2";
+
 
 function DashBoard() {
   const [hwtotal, setHwtotal] = useState();
@@ -94,7 +94,7 @@ function DashBoard() {
       .get(`${process.env.REACT_APP_API_URL}/amortizedtotal`)
       .then((res) => {
         console.log(res);
-        setAmortizedtotal(res.data[0].hw_amortized);
+        setAmortizedtotal(res.data[0].hw_asset);
       })
       .catch((err) => console.log(err));
   };

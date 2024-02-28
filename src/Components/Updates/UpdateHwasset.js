@@ -359,7 +359,13 @@ function UpdateHwasset() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={hwasset.price === 0 ? "" : hwasset.price}
+              value={
+                hwasset.price === ""
+                  ? ""
+                  : hwasset.price === 0
+                  ? "0"
+                  : hwasset.price
+              }
               onChange={(e) => {
                 const inputValue = e.target.value;
                 if (inputValue !== "") {

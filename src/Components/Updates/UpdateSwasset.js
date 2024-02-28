@@ -257,7 +257,13 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swasset.price === 0 ? "" : swasset.price}
+              value={
+                swasset.price === ""
+                  ? ""
+                  : swasset.price === 0
+                  ? "0"
+                  : swasset.price
+              }
               onChange={(e) => {
                 const inputValue = e.target.value;
                 if (inputValue !== "") {
@@ -268,7 +274,7 @@ function UpdateSwasset() {
                   });
                 } else {
                   setSwasset({
-                    ...swasset,
+                    ...setSwasset,
                     price: "",
                   });
                 }

@@ -195,7 +195,6 @@ function AddAccessories() {
               }
             />
           </div>
-          {assetnumber.length > 0 && (
             <div className="col-12">
               <label htmlFor="inputAssetInstall" className="form-label fs-5">
                 Asset Install
@@ -203,10 +202,10 @@ function AddAccessories() {
               <Select
                 name="AssetInstall"
                 id="inputAssetInstall"
-                value={selectedAsset || "-"}
-                defaultValue={"-"}
+                value={selectedAsset || "Not install"}
                 onChange={handleAssetChange}
                 options={[
+                  { value: "Not install", label: "Not install" },
                   ...assetnumber.map((asset) => ({
                     value: asset.hwassetnumber,
                     label: asset.hwassetnumber,
@@ -215,7 +214,6 @@ function AddAccessories() {
                 className="borderc"
               />
             </div>
-          )}
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
               Location
