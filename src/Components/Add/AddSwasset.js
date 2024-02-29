@@ -17,7 +17,7 @@ function AddSwasset() {
     user: "-",
     location: "-",
     dev: "-",
-    price: "0",
+    price: 0,
     receivedate: new Date(),
     invoicenumber: "-",
     ponumber: "-",
@@ -240,31 +240,18 @@ function AddSwasset() {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="inputPrice" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
               Price
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swasset.price === 0 ? "" : swasset.price}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setSwasset({
-                    ...swasset,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setSwasset({
-                    ...swasset,
-                    price: "",
-                  });
-                }
-              }}
+              value={swasset.price}
+              onChange={(e) =>
+                setSwasset({ ...swasset, price: e.target.value })
+              }
             />
           </div>
           <div className="col-12">

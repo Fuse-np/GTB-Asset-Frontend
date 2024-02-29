@@ -272,11 +272,12 @@ function HwAsset() {
               ))
             ) : (
               <tr>
-                <td colSpan="6">No assets available</td>
+                <td colSpan="4">No assets available</td>
               </tr>
             )}
           </tbody>
         </table>
+
         {/* Pagination */}
         <ul className="pagination justify-content-center">
           <li className="page-item">

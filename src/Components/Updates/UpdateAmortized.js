@@ -394,32 +394,13 @@ function UpdateAmortized() {
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={
-                amortized.price === ""
-                  ? ""
-                  : amortized.price === 0
-                  ? "0"
-                  : amortized.price
+              value={amortized.price}
+              onChange={(e) =>
+                setAmortized({ ...amortized, price: e.target.value })
               }
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setAmortized({
-                    ...amortized,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setAmortized({
-                    ...amortized,
-                    price: "",
-                  });
-                }
-              }}
             />
           </div>
           <div className="col-12">

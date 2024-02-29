@@ -27,6 +27,7 @@ function UpdateHwasset() {
   }
   const mergedOptions = [
     ...options,
+    { label: 'None Install', value: 'None Install' },
     ...swasset.map((item) => ({
       value: item.swassetnumber,
       label: `${item.swassetnumber} (${item.name})`,
@@ -97,16 +98,6 @@ function UpdateHwasset() {
           icon: "error",
           title: "Error",
           text: `${field} is required.`,
-        });
-        return;
-      }
-    }
-    for (const field in hwasset) {
-      if (hwasset.hasOwnProperty(field) && hwasset[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
         });
         return;
       }
@@ -355,32 +346,13 @@ function UpdateHwasset() {
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={
-                hwasset.price === ""
-                  ? ""
-                  : hwasset.price === 0
-                  ? "0"
-                  : hwasset.price
+              value={hwasset.price}
+              onChange={(e) =>
+                setHwasset({ ...hwasset, price: e.target.value })
               }
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setHwasset({
-                    ...hwasset,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setHwasset({
-                    ...hwasset,
-                    price: "",
-                  });
-                }
-              }}
             />
           </div>
           <div className="col-12">

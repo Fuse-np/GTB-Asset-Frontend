@@ -278,32 +278,13 @@ function UpdateAccessories() {
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={
-                accessories.price === ""
-                  ? ""
-                  : accessories.price === 0
-                  ? "0"
-                  : accessories.price
+              value={accessories.price}
+              onChange={(e) =>
+                setAccessories({ ...accessories, price: e.target.value })
               }
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setAccessories({
-                    ...accessories,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setAccessories({
-                    ...accessories,
-                    price: "",
-                  });
-                }
-              }}
             />
           </div>
           <div className="col-12">

@@ -21,7 +21,7 @@ function AddAmortized() {
     dev: "-",
     spec: "-",
     serialnumber: "-",
-    price: "0",
+    price: 0,
     receivedate: new Date(),
     invoicenumber: "-",
     ponumber: "-",
@@ -346,29 +346,18 @@ function AddAmortized() {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="inputPrice" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
               Price
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={amortized.price === 0 ? "" : amortized.price}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setAmortized({ ...amortized,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setAmortized({ ...amortized,
-                    price: "",
-                  });
-                }
-              }}
+              value={amortized.price}
+              onChange={(e) =>
+                setAmortized({ ...amortized, price: e.target.value })
+              }
             />
           </div>
           <div className="col-12">

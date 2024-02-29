@@ -22,7 +22,7 @@ function AddHwasset() {
     spec: "-",
     serialnumber: "-",
     softwareinstall: "",
-    price: "0",
+    price: 0,
     receivedate: new Date(),
     invoicenumber: "-",
     ponumber: "-",
@@ -280,6 +280,7 @@ function AddHwasset() {
               classNamePrefix="select"
               isMulti
               options={[
+                { label: 'None Install', value: 'None Install' },
                 ...swasset
                   .filter(
                     (sw_asset) =>
@@ -301,31 +302,18 @@ function AddHwasset() {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="inputPrice" className="form-label fs-5">
+            <label for="inputPrice" className="form-label fs-5">
               Price
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={hwasset.price === 0 ? "" : hwasset.price}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setHwasset({
-                    ...hwasset,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setHwasset({
-                    ...hwasset,
-                    price: "",
-                  });
-                }
-              }}
+              value={hwasset.price}
+              onChange={(e) =>
+                setHwasset({ ...hwasset, price: e.target.value })
+              }
             />
           </div>
           <div className="col-12">

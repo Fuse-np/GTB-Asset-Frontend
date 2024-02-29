@@ -249,32 +249,13 @@ function UpdateSwyearly() {
             </label>
             <input
               type="number"
-              step="0.01"
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={
-                swyearly.price === ""
-                  ? ""
-                  : swyearly.price === 0
-                  ? "0"
-                  : swyearly.price
+              value={swyearly.price}
+              onChange={(e) =>
+                setSwyearly({ ...swyearly, price: e.target.value })
               }
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue !== "") {
-                  const numericValue = parseFloat(inputValue.replace(/,/g, ""));
-                  setSwyearly({
-                    ...swyearly,
-                    price: isNaN(numericValue) ? "" : numericValue,
-                  });
-                } else {
-                  setSwyearly({
-                    ...swyearly,
-                    price: "",
-                  });
-                }
-              }}
             />
           </div>
           <div className="col-12">
