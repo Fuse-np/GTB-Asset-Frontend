@@ -6,54 +6,71 @@ import "./style.css";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 
-function AddSwasset() {
+function AddHardware() {
   const navigate = useNavigate();
-  const [swasset, setSwasset] = useState({
-    swassetnumber: "",
-    name: "-",
-    serialnumber: "-",
-    softwarekey: "-",
-    user: "-",
-    location: "-",
-    dev: "-",
-    price: 0,
-    receivedate: new Date(),
-    invoicenumber: "-",
-    ponumber: "-",
+  const [software, setSoftware] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [hardware, setHardware] = useState({
+    hw_assetnumber: "",
+    hw_brand: "-",
+    hw_model: "-",
+    hw_user: "-",
+    hw_location: "-",
+    hw_department: "-",
+    hw_spec: "-",
+    hw_serialnumber: "-",
+    hw_softwareinstall: "",
+    hw_price: 0,
+    hw_receivedate: new Date(),
+    hw_invoicenumber: "-",
+    hw_ponumber: "-",
   });
 
-  //date
+  useEffect(() => {
+    checkToken();
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/software-name`)
+      .then((res) => {
+        console.log(res);
+        setSoftware(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const handleDateChange = (date) => {
     if (date) {
       const selectedDate = new Date(date);
       selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
       selectedDate.setDate(selectedDate.getDate());
       const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setSwasset((prev) => ({
+      setHardware((prev) => ({
         ...prev,
-        receivedate: formattedDate,
+        hw_receivedate: formattedDate,
       }));
     }
   };
 
+  //submit
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
-      `swassetnumber`,
-      `name`,
-      `serialnumber`,
-      `softwarekey`,
-      `user`,
-      `location`,
-      `dev`,
-      `price`,
-      `receivedate`,
-      `invoicenumber`,
-      `ponumber`,
+      "hw_assetnumber",
+      "hw_brand",
+      "hw_model",
+      "hw_user",
+      "hw_location",
+      "hw_department",
+      "hw_spec",
+      "hw_serialnumber",
+      "hw_price",
+      "hw_receivedate",
+      "hw_invoicenumber",
+      "hw_ponumber",
     ];
     for (const field of requiredFields) {
-      if (!swasset[field] && swasset[field] !== 0) {
+      if (!hardware[field] && hardware[field] !== 0) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -62,37 +79,38 @@ function AddSwasset() {
         return;
       }
     }
-    for (const field in swasset) {
-      if (swasset.hasOwnProperty(field) && swasset[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
-        });
-        return;
-      }
-    }
     Swal.fire({
-      title: `Confirm Add ${swasset.swassetnumber}?`,
+      title: `Confirm Add ${hardware.hw_assetnumber} ?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        const dataToSend = {
+          ...hardware,
+          hw_softwareinstall: selectedOptions.map((option) => option.value),
+        };
         axios
-          .post(`${process.env.REACT_APP_API_URL}/addsw-asset`, swasset)
+          .post(`${process.env.REACT_APP_API_URL}/add-hardware`, dataToSend)
           .then((res) => {
-            if (res.data.status === "errorsoftware") {
+            if (res.data.status === "error") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number already exists.`,
+                text: `Asset number ${hardware.hw_assetnumber} already exists.`,
+              });
+            } else if (res.data.status === "errorsoftware") {
+              const assetnum = res.data.assetInstall;
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Software already exists in asset number ${assetnum}.`,
               });
             } else {
               Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/swasset");
+                navigate("/dashboard/hwasset");
               });
             }
           })
@@ -106,6 +124,11 @@ function AddSwasset() {
           });
       }
     });
+  };
+
+  //select
+  const handleChange = (selectedOptions) => {
+    setSelectedOptions(selectedOptions || []);
   };
 
   //authen
@@ -129,70 +152,53 @@ function AddSwasset() {
         console.error("Error", error);
       });
   };
-  
-  useEffect(() => {
-    checkToken();
-  }, []);
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border bg-white borderc">
-        <h2 className="text-center">Add Softwere Asset</h2>
+        <h2 className="text-center">Add Hardware Asset</h2>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputSoftwereAssetNumber" className="form-label fs-5">
-              Softwere Asset Number
+            <label for="inputAssetNumber" className="form-label fs-5">
+              Hardware Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputSoftwereAssetNumber"
-              placeholder="Enter Softwere Asset Number"
+              id="inputAssetNumber"
+              placeholder="Enter Asset Number"
               onChange={(e) =>
-                setSwasset({ ...swasset, swassetnumber: e.target.value })
+                setHardware({ ...hardware, hw_assetnumber: e.target.value })
               }
             />
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Software Name
+              Brand
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputSoftwereName"
-              placeholder="Enter Softwere Name"
-              value={swasset.name}
-              onChange={(e) => setSwasset({ ...swasset, name: e.target.value })}
-            />
-          </div>
-          <div className="col-12">
-            <label for="inputAssetID" className="form-label fs-5">
-              Serial Number
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0 borderc"
-              id="inputSerialnumber"
-              placeholder="Enter Serialnumber"
-              value={swasset.serialnumber}
+              id="inputBrand"
+              placeholder="Enter Brand"
+              value={hardware.hw_brand}
               onChange={(e) =>
-                setSwasset({ ...swasset, serialnumber: e.target.value })
+                setHardware({ ...hardware, hw_brand: e.target.value })
               }
             />
           </div>
           <div className="col-12">
             <label for="inputAssetID" className="form-label fs-5">
-              Softwere Key
+              Model
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputSoftwereKey"
-              placeholder="Enter Softwere Key"
-              value={swasset.softwarekey}
+              id="inputModel"
+              placeholder="Enter Model"
+              value={hardware.hw_model}
               onChange={(e) =>
-                setSwasset({ ...swasset, softwarekey: e.target.value })
+                setHardware({ ...hardware, hw_model: e.target.value })
               }
             />
           </div>
@@ -205,8 +211,8 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
-              value={swasset.user}
-              onChange={(e) => setSwasset({ ...swasset, user: e.target.value })}
+              value={hardware.hw_user}
+              onChange={(e) => setHardware({ ...hardware, hw_user: e.target.value })}
             />
           </div>
           <div className="col-12">
@@ -218,24 +224,80 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={swasset.location}
+              value={hardware.hw_location}
               onChange={(e) =>
-                setSwasset({ ...swasset, location: e.target.value })
+                setHardware({ ...hardware, hw_location: e.target.value })
               }
             />
           </div>
           <div className="col-12">
             <label for="inputDev" className="form-label fs-5">
-              Dev
+              Department
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
-              value={swasset.dev}
+              value={hardware.hw_department}
+              onChange={(e) => setHardware({ ...hardware, hw_department: e.target.value })}
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputAssetID" className="form-label fs-5">
+              Spec
+            </label>
+            <textarea
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSpec"
+              placeholder="Enter Spec"
+              value={hardware.hw_spec}
+              onChange={(e) => setHardware({ ...hardware, hw_spec: e.target.value })}
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputSerialnumber" className="form-label fs-5">
+              Serial Number
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSerialnumber"
+              placeholder="Enter Serialnumber"
+              value={hardware.hw_serialnumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, dev: e.target.value })
+                setHardware({ ...hardware, hw_serialnumber: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label htmlFor="inputSoftwareinstall" className="form-label fs-5">
+              Software Install
+            </label>
+            <Select
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              options={[
+                { label: 'None Install', value: 'None Install' },
+                ...software
+                  .filter(
+                    (sw) =>
+                      !selectedOptions.some(
+                        (selectedOption) =>
+                          selectedOption.value === sw.sw_assetnumber
+                      )
+                  )
+                  .map((sw) => ({
+                    value: sw.sw_assetnumber,
+                    label: `${sw.sw_assetnumber} (${sw.sw_name})`,
+                  })),
+              ]}
+              onChange={handleChange}
+              value={selectedOptions}
+              filterOption={(option, inputValue) =>
+                option.label.toLowerCase().includes(inputValue.toLowerCase())
               }
             />
           </div>
@@ -248,9 +310,9 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swasset.price}
+              value={hardware.hw_price}
               onChange={(e) =>
-                setSwasset({ ...swasset, price: e.target.value })
+                setHardware({ ...hardware, hw_price: e.target.value })
               }
             />
           </div>
@@ -260,7 +322,7 @@ function AddSwasset() {
                 Receive Date
               </label>
               <DatePicker
-                selected={swasset.receivedate}
+                selected={hardware.hw_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputReceiveDate"
@@ -279,9 +341,9 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={swasset.invoicenumber}
+              value={hardware.hw_invoicenumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, invoicenumber: e.target.value })
+                setHardware({ ...hardware, hw_invoicenumber: e.target.value })
               }
             />
           </div>
@@ -294,15 +356,15 @@ function AddSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={swasset.ponumber}
+              value={hardware.hw_ponumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, ponumber: e.target.value })
+                setHardware({ ...hardware, hw_ponumber: e.target.value })
               }
             />
           </div>
           <p></p>
-          <button className="btn btn-success w-100 rounded-0 mb-2 borderc">
-            Add Softwere Asset
+          <button className="btn btn-success w-100 rounded-0 mb-2">
+            Add Asset
           </button>
         </form>
       </div>
@@ -310,4 +372,4 @@ function AddSwasset() {
   );
 }
 
-export default AddSwasset;
+export default AddHardware;

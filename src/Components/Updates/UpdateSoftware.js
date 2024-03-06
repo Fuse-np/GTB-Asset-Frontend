@@ -7,77 +7,67 @@ import "./style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function UpdateSwasset() {
+function UpdateSoftware() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readsw-asset/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-software/` + id)
       .then((res) => {
         console.log(res);
-        setSwasset({
-          ...swasset,
-          swassetnumber: res.data[0]. swassetnumber,
-          name: res.data[0].name,
-          serialnumber: res.data[0].serialnumber,
-          softwarekey: res.data[0].softwarekey,
-          user: res.data[0].user,
-          location: res.data[0].location,
-          price: res.data[0].price,
-          receivedate: res.data[0].receivedate,
-          invoicenumber: res.data[0].invoicenumber,
-          ponumber: res.data[0].ponumber,
+        setSoftware({
+          ...software,
+          sw_assetnumber: res.data[0].sw_assetnumber,
+          sw_name: res.data[0].sw_name,
+          sw_serialnumber: res.data[0].sw_serialnumber,
+          sw_softwarekey: res.data[0].sw_softwarekey,
+          sw_user: res.data[0].sw_user,
+          sw_location: res.data[0].sw_location,
+          sw_price: res.data[0].sw_price,
+          sw_receivedate: res.data[0].sw_receivedate,
+          sw_invoicenumber: res.data[0].sw_invoicenumber,
+          sw_ponumber: res.data[0].sw_ponumber,
         });
       })
       .catch((err) => console.log(err));
   }, []);
 
-  const [swasset, setSwasset] = useState({
-    swassetnumber: "",
-    name: "",
-    serialnumber: "",
-    softwarekey: "",
-    user: "",
-    location: "",
-    price: "",
-    receivedate: "",
-    invoicenumber: "",
-    ponumber: "",
+  const [software, setSoftware] = useState({
+    sw_swassetnumber: "",
+    sw_name: "",
+    sw_serialnumber: "",
+    sw_softwarekey: "",
+    sw_user: "",
+    sw_location: "",
+    sw_price: "",
+    sw_receivedate: "",
+    sw_invoicenumber: "",
+    sw_ponumber: "",
   });
 
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
-      `swassetnumber`,
-      `name`,
-      `serialnumber`,
-      `softwarekey`,
-      `user`,
-      `location`,
-      `price`,
-      `receivedate`,
-      `invoicenumber`,
-      `ponumber`,
+      `sw_assetnumber`,
+      `sw_name`,
+      `sw_serialnumber`,
+      `sw_softwarekey`,
+      `sw_user`,
+      `sw_location`,
+      `sw_price`,
+      `sw_receivedate`,
+      `sw_invoicenumber`,
+      `sw_ponumber`,
     ];
     for (const field of requiredFields) {
-      if (!swasset[field] && swasset[field] !== 0) {
+      if (!software[field] && software[field] !== 0) {
         Swal.fire({
           icon: "error",
           title: "Error",
           text: `${field} is required.`,
-        });
-        return;
-      }
-    }
-    for (const field in swasset) {
-      if (swasset.hasOwnProperty(field) && swasset[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
         });
         return;
       }
@@ -91,7 +81,10 @@ function UpdateSwasset() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${process.env.REACT_APP_API_URL}/updatesw-asset/` + id, swasset)
+          .put(
+            `${process.env.REACT_APP_API_URL}/update-software/` + id,
+            software
+          )
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
@@ -102,7 +95,7 @@ function UpdateSwasset() {
             } else {
               Swal.fire("Updated!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/readswasset/" + id, swasset);
+                navigate("/dashboard/readswasset/" + id, software);
               });
             }
           })
@@ -125,9 +118,9 @@ function UpdateSwasset() {
       selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
       selectedDate.setDate(selectedDate.getDate());
       const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setSwasset((prev) => ({
+      setSoftware((prev) => ({
         ...prev,
-        receivedate: formattedDate,
+        sw_receivedate: formattedDate,
       }));
     }
   };
@@ -168,9 +161,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputAssetNumber"
               placeholder="Enter Asset Number"
-              value={swasset.swassetnumber}
+              value={software.sw_assetnumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, swassetnumber: e.target.value })
+                setSoftware({ ...software, sw_assetnumber: e.target.value })
               }
             />
           </div>
@@ -183,55 +176,57 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputSoftwereName"
               placeholder="Enter Softwere Name"
-              value={swasset.name}
-              onChange={(e) => setSwasset({ ...swasset, name: e.target.value })}
+              value={software.sw_name}
+              onChange={(e) =>
+                setSoftware({ ...software, sw_name: e.target.value })
+              }
             />
           </div>
-            <div className="col-12">
-              <label for="inputSerialNumber" className="form-label fs-5">
-                Serial Number
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputSerialNumber"
-                placeholder="Enter Serial Number"
-                value={swasset.serialnumber}
-                onChange={(e) =>
-                  setSwasset({ ...swasset, serialnumber: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-              <label for="inputSoftwereKey" className="form-label fs-5">
-                Softwere Key
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputSoftwereKey"
-                placeholder="Enter Softwere Key"
-                value={swasset.softwarekey}
-                onChange={(e) =>
-                  setSwasset({ ...swasset, softwarekey: e.target.value })
-                }
-              />
-            </div>
-            <div className="col-12">
-              <label for="inputUser" className="form-label fs-5">
-                User
-              </label>
-              <input
-                type="text"
-                className="form-control rounded-0 borderc"
-                id="inputUser"
-                placeholder="Enter User"
-                value={swasset.user}
-                onChange={(e) =>
-                  setSwasset({ ...swasset, user: e.target.value })
-                }
-              />
-            </div>
+          <div className="col-12">
+            <label for="inputSerialNumber" className="form-label fs-5">
+              Serial Number
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSerialNumber"
+              placeholder="Enter Serial Number"
+              value={software.sw_serialnumber}
+              onChange={(e) =>
+                setSoftware({ ...software, sw_serialnumber: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputSoftwereKey" className="form-label fs-5">
+              Softwere Key
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputSoftwereKey"
+              placeholder="Enter Softwere Key"
+              value={software.sw_softwarekey}
+              onChange={(e) =>
+                setSoftware({ ...software, sw_softwarekey: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputUser" className="form-label fs-5">
+              User
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputUser"
+              placeholder="Enter User"
+              value={software.sw_user}
+              onChange={(e) =>
+                setSoftware({ ...software, sw_user: e.target.value })
+              }
+            />
+          </div>
           <div className="col-12">
             <label for="inputLocation" className="form-label fs-5">
               Location
@@ -241,9 +236,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={swasset.location}
+              value={software.sw_location}
               onChange={(e) =>
-                setSwasset({ ...swasset, location: e.target.value })
+                setSoftware({ ...software, sw_location: e.target.value })
               }
             />
           </div>
@@ -256,9 +251,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swasset.price}
+              value={software.sw_price}
               onChange={(e) =>
-                setSwasset({ ...swasset, price: e.target.value })
+                setSoftware({ ...software, sw_price: e.target.value })
               }
             />
           </div>
@@ -268,7 +263,7 @@ function UpdateSwasset() {
                 Receive Date
               </label>
               <DatePicker
-                selected={swasset.receivedate}
+                selected={software.sw_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputReceiveDate"
@@ -286,9 +281,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={swasset.invoicenumber}
+              value={software.sw_invoicenumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, invoicenumber: e.target.value })
+                setSoftware({ ...software, sw_invoicenumber: e.target.value })
               }
             />
           </div>
@@ -301,9 +296,9 @@ function UpdateSwasset() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={swasset.ponumber}
+              value={software.sw_ponumber}
               onChange={(e) =>
-                setSwasset({ ...swasset, ponumber: e.target.value })
+                setSoftware({ ...software, sw_ponumber: e.target.value })
               }
             />
           </div>
@@ -317,4 +312,4 @@ function UpdateSwasset() {
   );
 }
 
-export default UpdateSwasset;
+export default UpdateSoftware;

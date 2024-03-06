@@ -22,53 +22,53 @@ function UpdateAccessories() {
         console.log(res);
         setAccessories({
           ...accessories,
-          type: res.data[0].type,
-          detail: res.data[0].detail,
-          serialnumber: res.data[0].serialnumber,
-          assetinstall: res.data[0].assetinstall,
-          location: res.data[0].location,
-          dev: res.data[0].dev,
-          price: res.data[0].price,
-          receivedate: res.data[0].receivedate,
-          invoicenumber: res.data[0].invoicenumber,
-          ponumber: res.data[0].ponumber,
+          acc_type: res.data[0].acc_type,
+          acc_detail: res.data[0].acc_detail,
+          acc_serialnumber: res.data[0].acc_serialnumber,
+          acc_assetinstall: res.data[0].acc_assetinstall,
+          acc_location: res.data[0].acc_location,
+          acc_department: res.data[0].acc_department,
+          acc_price: res.data[0].acc_price,
+          acc_receivedate: res.data[0].acc_receivedate,
+          acc_invoicenumber: res.data[0].acc_invoicenumber,
+          acc_ponumber: res.data[0].acc_ponumber,
         });
         getAssetnmber();
         setSelectedAsset({
-          value: res.data[0].assetinstall,
-          label: res.data[0].assetinstall,
+          value: res.data[0].acc_assetinstall,
+          label: res.data[0].acc_assetinstall,
         });
       })
       .catch((err) => console.log(err));
   }, []);
 
   const [accessories, setAccessories] = useState({
-    type: "",
-    detail: "",
-    serialnumber: "",
-    assetinstall: "",
-    location: "",
-    dev: "",
-    price: "",
-    receivedate: "",
-    invoicenumber: "",
-    ponumber: "",
+    acc_type: "",
+    acc_detail: "",
+    acc_serialnumber: "",
+    acc_assetinstall: "",
+    acc_location: "",
+    acc_department: "",
+    acc_price: "",
+    acc_receivedate: "",
+    acc_invoicenumber: "",
+    acc_ponumber: "",
   });
 
   //update
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
-      `type`,
-      `detail`,
-      `serialnumber`,
-      `assetinstall`,
-      `location`,
-      `dev`,
-      `price`,
-      `receivedate`,
-      `invoicenumber`,
-      `ponumber`,
+      `acc_type`,
+      `acc_detail`,
+      `acc_serialnumber`,
+      `acc_assetinstall`,
+      `acc_location`,
+      `acc_department`,
+      `acc_price`,
+      `acc_receivedate`,
+      `acc_invoicenumber`,
+      `acc_ponumber`,
     ];
     for (const field of requiredFields) {
       if (!accessories[field] && accessories[field] !== 0) {
@@ -76,16 +76,6 @@ function UpdateAccessories() {
           icon: "error",
           title: "Error",
           text: `${field} is required.`,
-        });
-        return;
-      }
-    }
-    for (const field in accessories) {
-      if (accessories.hasOwnProperty(field) && accessories[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
         });
         return;
       }
@@ -100,7 +90,7 @@ function UpdateAccessories() {
       if (result.isConfirmed) {
         axios
           .put(
-            `${process.env.REACT_APP_API_URL}/updatehw-accessories/` + id,
+            `${process.env.REACT_APP_API_URL}/update-accessories/` + id,
             accessories
           )
           .then((res) => {
@@ -130,7 +120,7 @@ function UpdateAccessories() {
       const formattedDate = selectedDate.toISOString().substring(0, 10);
       setAccessories((prev) => ({
         ...prev,
-        receivedate: formattedDate,
+        acc_receivedate: formattedDate,
       }));
     }
   };
@@ -168,7 +158,7 @@ function UpdateAccessories() {
   //for select
   const handleAssetChange = (selectedOption) => {
     setSelectedAsset(selectedOption);
-    setAccessories({ ...accessories, assetinstall: selectedOption.value });
+    setAccessories({ ...accessories, acc_assetinstall: selectedOption.value });
   };
 
   return (
@@ -185,9 +175,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputAssetType"
               placeholder="Enter Asset Type"
-              value={accessories.type}
+              value={accessories.acc_type}
               onChange={(e) =>
-                setAccessories({ ...accessories, type: e.target.value })
+                setAccessories({ ...accessories, acc_type: e.target.value })
               }
             />
           </div>
@@ -200,9 +190,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputAssetDetail"
               placeholder="Enter Asset Detail"
-              value={accessories.detail}
+              value={accessories.acc_detail}
               onChange={(e) =>
-                setAccessories({ ...accessories, detail: e.target.value })
+                setAccessories({ ...accessories, acc_detail: e.target.value })
               }
             />
           </div>
@@ -215,9 +205,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputSerialNumber"
               placeholder="Enter Serial Number"
-              value={accessories.serialnumber}
+              value={accessories.acc_serialnumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, serialnumber: e.target.value })
+                setAccessories({ ...accessories, acc_serialnumber: e.target.value })
               }
             />
           </div>
@@ -234,8 +224,8 @@ function UpdateAccessories() {
                 options={[
                   { value: "Not Install", label: "Not Install" },
                   ...assetnumber.map((asset) => ({
-                    value: asset.hwassetnumber,
-                    label: asset.hwassetnumber,
+                    value: asset.hw_assetnumber,
+                    label: asset.hw_assetnumber,
                   })),
                 ]}
                 className="borderc"
@@ -251,9 +241,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={accessories.location}
+              value={accessories.acc_location}
               onChange={(e) =>
-                setAccessories({ ...accessories, location: e.target.value })
+                setAccessories({ ...accessories, acc_location: e.target.value })
               }
             />
           </div>
@@ -266,9 +256,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
-              value={accessories.dev}
+              value={accessories.acc_department}
               onChange={(e) =>
-                setAccessories({ ...accessories, dev: e.target.value })
+                setAccessories({ ...accessories, acc_department: e.target.value })
               }
             />
           </div>
@@ -281,9 +271,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={accessories.price}
+              value={accessories.acc_price}
               onChange={(e) =>
-                setAccessories({ ...accessories, price: e.target.value })
+                setAccessories({ ...accessories, acc_price: e.target.value })
               }
             />
           </div>
@@ -293,7 +283,7 @@ function UpdateAccessories() {
                 Receive Date
               </label>
               <DatePicker
-                selected={accessories.receivedate}
+                selected={accessories.acc_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputReceiveDate"
@@ -311,11 +301,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={accessories.invoicenumber}
+              value={accessories.acc_invoicenumber}
               onChange={(e) =>
-                setAccessories({
-                  ...accessories,
-                  invoicenumber: e.target.value,
+                setAccessories({ ...accessories, acc_invoicenumber: e.target.value,
                 })
               }
             />
@@ -329,9 +317,9 @@ function UpdateAccessories() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={accessories.ponumber}
+              value={accessories.acc_ponumber}
               onChange={(e) =>
-                setAccessories({ ...accessories, ponumber: e.target.value })
+                setAccessories({ ...accessories, acc_ponumber: e.target.value })
               }
             />
           </div>

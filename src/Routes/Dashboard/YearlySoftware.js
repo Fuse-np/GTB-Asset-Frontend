@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function SwYearly() {
+function YearlySoftware() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -14,7 +14,7 @@ function SwYearly() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/sw-yearly`)
+      .get(`${process.env.REACT_APP_API_URL}/get-yearlysoftware`)
       .then((res) => {
         setData(res.data);
         console.log(data);
@@ -60,7 +60,7 @@ function SwYearly() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/deletesw-yearly/` + id)
+          .delete(`${process.env.REACT_APP_API_URL}/delete-yearlysoftware/` + id)
           .then((res) => {
             console.log(res);
             Swal.fire({
@@ -71,7 +71,7 @@ function SwYearly() {
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/sw-yearly`)
+                  .get(`${process.env.REACT_APP_API_URL}/get-yearlysoftware`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -104,8 +104,8 @@ function SwYearly() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-  const filteredData = data.filter((sw_yearly) => {
-    return Object.values(sw_yearly).some((value) => {
+  const filteredData = data.filter((Yearlysoftware) => {
+    return Object.values(Yearlysoftware).some((value) => {
       if (value !== null && value !== undefined) {
         return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
       }
@@ -195,27 +195,27 @@ function SwYearly() {
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((sw_yearly, index) => (
+              currentData.map((yearlysoftware, index) => (
                 <tr key={index}>
-                  <td>{sw_yearly.name}</td>
-                  <td>{sw_yearly.assetinstall}</td>
+                  <td>{yearlysoftware.ys_name}</td>
+                  <td>{yearlysoftware.ys_assetinstall}</td>
                   <td>
-                    {new Date(sw_yearly.receivedate).toLocaleDateString(
+                    {new Date(yearlysoftware.ys_receivedate).toLocaleDateString(
                       "en-GB"
                     )}
                   </td>
                   <td>
-                    {new Date(sw_yearly.expiredate).toLocaleDateString("en-GB")}
+                    {new Date(yearlysoftware.ys_expiredate).toLocaleDateString("en-GB")}
                   </td>
                   <td>
                     <Link
-                      to={`/dashboard/readswyearly/${sw_yearly.id}`}
+                      to={`/dashboard/readswyearly/${yearlysoftware.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
-                      onClick={() => handleDelete(sw_yearly.id)}
+                      onClick={() => handleDelete(yearlysoftware.id)}
                       className="btn btndelete btn-sm"
                     >
                       Delete
@@ -278,4 +278,4 @@ function SwYearly() {
   );
 }
 
-export default SwYearly;
+export default YearlySoftware;

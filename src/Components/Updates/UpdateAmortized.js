@@ -11,7 +11,7 @@ import Select from "react-select";
 function UpdateAmortized() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [swasset, setSwasset] = useState([]);
+  const [software, setSoftware] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
   const [options, setOptions] = useState([]);
 
@@ -24,39 +24,38 @@ function UpdateAmortized() {
         console.log(res);
         setAmortized({
           ...amortized,
-          hwassetnumber: res.data[0].hwassetnumber,
-          brand: res.data[0].brand,
-          model: res.data[0].model,
-          user: res.data[0].user,
-          location: res.data[0].location,
-          dev: res.data[0].dev,
-          spec: res.data[0].spec,
-          serialnumber: res.data[0].serialnumber,
-          software: res.data[0].software,
-          price: res.data[0].price,
-          receivedate: res.data[0].receivedate,
-          invoicenumber: res.data[0].invoicenumber,
-          ponumber: res.data[0].ponumber,
-          amortizeddate: res.data[0].amortizeddate,
+          hw_assetnumber: res.data[0].hw_assetnumber,
+          hw_brand: res.data[0].hw_brand,
+          hw_model: res.data[0].hw_model,
+          hw_user: res.data[0].hw_user,
+          hw_location: res.data[0].hw_location,
+          hw_department: res.data[0].hw_department,
+          hw_spec: res.data[0].hw_spec,
+          hw_serialnumber: res.data[0].hw_serialnumber,
+          hw_price: res.data[0].hw_price,
+          hw_receivedate: res.data[0].hw_receivedate,
+          hw_invoicenumber: res.data[0].hw_invoicenumber,
+          hw_ponumber: res.data[0].hw_ponumber,
+          hw_amortizeddate: res.data[0].hw_amortizeddate,
         });
       })
       .catch((err) => console.log(err));
   }, []);
 
   const [amortized, setAmortized] = useState({
-    hwassetnumber: "",
-    brand: "",
-    model: "",
-    user: "",
-    location: "",
-    dev: "",
-    spec: "",
-    serialnumber: "",
-    price: "",
-    receivedate: "",
-    invoicenumber: "",
-    ponumber: "",
-    amortizeddate: "",
+    hw_assetnumber: "",
+    hw_brand: "",
+    hw_model: "",
+    hw_user: "",
+    hw_location: "",
+    hw_department: "",
+    hw_spec: "",
+    hw_serialnumber: "",
+    hw_price: "",
+    hw_receivedate: "",
+    hw_invoicenumber: "",
+    hw_ponumber: "",
+    hw_amortizeddate: "",
   });
 
   //date
@@ -68,7 +67,7 @@ function UpdateAmortized() {
       const formattedDate = selectedDate.toISOString().substring(0, 10);
       setAmortized((prev) => ({
         ...prev,
-        receivedate: formattedDate,
+        hw_receivedate: formattedDate,
       }));
     }
   };
@@ -80,7 +79,7 @@ function UpdateAmortized() {
       const formattedDate = selectedDate.toISOString().substring(0, 10);
       setAmortized((prev) => ({
         ...prev,
-        amortizeddate: formattedDate,
+        hw_amortizeddate: formattedDate,
       }));
     }
   };
@@ -221,18 +220,19 @@ function UpdateAmortized() {
   //select software
   function getSoft() {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/sw`)
+      .get(`${process.env.REACT_APP_API_URL}/software-name`)
       .then((res) => {
         console.log(res);
-        setSwasset(res.data);
+        setSoftware(res.data);
       })
       .catch((err) => console.log(err));
   }
   const mergedOptions = [
     ...options,
-    ...swasset.map((item) => ({
-      value: item.swassetnumber,
-      label: `${item.swassetnumber} (${item.name})`,
+    { label: "None Install", value: "None Install" },
+    ...software.map((item) => ({
+      value: item.sw_assetnumber,
+      label: `${item.sw_assetnumber} (${item.sw_name})`,
     })),
   ];
 
@@ -247,7 +247,7 @@ function UpdateAmortized() {
                 Amortied Date
               </label>
               <DatePicker
-                selected={amortized.amortizeddate}
+                selected={amortized.hw_amortizeddate}
                 onChange={handleDateChange2}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -265,9 +265,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputAssetID"
               placeholder="Enter AssetID"
-              value={amortized.hwassetnumber}
+              value={amortized.hw_assetnumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, hwassetnumber: e.target.value })
+                setAmortized({ ...amortized, hw_assetnumber: e.target.value })
               }
             />
           </div>
@@ -280,9 +280,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputBrand"
               placeholder="Enter Brand"
-              value={amortized.brand}
+              value={amortized.hw_brand}
               onChange={(e) =>
-                setAmortized({ ...amortized, brand: e.target.value })
+                setAmortized({ ...amortized, hw_brand: e.target.value })
               }
             />
           </div>
@@ -295,9 +295,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputModel"
               placeholder="Enter Model"
-              value={amortized.model}
+              value={amortized.hw_model}
               onChange={(e) =>
-                setAmortized({ ...amortized, model: e.target.value })
+                setAmortized({ ...amortized, hw_model: e.target.value })
               }
             />
           </div>
@@ -310,9 +310,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
-              value={amortized.user}
+              value={amortized.hw_user}
               onChange={(e) =>
-                setAmortized({ ...amortized, user: e.target.value })
+                setAmortized({ ...amortized, hw_user: e.target.value })
               }
             />
           </div>
@@ -325,24 +325,24 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={amortized.location}
+              value={amortized.hw_location}
               onChange={(e) =>
-                setAmortized({ ...amortized, location: e.target.value })
+                setAmortized({ ...amortized, hw_location: e.target.value })
               }
             />
           </div>
           <div className="col-12">
             <label for="inputDev" className="form-label fs-5">
-              Dev
+              Department
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputDev"
               placeholder="Enter Dev"
-              value={amortized.dev}
+              value={amortized.hw_department}
               onChange={(e) =>
-                setAmortized({ ...amortized, dev: e.target.value })
+                setAmortized({ ...amortized, hw_department: e.target.value })
               }
             />
           </div>
@@ -355,9 +355,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSpec"
               placeholder="Enter Spec"
-              value={amortized.spec}
+              value={amortized.hw_spec}
               onChange={(e) =>
-                setAmortized({ ...amortized, spec: e.target.value })
+                setAmortized({ ...amortized, hw_spec: e.target.value })
               }
             />
           </div>
@@ -370,9 +370,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
-              value={amortized.serialnumber}
+              value={amortized.hw_serialnumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, serialnumber: e.target.value })
+                setAmortized({ ...amortized, hw_serialnumber: e.target.value })
               }
             />
           </div>
@@ -397,9 +397,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={amortized.price}
+              value={amortized.hw_price}
               onChange={(e) =>
-                setAmortized({ ...amortized, price: e.target.value })
+                setAmortized({ ...amortized, hw_price: e.target.value })
               }
             />
           </div>
@@ -409,7 +409,7 @@ function UpdateAmortized() {
                 Receive Date
               </label>
               <DatePicker
-                selected={amortized.receivedate}
+                selected={amortized.hw_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -427,9 +427,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={amortized.invoicenumber}
+              value={amortized.hw_invoicenumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, invoicenumber: e.target.value })
+                setAmortized({ ...amortized, hw_invoicenumber: e.target.value })
               }
             />
           </div>
@@ -442,9 +442,9 @@ function UpdateAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={amortized.ponumber}
+              value={amortized.hw_ponumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, ponumber: e.target.value })
+                setAmortized({ ...amortized, hw_ponumber: e.target.value })
               }
             />
           </div>

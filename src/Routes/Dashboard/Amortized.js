@@ -1,15 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function HwAccessories() {
+function Amortized() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    checkToken();
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/get-amortized`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   //authen
   const checkToken = () => {
@@ -33,21 +43,11 @@ function HwAccessories() {
       });
   };
 
-  useEffect(() => {
-    checkToken();
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/hw-accessories`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   //delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
-      text: "Data will be delete from Accessories?",
+      text: "Data will be delete from Amortized asset?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#dc3545",
@@ -59,18 +59,18 @@ function HwAccessories() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/deletehw-accessories/${id}`)
+          .delete(`${process.env.REACT_APP_API_URL}/delete-amortized/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
               title: "Success",
-              text: "Hardwere Accessories delete successfully!",
+              text: "Amortized asset delete successfully!",
               icon: "success",
               confirmButtonColor: "#28a745",
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/hw-accessories`)
+                  .get(`${process.env.REACT_APP_API_URL}/get-amortized`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -88,7 +88,54 @@ function HwAccessories() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete Accessories",
+              text: "Failed to delete Amortized asset",
+              icon: "error",
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              confirmButtonColor: "#dc3545",
+            });
+          });
+      }
+    });
+  };
+
+  //moveback
+  const handleMove = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Data will be moved back to Hardware Asset",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Move Back",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`${process.env.REACT_APP_API_URL}/amortized-hardware/${id}`)
+          .then((res) => {
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else {
+              Swal.fire({
+                title: "Success",
+                text: "Move back to Hardware Asset successfully!",
+                icon: "success",
+                confirmButtonColor: "#28a745",
+              }).then(() => {
+                window.location = "/dashboard/hwasset";
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Failed to move back to Hardware asset",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -103,8 +150,9 @@ function HwAccessories() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-  const filteredData = data.filter((hw_accessories) => {
-    return Object.values(hw_accessories).some((value) => {
+
+  const filteredData = data.filter((amortized) => {
+    return Object.values(amortized).some((value) => {
       if (value !== null && value !== undefined) {
         return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
       }
@@ -117,7 +165,7 @@ function HwAccessories() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = reversedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPageCount = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPageCount = Math.ceil(reversedData.length / itemsPerPage);
   const maxPaginationLinks = 5;
 
   const getPageNumbers = () => {
@@ -153,10 +201,11 @@ function HwAccessories() {
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
-        <h3 className="text-uppercase display-5">Accessories Asset List</h3>
+        <h3 className="text-uppercase display-5">Amortized Asset List</h3>
       </div>
+
       <Link
-        to="/dashboard/addacessories"
+        to="/dashboard/addamortized"
         className="btn btn-success mb-3 custom-card"
       >
         Add Asset
@@ -183,42 +232,57 @@ function HwAccessories() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
-              <th className="text-danger fs-5">Acessories Type</th>
-              <th className="text-danger fs-5">Detail</th>
-              <th className="text-danger fs-5">Asset Install</th>
+              <th className="text-danger fs-5">Asset Number</th>
+              <th className="text-danger fs-5">Receive Date</th>
+              <th className="text-danger fs-5">Amortized Date</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((hw_accessories, index) => (
+              currentData.map((amortized, index) => (
                 <tr key={index}>
-                  <td>{hw_accessories.type}</td>
-                  <td>{hw_accessories.detail}</td>
-                  <td>{hw_accessories.assetinstall}</td>
+                  <td>{amortized.hw_assetnumber}</td>
+                  <td>
+                    {new Date(amortized.hw_receivedate).toLocaleDateString(
+                      "en-GB"
+                    )}
+                  </td>
+                  <td>
+                    {new Date(amortized.hw_amortizeddate).toLocaleDateString(
+                      "en-GB"
+                    )}
+                  </td>
                   <td>
                     <Link
-                      to={`/dashboard/readacessories/${hw_accessories.id}`}
+                      to={`/dashboard/readamortized/${amortized.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
-                      onClick={() => handleDelete(hw_accessories.id)}
-                      className="btn btndelete btn-sm"
+                      onClick={() => handleDelete(amortized.id)}
+                      className="btn btndelete btn-sm me-3"
                     >
                       Delete
+                    </button>
+                    <button
+                      onClick={() => handleMove(amortized.id)}
+                      className="btn btnedit btn-sm"
+                    >
+                      Move Back
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6">No assets available</td>
+                <td colSpan="4">No assets available</td>
               </tr>
             )}
           </tbody>
         </table>
+
         {/* Pagination */}
         <ul className="pagination justify-content-center">
           <li className="page-item">
@@ -267,4 +331,4 @@ function HwAccessories() {
   );
 }
 
-export default HwAccessories;
+export default Amortized;

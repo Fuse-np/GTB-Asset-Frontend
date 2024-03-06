@@ -5,18 +5,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function ReadHwasset() {
+function ReadSoftware() {
   const { id } = useParams();
-  const [hwasset, setHwasset] = useState([]);
+  const [software, setSoftware] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readhw-asset/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-software/` + id)
       .then((res) => {
         console.log(res);
-        setHwasset(res.data[0]);
+        setSoftware(res.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -25,7 +25,7 @@ function ReadHwasset() {
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "Data will be delete from Hardware Asset",
+      text: "Data will be delete from Software Asset",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -33,13 +33,13 @@ function ReadHwasset() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${process.env.REACT_APP_API_URL}/deletehw-asset/` + id);
+        axios.delete(`${process.env.REACT_APP_API_URL}/delete-software/` + id);
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/hwasset");
+        navigate("/dashboard/swasset");
       } else {
       }
     });
@@ -70,7 +70,7 @@ function ReadHwasset() {
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-4 bg-white rounded">
-        <h3 className="display-4">Hardware Asset Detail</h3>
+        <h3 className="display-4">Softwere Detail</h3>
       </div>
       <div className="mt-3">
         <table
@@ -79,79 +79,75 @@ function ReadHwasset() {
         >
           <tbody>
             <tr>
-              <th className="text-center">Hardware Asset Number</th>
-              <td className="text-center fs-5">{hwasset.hwassetnumber}</td>
+              <th className="text-center">Softwere Asset Number</th>
+              <td className="text-center fs-5">{software.sw_assetnumber}</td>
             </tr>
             <tr>
-              <th className="text-center">Brand</th>
-              <td className="text-center fs-5">{hwasset.brand}</td>
+              <th className="text-center">Softwere Name</th>
+              <td className="text-center fs-5">{software.sw_name}</td>
             </tr>
             <tr>
-              <th className="text-center">Model</th>
-              <td className="text-center fs-5">{hwasset.model}</td>
-            </tr>
-            <tr>
-              <th className="text-center">User</th>
-              <td className="text-center fs-5">{hwasset.user}</td>
-            </tr>
-            <tr>
-              <th className="text-center">Location</th>
-              <td className="text-center fs-5">{hwasset.location}</td>
-            </tr>
-            <tr>
-              <th className="text-center">Dev</th>
-              <td className="text-center fs-5">{hwasset.dev}</td>
-            </tr>
-            <tr>
-              <th className="text-center">Spec</th>
-              <td className="text-center fs-5">{hwasset.spec}</td>
+              <th className="text-center">Asset Install</th>
+              <td className="text-center fs-5">{software.pcinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Serial Number</th>
-              <td className="text-center fs-5">{hwasset.serialnumber}</td>
+              <td className="text-center fs-5">{software.sw_serialnumber}</td>
             </tr>
             <tr>
-              <th className="text-center">Software Install</th>
-              <td className="text-center fs-5">{hwasset.softwareinstall}</td>
+              <th className="text-center">Softwere Key</th>
+              <td className="text-center fs-5">{software.sw_softwarekey}</td>
+            </tr>
+            <tr>
+              <th className="text-center">User</th>
+              <td className="text-center fs-5">{software.sw_user}</td>
+            </tr>
+            <tr>
+              <th className="text-center">Location</th>
+              <td className="text-center fs-5">{software.sw_location}</td>
+            </tr>
+            <tr>
+              <th className="text-center">Department</th>
+              <td className="text-center fs-5">{software.sw_department}</td>
             </tr>
             <tr>
               <th className="text-center">Price</th>
               <td className="text-center fs-5">
-                {hwasset.price !== undefined && hwasset.price !== null
-                  ? hwasset.price.toLocaleString()
+                {software.sw_price !== undefined && software.sw_price !== null
+                  ? software.sw_price.toLocaleString()
                   : "0"}
               </td>
             </tr>
             <tr>
               <th className="text-center">Receive Date</th>
               <td className="text-center fs-5">
-                {new Date(hwasset.receivedate).toLocaleDateString("en-GB")}
+                {new Date(software.sw_receivedate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{hwasset.invoicenumber}</td>
+              <td className="text-center fs-5">{software.sw_invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{hwasset.ponumber}</td>
+              <td className="text-center fs-5">{software.sw_ponumber}</td>
             </tr>
           </tbody>
         </table>
         <div className="d-flex justify-content-end mb-3">
           <Link
-            to={`/dashboard/updatehwasset/${hwasset.id}`}
+            to={`/dashboard/updateswasset/${software.id}`}
             className="btn btnedit btn-lg me-3"
           >
             Edit
           </Link>
           <button
-            onClick={() => handleDelete(hwasset.id)}
+            onClick={() => handleDelete(software.id)}
             className="btn btndelete btn-lg me-3"
           >
             Delete
           </button>
-          <Link to="/dashboard/hwasset" className="btn btndetail btn-lg">
+          <Link to="/dashboard/swasset" className="btn btndetail btn-lg">
             Back
           </Link>
         </div>
@@ -160,4 +156,4 @@ function ReadHwasset() {
   );
 }
 
-export default ReadHwasset;
+export default ReadSoftware;

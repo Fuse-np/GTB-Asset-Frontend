@@ -13,7 +13,7 @@ function ReadAccessories() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readhw-accessories/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-accessories/` + id)
       .then((res) => {
         console.log(res);
         setAccessories(res.data[0]);
@@ -34,7 +34,7 @@ function ReadAccessories() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(
-          `${process.env.REACT_APP_API_URL}/deletehw-accessories/` + id
+          `${process.env.REACT_APP_API_URL}/delete-accessories/` + id
         );
         Swal.fire({
           title: "Deleted!",
@@ -82,49 +82,49 @@ function ReadAccessories() {
           <tbody>
             <tr>
               <th className="text-center">Accessories Type</th>
-              <td className="text-center fs-5">{accessories.type}</td>
+              <td className="text-center fs-5">{accessories.acc_type}</td>
             </tr>
             <tr>
               <th className="text-center">Detail</th>
-              <td className="text-center fs-5">{accessories.detail}</td>
+              <td className="text-center fs-5">{accessories.acc_detail}</td>
             </tr>
             <tr>
               <th className="text-center">Serial Number</th>
-              <td className="text-center fs-5">{accessories.serialnumber}</td>
+              <td className="text-center fs-5">{accessories.acc_serialnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Asset Install</th>
-              <td className="text-center fs-5">{accessories.assetinstall}</td>
+              <td className="text-center fs-5">{accessories.acc_assetinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Location</th>
-              <td className="text-center fs-5">{accessories.location}</td>
+              <td className="text-center fs-5">{accessories.acc_location}</td>
             </tr>
             <tr>
-              <th className="text-center">Dev</th>
-              <td className="text-center fs-5">{accessories.dev}</td>
+              <th className="text-center">Department</th>
+              <td className="text-center fs-5">{accessories.acc_department}</td>
             </tr>
             <tr>
               <th className="text-center">Price</th>
               <td className="text-center fs-5">
-                {accessories.price !== undefined && accessories.price !== null
-                  ? accessories.price.toLocaleString()
+                {accessories.acc_price !== undefined && accessories.acc_price !== null
+                  ? accessories.acc_price.toLocaleString()
                   : "0"}
               </td>
             </tr>
             <tr>
               <th className="text-center">Receive Date</th>
               <td className="text-center fs-5">
-                {new Date(accessories.receivedate).toLocaleDateString("en-GB")}
+                {new Date(accessories.acc_receivedate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{accessories.invoicenumber}</td>
+              <td className="text-center fs-5">{accessories.acc_invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{accessories.ponumber}</td>
+              <td className="text-center fs-5">{accessories.acc_ponumber}</td>
             </tr>
           </tbody>
         </table>

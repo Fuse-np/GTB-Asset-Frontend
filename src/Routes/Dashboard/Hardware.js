@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function HwAsset() {
+function Hardware() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -14,7 +14,7 @@ function HwAsset() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/hw-asset`)
+      .get(`${process.env.REACT_APP_API_URL}/get-hardware`)
       .then((res) => {
         setData(res.data);
       })
@@ -59,7 +59,7 @@ function HwAsset() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/deletehw-asset/${id}`)
+          .delete(`${process.env.REACT_APP_API_URL}/delete-hardware/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
@@ -70,7 +70,7 @@ function HwAsset() {
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/hw-asset`)
+                  .get(`${process.env.REACT_APP_API_URL}/get-hardware`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -112,7 +112,7 @@ function HwAsset() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${process.env.REACT_APP_API_URL}/movetohw-amortized/${id}`)
+          .put(`${process.env.REACT_APP_API_URL}/hardware-amortized/${id}`)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
@@ -152,8 +152,8 @@ function HwAsset() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-  const filteredData = data.filter((hw_asset) => {
-    return Object.values(hw_asset).some((value) => {
+  const filteredData = data.filter((hardware) => {
+    return Object.values(hardware).some((value) => {
       if (value !== null && value !== undefined) {
         return value
           .toString()
@@ -243,26 +243,26 @@ function HwAsset() {
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((hw_asset, index) => (
+              currentData.map((hardware, index) => (
                 <tr key={index}>
-                  <td>{hw_asset.hwassetnumber}</td>
-                  <td>{hw_asset.user}</td>
-                  <td>{hw_asset.softwareinstall}</td>
+                  <td>{hardware.hw_assetnumber}</td>
+                  <td>{hardware.hw_user}</td>
+                  <td>{hardware.softwareinstall}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readhwasset/${hw_asset.id}`}
+                      to={`/dashboard/readhwasset/${hardware.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
-                      onClick={() => handleDelete(hw_asset.id)}
+                      onClick={() => handleDelete(hardware.id)}
                       className="btn btndelete btn-sm me-3"
                     >
                       Delete
                     </button>
                     <button
-                      onClick={() => handleMove(hw_asset.id)}
+                      onClick={() => handleMove(hardware.id)}
                       className="btn btnedit btn-sm"
                     >
                       Move
@@ -326,4 +326,4 @@ function HwAsset() {
   );
 }
 
-export default HwAsset;
+export default Hardware;

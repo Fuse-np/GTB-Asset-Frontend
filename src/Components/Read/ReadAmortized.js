@@ -13,7 +13,7 @@ function ReadAmortized() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readhw-amortized/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-amortized/` + id)
       .then((res) => {
         console.log(res);
         setAmortized(res.data[0]);
@@ -34,7 +34,7 @@ function ReadAmortized() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(
-          `${process.env.REACT_APP_API_URL}/deletehw-amortized/` + id
+          `${process.env.REACT_APP_API_URL}/delete-amortized/` + id
         );
         Swal.fire({
           title: "Deleted!",
@@ -83,40 +83,40 @@ function ReadAmortized() {
             <tr>
               <th className="text-center">Amortized Date</th>
               <td className="text-center fs-5">
-                {new Date(amortized.amortizeddate).toLocaleDateString("en-GB")}
+                {new Date(amortized.hw_amortizeddate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Hardware Asset Number</th>
-              <td className="text-center fs-5">{amortized.hwassetnumber}</td>
+              <td className="text-center fs-5">{amortized.hw_assetnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Brand</th>
-              <td className="text-center fs-5">{amortized.brand}</td>
+              <td className="text-center fs-5">{amortized.hw_brand}</td>
             </tr>
             <tr>
               <th className="text-center">Model</th>
-              <td className="text-center fs-5">{amortized.model}</td>
+              <td className="text-center fs-5">{amortized.hw_model}</td>
             </tr>
             <tr>
               <th className="text-center">User</th>
-              <td className="text-center fs-5">{amortized.user}</td>
+              <td className="text-center fs-5">{amortized.hw_user}</td>
             </tr>
             <tr>
               <th className="text-center">Location</th>
-              <td className="text-center fs-5">{amortized.location}</td>
+              <td className="text-center fs-5">{amortized.hw_location}</td>
             </tr>
             <tr>
-              <th className="text-center">Dev</th>
-              <td className="text-center fs-5">{amortized.dev}</td>
+              <th className="text-center">Department</th>
+              <td className="text-center fs-5">{amortized.hw_department}</td>
             </tr>
             <tr>
               <th className="text-center">Spec</th>
-              <td className="text-center fs-5">{amortized.spec}</td>
+              <td className="text-center fs-5">{amortized.hw_spec}</td>
             </tr>
             <tr>
               <th className="text-center">Serial Number</th>
-              <td className="text-center fs-5">{amortized.serialnumber}</td>
+              <td className="text-center fs-5">{amortized.hw_serialnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Software Install</th>
@@ -125,24 +125,24 @@ function ReadAmortized() {
             <tr>
               <th className="text-center">Price</th>
               <td className="text-center fs-5">
-                {amortized.price !== undefined && amortized.price !== null
-                  ? amortized.price.toLocaleString()
+                {amortized.hw_price !== undefined && amortized.hw_price !== null
+                  ? amortized.hw_price.toLocaleString()
                   : "0"}
               </td>
             </tr>
             <tr>
               <th className="text-center">Receive Date</th>
               <td className="text-center fs-5">
-                {new Date(amortized.receivedate).toLocaleDateString("en-GB")}
+                {new Date(amortized.hw_receivedate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{amortized.invoicenumber}</td>
+              <td className="text-center fs-5">{amortized.hw_invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{amortized.ponumber}</td>
+              <td className="text-center fs-5">{amortized.hw_ponumber}</td>
             </tr>
           </tbody>
         </table>

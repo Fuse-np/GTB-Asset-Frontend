@@ -7,27 +7,27 @@ import "chart.js/auto";
 
 
 function DashBoard() {
-  const [hwtotal, setHwtotal] = useState();
+  const [hardwaretotal, setHardwaretotal] = useState();
   const [accstotal, setAccstotal] = useState();
-  const [swtotal, setSwtotal] = useState();
-  const [swyeartotal, setSwyeartotal] = useState();
+  const [softwaretotal, setSoftwaretotal] = useState();
+  const [yearlysoftwaretotal, setYearlysoftwaretotal] = useState();
   const [amortizedtotal, setAmortizedtotal] = useState();
-  const [hwpricetotal, setHwpricetotal] = useState();
-  const [accspricetotal, setAccspricetotal] = useState();
-  const [swpricetotal, setSwpricetotal] = useState();
-  const [swyearpricetotal, setSwyearpricetotal] = useState();
+  const [hardwareprice, setHardwareprice] = useState();
+  const [accsprice, setAccsprice] = useState();
+  const [softwareprice, setSoftwareprice] = useState();
+  const [yearlysoftwareprice, setYearlysoftwareprice] = useState();
 
   useEffect(() => {
     checkToken();
-    hwcount();
-    accscount();
-    swcount();
-    swyearcount();
+    hardwarecount();
+    accessoriescount();
+    softwarecount();
+    yearlysoftwarecount();
     amortizedcount();
-    hwpricecount();
-    accspricecount();
-    swpricecount();
-    swyearpricecount();
+    hardwarepricecount();
+    accessoriespricecount();
+    softwarepricecount();
+    yearlysoftwarepricecount();
   }, []);
 
   //authen
@@ -53,39 +53,39 @@ function DashBoard() {
 };
 
   //Get total
-  const hwcount = () => {
+  const hardwarecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/hwtotal`)
+      .get(`${process.env.REACT_APP_API_URL}/hardwaretotal`)
       .then((res) => {
         console.log(res);
-        setHwtotal(res.data[0].hw_asset);
+        setHardwaretotal(res.data[0].hardware);
       })
       .catch((err) => console.log(err));
   };
-  const accscount = () => {
+  const accessoriescount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/accstotal`)
+      .get(`${process.env.REACT_APP_API_URL}/accessoriestotal`)
       .then((res) => {
         console.log(res);
-        setAccstotal(res.data[0].hw_accessories);
+        setAccstotal(res.data[0].accessories);
       })
       .catch((err) => console.log(err));
   };
-  const swcount = () => {
+  const softwarecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/swtotal`)
+      .get(`${process.env.REACT_APP_API_URL}/softwaretotal`)
       .then((res) => {
         console.log(res);
-        setSwtotal(res.data[0].sw_asset);
+        setSoftwaretotal(res.data[0].software);
       })
       .catch((err) => console.log(err));
   };
-  const swyearcount = () => {
+  const yearlysoftwarecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/swyeartotal`)
+      .get(`${process.env.REACT_APP_API_URL}/yearlysoftwaretotal`)
       .then((res) => {
         console.log(res);
-        setSwyeartotal(res.data[0].sw_yearly);
+        setYearlysoftwaretotal(res.data[0].yearlysoftware);
       })
       .catch((err) => console.log(err));
   };
@@ -94,45 +94,45 @@ function DashBoard() {
       .get(`${process.env.REACT_APP_API_URL}/amortizedtotal`)
       .then((res) => {
         console.log(res);
-        setAmortizedtotal(res.data[0].hw_asset);
+        setAmortizedtotal(res.data[0].hardware);
       })
       .catch((err) => console.log(err));
   };
 
   //Get Price
-  const hwpricecount = () => {
+  const hardwarepricecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/hwtotalprice`)
+      .get(`${process.env.REACT_APP_API_URL}/hardwareprice`)
       .then((res) => {
         console.log(res);
-        setHwpricetotal(res.data.price);
+        setHardwareprice(res.data.hw_price);
       })
       .catch((err) => console.log(err));
   };
-  const accspricecount = () => {
+  const accessoriespricecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/accstotalprice`)
+      .get(`${process.env.REACT_APP_API_URL}/accessoriesprice`)
       .then((res) => {
         console.log(res);
-        setAccspricetotal(res.data.price);
+        setAccsprice(res.data.acc_price);
       })
       .catch((err) => console.log(err));
   };
-  const swpricecount = () => {
+  const softwarepricecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/swtotalprice`)
+      .get(`${process.env.REACT_APP_API_URL}/softwareprice`)
       .then((res) => {
         console.log(res);
-        setSwpricetotal(res.data.price);
+        setSoftwareprice(res.data.sw_price);
       })
       .catch((err) => console.log(err));
   };
-  const swyearpricecount = () => {
+  const yearlysoftwarepricecount = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/swyeartotalprice`)
+      .get(`${process.env.REACT_APP_API_URL}/yearlysoftwareprice`)
       .then((res) => {
         console.log(res);
-        setSwyearpricetotal(res.data.price);
+        setYearlysoftwareprice(res.data.ys_price);
       })
       .catch((err) => console.log(err));
   };
@@ -147,7 +147,7 @@ function DashBoard() {
     ],
     datasets: [
       {
-        data: [hwtotal, accstotal, swtotal, swyeartotal, amortizedtotal],
+        data: [hardwaretotal, accstotal, softwaretotal, yearlysoftwaretotal, amortizedtotal],
         backgroundColor: [
           "rgba(255, 99, 132, 0.7)",
           "rgba(54, 162, 235, 0.7)",
@@ -239,7 +239,7 @@ function DashBoard() {
               <div className="card-body">
                 <h4 className="card-title headtext">Hardware Asset</h4>
                 <h6 className="card-text">
-                  {Number(hwpricetotal).toLocaleString()} Baht
+                  {Number(hardwareprice).toLocaleString()} Baht
                 </h6>
               </div>
             </div>
@@ -249,7 +249,7 @@ function DashBoard() {
               <div className="card-body">
                 <h4 className="card-title headtext">Hardware Accessories</h4>
                 <h6 className="card-text">
-                  {Number(accspricetotal).toLocaleString()} Baht
+                  {Number(accsprice).toLocaleString()} Baht
                 </h6>
               </div>
             </div>
@@ -259,7 +259,7 @@ function DashBoard() {
               <div className="card-body">
                 <h4 className="card-title headtext">Software Asset</h4>
                 <h6 className="card-text">
-                  {Number(swpricetotal).toLocaleString()} Baht
+                  {Number(softwareprice).toLocaleString()} Baht
                 </h6>
               </div>
             </div>
@@ -269,7 +269,7 @@ function DashBoard() {
               <div className="card-body">
                 <h4 className="card-title headtext">Software Yearly</h4>
                 <h6 className="card-text">
-                  {Number(swyearpricetotal).toLocaleString()} Baht
+                  {Number(yearlysoftwareprice).toLocaleString()} Baht
                 </h6>
               </div>
             </div>

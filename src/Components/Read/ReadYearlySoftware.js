@@ -5,18 +5,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function ReadSwyearly() {
+function ReadYeaylySoftware() {
   const { id } = useParams();
-  const [swyearly, setSwyearly] = useState([]);
+  const [yearlySoftware, setYearlySoftware] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/readsw-yearly/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-yearlysoftware/` + id)
       .then((res) => {
         console.log(res);
-        setSwyearly(res.data[0]);
+        setYearlySoftware(res.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -33,7 +33,7 @@ function ReadSwyearly() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${process.env.REACT_APP_API_URL}/deletesw-yearly/` + id);
+        axios.delete(`${process.env.REACT_APP_API_URL}/delete-yearlysoftware/` + id);
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
@@ -66,7 +66,7 @@ function ReadSwyearly() {
         console.error("Error", error);
       });
   };
-
+ 
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-4 bg-white rounded">
@@ -80,55 +80,55 @@ function ReadSwyearly() {
           <tbody>
             <tr>
               <th className="text-center">Softwere Name</th>
-              <td className="text-center fs-5">{swyearly.name}</td>
+              <td className="text-center fs-5">{yearlySoftware.ys_name}</td>
             </tr>
             <tr>
               <th className="text-center">Serial Number</th>
-              <td className="text-center fs-5">{swyearly.serialnumber}</td>
+              <td className="text-center fs-5">{yearlySoftware.ys_serialnumber}</td>
             </tr>
             <tr>
               <th className="text-center">Asset Install</th>
-              <td className="text-center fs-5">{swyearly.assetinstall}</td>
+              <td className="text-center fs-5">{yearlySoftware.ys_assetinstall}</td>
             </tr>
             <tr>
               <th className="text-center">Receive Date</th>
               <td className="text-center fs-5">
-                {new Date(swyearly.receivedate).toLocaleDateString("en-GB")}
+                {new Date(yearlySoftware.ys_receivedate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Expiredate</th>
               <td className="text-center fs-5">
-                {new Date(swyearly.expiredate).toLocaleDateString("en-GB")}
+                {new Date(yearlySoftware.ys_expiredate).toLocaleDateString("en-GB")}
               </td>
             </tr>
             <tr>
               <th className="text-center">Price</th>
               <td className="text-center fs-5">
-                {swyearly.price !== undefined && swyearly.price !== null
-                  ? swyearly.price.toLocaleString()
+                {yearlySoftware.ys_price !== undefined && yearlySoftware.ys_price !== null
+                  ? yearlySoftware.ys_price.toLocaleString()
                   : "0"}
               </td>
             </tr>
             <tr>
               <th className="text-center">Invoice Number</th>
-              <td className="text-center fs-5">{swyearly.invoicenumber}</td>
+              <td className="text-center fs-5">{yearlySoftware.ys_invoicenumber}</td>
             </tr>
             <tr>
               <th className="text-center">PO Number</th>
-              <td className="text-center fs-5">{swyearly.ponumber}</td>
+              <td className="text-center fs-5">{yearlySoftware.ys_ponumber}</td>
             </tr>
           </tbody>
         </table>
         <div className="d-flex justify-content-end mb-3">
           <Link
-            to={`/dashboard/updateswyearly/${swyearly.id}`}
+            to={`/dashboard/updateswyearly/${yearlySoftware.id}`}
             className="btn btnedit btn-lg me-3"
           >
             Edit
           </Link>
           <button
-            onClick={() => handleDelete(swyearly.id)}
+            onClick={() => handleDelete(yearlySoftware.id)}
             className="btn btndelete btn-lg me-3"
           >
             Delete
@@ -141,4 +141,4 @@ function ReadSwyearly() {
     </div>
   );
 }
-export default ReadSwyearly;
+export default ReadYeaylySoftware;

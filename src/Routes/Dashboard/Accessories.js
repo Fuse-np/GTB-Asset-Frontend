@@ -5,28 +5,11 @@ import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function SwAsset() {
+function Accessories() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    checkToken();
-    software();
-    
-  }, []);
-
-  //Software
-  const software = () => {
-    axios
-    .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
-    .then((res) => {
-      setData(res.data);
-      console.log(data);
-    })
-    .catch((err) => console.log(err));
-  }
 
   //authen
   const checkToken = () => {
@@ -50,11 +33,21 @@ function SwAsset() {
       });
   };
 
+  useEffect(() => {
+    checkToken();
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/get-accessories`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   //delete
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
-      text: "Data will be delete from Softwere Asset?",
+      text: "Data will be delete from Accessories?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#dc3545",
@@ -66,18 +59,18 @@ function SwAsset() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/deletesw-asset/` + id)
+          .delete(`${process.env.REACT_APP_API_URL}/delete-accessories/${id}`)
           .then((res) => {
             console.log(res);
             Swal.fire({
               title: "Success",
-              text: "Softwere asset delete successfully!",
+              text: "Hardwere Accessories delete successfully!",
               icon: "success",
               confirmButtonColor: "#28a745",
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+                  .get(`${process.env.REACT_APP_API_URL}/get-accessories`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -95,7 +88,7 @@ function SwAsset() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete Softwere asset",
+              text: "Failed to delete Accessories",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -110,15 +103,15 @@ function SwAsset() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-  
-  const filteredData = data.filter((sw_asset) => {
-    return Object.values(sw_asset).some((value) => {
+  const filteredData = data.filter((accessories) => {
+    return Object.values(accessories).some((value) => {
       if (value !== null && value !== undefined) {
         return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
       }
       return false;
     });
   });
+
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -157,17 +150,16 @@ function SwAsset() {
     setSearchTerm("");
   };
 
-
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
-        <h3 className="text-uppercase display-5">Software Asset List</h3>
+        <h3 className="text-uppercase display-5">Accessories Asset List</h3>
       </div>
       <Link
-        to="/dashboard/addswasset"
+        to="/dashboard/addacessories"
         className="btn btn-success mb-3 custom-card"
       >
-        Add Software
+        Add Asset
       </Link>
       <Link
         onClick={handleClearSearch}
@@ -191,28 +183,28 @@ function SwAsset() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
-              <th className="text-danger fs-5">Software Asset Number</th>
-              <th className="text-danger fs-5">Name</th>
+              <th className="text-danger fs-5">Acessories Type</th>
+              <th className="text-danger fs-5">Detail</th>
               <th className="text-danger fs-5">Asset Install</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((sw_asset, index) => (
+              currentData.map((accessories, index) => (
                 <tr key={index}>
-                  <td>{sw_asset.swassetnumber}</td>
-                  <td>{sw_asset.name}</td>
-                  <td>{sw_asset.assetinstall}</td>
+                  <td>{accessories.acc_type}</td>
+                  <td>{accessories.acc_detail}</td>
+                  <td>{accessories.acc_assetinstall}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readswasset/${sw_asset.id}`}
+                      to={`/dashboard/readacessories/${accessories.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
-                      onClick={() => handleDelete(sw_asset.id)}
+                      onClick={() => handleDelete(accessories.id)}
                       className="btn btndelete btn-sm"
                     >
                       Delete
@@ -222,7 +214,7 @@ function SwAsset() {
               ))
             ) : (
               <tr>
-                <td colSpan="6">No software assets available</td>
+                <td colSpan="6">No assets available</td>
               </tr>
             )}
           </tbody>
@@ -275,4 +267,4 @@ function SwAsset() {
   );
 }
 
-export default SwAsset;
+export default Accessories;

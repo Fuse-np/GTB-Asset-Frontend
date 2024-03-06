@@ -1,63 +1,66 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Swal from "sweetalert2";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
+import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function UpdateSwyearly() {
-  const { id } = useParams();
+function AddYearlysoftware() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    checkToken();
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/readsw-yearly/` + id)
-      .then((res) => {
-        console.log(res);
-        setSwyearly({
-          ...swyearly,
-          name: res.data[0].name,
-          serialnumber: res.data[0].serialnumber,
-          assetinstall: res.data[0].assetinstall,
-          expiredate: res.data[0].expiredate,
-          price: res.data[0].price,
-          receivedate: res.data[0].receivedate,
-          invoicenumber: res.data[0].invoicenumber,
-          ponumber: res.data[0].ponumber,
-        });
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const [swyearly, setSwyearly] = useState({
-    name: "",
-    serialnumber: "",
-    assetinstall: "",
-    expiredate: "",
-    price: "",
-    receivedate: "",
-    invoicenumber: "",
-    ponumber: "",
+  const [yearlySoftware, setYearlySoftware] = useState({
+    ys_name: "-",
+    ys_serialnumber: "-",
+    ys_assetinstall: "-",
+    ys_receivedate: new Date(),
+    ys_expiredate: new Date(),
+    ys_price: 0,
+    ys_invoicenumber: "-",
+    ys_ponumber: "-",
   });
 
-  //update
-  const handleUpdate = (event) => {
-    event.preventDefault();
+  //date
+  const handleDateChange = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setYearlySoftware((prev) => ({
+        ...prev,
+        ys_receivedate: formattedDate,
+      }));
+    }
+  };
+  const handleDateChange2 = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setYearlySoftware((prev) => ({
+        ...prev,
+        ys_expiredate: formattedDate,
+      }));
+    }
+  };
+
+  //Submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const requiredFields = [
-      `name`,
-      `assetinstall`,
-      `serialnumber`,
-      `expiredate`,
-      `price`,
-      `receivedate`,
-      `invoicenumber`,
-      `ponumber`,
+      `ys_name`,
+      `ys_serialnumber`,
+      `ys_assetinstall`,
+      `ys_receivedate`,
+      `ys_expiredate`,
+      `ys_price`,
+      `ys_invoicenumber`,
+      `ys_ponumber`,
     ];
     for (const field of requiredFields) {
-      if (!swyearly[field] && swyearly[field] !== 0) {
+      if (!yearlySoftware[field] && yearlySoftware[field] !== 0) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -66,29 +69,16 @@ function UpdateSwyearly() {
         return;
       }
     }
-    for (const field in swyearly) {
-      if (swyearly.hasOwnProperty(field) && swyearly[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
-        });
-        return;
-      }
-    }
     Swal.fire({
-      title: "Confirm Update Data?",
+      title: "Confirm Add Data?",
       showCancelButton: true,
-      confirmButtonText: "Update",
+      confirmButtonText: "Add",
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(
-            `${process.env.REACT_APP_API_URL}/updatesw-yearly/` + id,
-            swyearly
-          )
+          .post(`${process.env.REACT_APP_API_URL}/add-yearlysoftware`, yearlySoftware)
           .then((res) => {
             if (res.data.status === "errordate") {
               Swal.fire({
@@ -97,9 +87,9 @@ function UpdateSwyearly() {
                 text: `Receivedate can't be after expiredate.`,
               });
             } else {
-              Swal.fire("Updated!", "", "success").then(() => {
+              Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/readswyearly/" + id, swyearly);
+                navigate("/dashboard/swyearly");
               });
             }
           })
@@ -113,32 +103,6 @@ function UpdateSwyearly() {
           });
       }
     });
-  };
-
-  //date
-  const handleDateChange = (date) => {
-    if (date) {
-      const selectedDate = new Date(date);
-      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
-      selectedDate.setDate(selectedDate.getDate());
-      const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setSwyearly((prev) => ({
-        ...prev,
-        receivedate: formattedDate,
-      }));
-    }
-  };
-  const handleDateChange2 = (date) => {
-    if (date) {
-      const selectedDate = new Date(date);
-      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
-      selectedDate.setDate(selectedDate.getDate());
-      const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setSwyearly((prev) => ({
-        ...prev,
-        expiredate: formattedDate,
-      }));
-    }
   };
 
   //authen
@@ -163,23 +127,27 @@ function UpdateSwyearly() {
       });
   };
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
-      <div className="p-3 rounded w-50 border borderc bg-white">
-        <h2 className="text-center">Update Softwere Asset</h2>
-        <form className="row g-1" onSubmit={handleUpdate}>
+      <div className="p-3 rounded w-50 border bg-white borderc">
+        <h2 className="text-center">Add Yearly Software</h2>
+        <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputSoftwereName" className="form-label fs-5">
-              Softwere Name
+            <label for="inputAssetID" className="form-label fs-5">
+              Software Name
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputSoftwereName"
               placeholder="Enter Softwere Name"
-              value={swyearly.name}
+              value={yearlySoftware.ys_name}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, name: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_name: e.target.value })
               }
             />
           </div>
@@ -192,14 +160,14 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputSerialNumber"
               placeholder="Enter Serial Number"
-              value={swyearly.serialnumber}
+              value={yearlySoftware.ys_serialnumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, serialnumber: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_serialnumber: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputAssetInstall" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Asset Install
             </label>
             <input
@@ -207,9 +175,9 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputAssetInstall"
               placeholder="Enter Asset Install"
-              value={swyearly.assetinstall}
+              value={yearlySoftware.ys_assetinstall}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, assetinstall: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_assetinstall: e.target.value })
               }
             />
           </div>
@@ -219,12 +187,13 @@ function UpdateSwyearly() {
                 Receive Date
               </label>
               <DatePicker
-                selected={swyearly.receivedate}
+                selected={yearlySoftware.ys_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputReceiveDate"
                 placeholderText="Enter Receive Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>
@@ -234,7 +203,7 @@ function UpdateSwyearly() {
                 Expiredate
               </label>
               <DatePicker
-                selected={swyearly.expiredate}
+                selected={yearlySoftware.ys_expiredate}
                 onChange={handleDateChange2}
                 className="form-control rounded-0 borderc"
                 id="input Expiredate"
@@ -252,14 +221,14 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={swyearly.price}
+              value={yearlySoftware.ys_price}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, price: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_price: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputInvoiceNumber" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Invoice Number
             </label>
             <input
@@ -267,14 +236,14 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={swyearly.invoicenumber}
+              value={yearlySoftware.ys_invoicenumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, invoicenumber: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_invoicenumber: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputPONumber" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               PO Number
             </label>
             <input
@@ -282,15 +251,15 @@ function UpdateSwyearly() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={swyearly.ponumber}
+              value={yearlySoftware.ys_ponumber}
               onChange={(e) =>
-                setSwyearly({ ...swyearly, ponumber: e.target.value })
+                setYearlySoftware({ ...yearlySoftware, ys_ponumber: e.target.value })
               }
             />
           </div>
           <p></p>
           <button className="btn btn-success w-100 rounded-0 mb-2 borderc">
-            Update SoftwereYearly
+            Add Softwere Asset
           </button>
         </form>
       </div>
@@ -298,4 +267,4 @@ function UpdateSwyearly() {
   );
 }
 
-export default UpdateSwyearly;
+export default AddYearlysoftware;

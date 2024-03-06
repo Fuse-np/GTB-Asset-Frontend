@@ -142,7 +142,21 @@ function Sidebar() {
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill-x ms-2"></i>
-              <span className="ms-2 d-none d-sm-inline">AmortizedAssets</span>
+              <span className="ms-2 d-none d-sm-inline">HardwareAmortized</span>
+            </Link>
+          </li>
+
+          <li className="w-100">
+            <Link
+              onClick={() =>
+                window.location.pathname === "/dashboard/amortized" &&
+                window.location.reload()
+              }
+              to="/dashboard/amortized"
+              className="nav-link whitetext px-0 align-middle"
+            >
+              <i className="fs-4 bi-database-fill-x ms-2"></i>
+              <span className="ms-2 d-none d-sm-inline">SoftwareAmortized</span>
             </Link>
           </li>
 

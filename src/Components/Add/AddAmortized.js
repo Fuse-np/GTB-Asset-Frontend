@@ -10,22 +10,23 @@ import Select from "react-select";
 
 function AddAmortized() {
   const navigate = useNavigate();
-  const [swasset, setSwasset] = useState([]);
+  const [software, setSoftware] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [amortized, setAmortized] = useState({
-    hwassetnumber: "",
-    brand: "-",
-    model: "-",
-    user: "-",
-    location: "-",
-    dev: "-",
-    spec: "-",
-    serialnumber: "-",
-    price: 0,
-    receivedate: new Date(),
-    invoicenumber: "-",
-    ponumber: "-",
-    amortizeddate: new Date(),
+    hw_assetnumber: "",
+    hw_brand: "-",
+    hw_model: "-",
+    hw_user: "-",
+    hw_location: "-",
+    hw_department: "-",
+    hw_spec: "-",
+    hw_serialnumber: "-",
+    hw_softwareinstall: "",
+    hw_price: 0,
+    hw_receivedate: new Date(),
+    hw_invoicenumber: "-",
+    hw_ponumber: "-",
+    hw_amortizeddate: new Date(),
   });
 
   //date
@@ -37,7 +38,7 @@ function AddAmortized() {
       const formattedDate = selectedDate.toISOString().substring(0, 10);
       setAmortized((prev) => ({
         ...prev,
-        receivedate: formattedDate,
+        hw_receivedate: formattedDate,
       }));
     }
   };
@@ -50,7 +51,7 @@ function AddAmortized() {
       const formattedDate = selectedDate.toISOString().substring(0, 10);
       setAmortized((prev) => ({
         ...prev,
-        amortizeddate: formattedDate,
+        hw_amortizeddate: formattedDate,
       }));
     }
   };
@@ -58,10 +59,10 @@ function AddAmortized() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/sw-asset`)
+      .get(`${process.env.REACT_APP_API_URL}/software-name`)
       .then((res) => {
         console.log(res);
-        setSwasset(res.data);
+        setSoftware(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -74,19 +75,19 @@ function AddAmortized() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
-      "hwassetnumber",
-      "brand",
-      "model",
-      "user",
-      "location",
-      "dev",
-      "spec",
-      "serialnumber",
-      "price",
-      "receivedate",
-      "invoicenumber",
-      "ponumber",
-      `amortizeddate`,
+      `hw_assetnumber`,
+      `hw_brand`,
+      `hw_model`,
+      `hw_user`,
+      `hw_location`,
+      `hw_department`,
+      `hw_spec`,
+      `hw_serialnumber`,
+      `hw_price`,
+      `hw_receivedate`,
+      `hw_invoicenumber`,
+      `hw_ponumber`,
+      `hw_amortizeddate`,
     ];
     for (const field of requiredFields) {
       if (!amortized[field] && amortized[field] !== 0) {
@@ -98,18 +99,8 @@ function AddAmortized() {
         return;
       }
     }
-    for (const field in amortized) {
-      if (amortized.hasOwnProperty(field) && amortized[field] === null) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${field} cannot be null.`,
-        });
-        return;
-      }
-    }
     Swal.fire({
-      title: `Confirm Add ${amortized.hwassetnumber}?`,
+      title: `Confirm Add ${amortized.hw_assetnumber}?`,
       showCancelButton: true,
       confirmButtonText: "Add",
       allowOutsideClick: false,
@@ -118,16 +109,16 @@ function AddAmortized() {
       if (result.isConfirmed) {
         const dataToSend = {
           ...amortized,
-          softwareinstall: selectedOptions.map((option) => option.value),
+          hw_softwareinstall: selectedOptions.map((option) => option.value),
         };
         axios
-          .post(`${process.env.REACT_APP_API_URL}/addhw-amortized`, dataToSend)
+          .post(`${process.env.REACT_APP_API_URL}/add-amortized`, dataToSend)
           .then((res) => {
             if (res.data.status === "error") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Asset number ${amortized.hwassetnumber} already exists.`,
+                text: `Asset number ${amortized.hw_assetnumber} already exists.`,
               });
             } else if (res.data.status === "errorsoftware") {
               const assetnum = res.data.assetInstall;
@@ -189,7 +180,7 @@ function AddAmortized() {
                 Amortied Date
               </label>
               <DatePicker
-                selected={amortized.amortizeddate}
+                selected={amortized.hw_amortizeddate}
                 onChange={handleDateChange2}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -209,7 +200,7 @@ function AddAmortized() {
               id="inputAssetID"
               placeholder="Enter AssetID"
               onChange={(e) =>
-                setAmortized({ ...amortized, hwassetnumber: e.target.value })
+                setAmortized({ ...amortized, hw_assetnumber: e.target.value })
               }
             />
           </div>
@@ -222,9 +213,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputBrand"
               placeholder="Enter Brand"
-              value={amortized.brand}
+              value={amortized.hw_brand}
               onChange={(e) =>
-                setAmortized({ ...amortized, brand: e.target.value })
+                setAmortized({ ...amortized, hw_brand: e.target.value })
               }
             />
           </div>
@@ -237,9 +228,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputModel"
               placeholder="Enter Model"
-              value={amortized.model}
+              value={amortized.hw_model}
               onChange={(e) =>
-                setAmortized({ ...amortized, model: e.target.value })
+                setAmortized({ ...amortized, hw_model: e.target.value })
               }
             />
           </div>
@@ -252,9 +243,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputUser"
               placeholder="Enter User"
-              value={amortized.user}
+              value={amortized.hw_user}
               onChange={(e) =>
-                setAmortized({ ...amortized, user: e.target.value })
+                setAmortized({ ...amortized, hw_user: e.target.value })
               }
             />
           </div>
@@ -267,24 +258,24 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputLocation"
               placeholder="Enter Location"
-              value={amortized.location}
+              value={amortized.hw_location}
               onChange={(e) =>
-                setAmortized({ ...amortized, location: e.target.value })
+                setAmortized({ ...amortized, hw_location: e.target.value })
               }
             />
           </div>
           <div className="col-12">
             <label for="inputDev" className="form-label fs-5">
-              Dev
+              Department
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
               id="inputDev"
-              placeholder="Enter Dev"
-              value={amortized.dev}
+              placeholder="Enter Department"
+              value={amortized.hw_department}
               onChange={(e) =>
-                setAmortized({ ...amortized, dev: e.target.value })
+                setAmortized({ ...amortized, hw_department: e.target.value })
               }
             />
           </div>
@@ -297,9 +288,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSpec"
               placeholder="Enter Spec"
-              value={amortized.spec}
+              value={amortized.hw_spec}
               onChange={(e) =>
-                setAmortized({ ...amortized, spec: e.target.value })
+                setAmortized({ ...amortized, hw_spec: e.target.value })
               }
             />
           </div>
@@ -312,9 +303,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputSerialnumber"
               placeholder="Enter Serialnumber"
-              value={amortized.serialnumber}
+              value={amortized.hw_serialnumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, serialnumber: e.target.value })
+                setAmortized({ ...amortized, hw_serialnumber: e.target.value })
               }
             />
           </div>
@@ -326,18 +317,21 @@ function AddAmortized() {
               className="basic-multi-select"
               classNamePrefix="select"
               isMulti
-              options={swasset
-                .filter(
-                  (sw_asset) =>
-                    !selectedOptions.some(
-                      (selectedOption) =>
-                        selectedOption.value === sw_asset.swassetnumber
-                    )
-                )
-                .map((sw_asset) => ({
-                  value: sw_asset.swassetnumber,
-                  label: `${sw_asset.swassetnumber} (${sw_asset.name})`,
-                }))}
+              options={[
+                { label: 'None Install', value: 'None Install' },
+                ...software
+                  .filter(
+                    (sw) =>
+                      !selectedOptions.some(
+                        (selectedOption) =>
+                          selectedOption.value === sw.sw_assetnumber
+                      )
+                  )
+                  .map((sw) => ({
+                    value: sw.sw_assetnumber,
+                    label: `${sw.sw_assetnumber} (${sw.sw_name})`,
+                  })),
+              ]}
               onChange={handleChange}
               value={selectedOptions}
               filterOption={(option, inputValue) =>
@@ -354,9 +348,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPrice"
               placeholder="Enter Price"
-              value={amortized.price}
+              value={amortized.hw_price}
               onChange={(e) =>
-                setAmortized({ ...amortized, price: e.target.value })
+                setAmortized({ ...amortized, hw_price: e.target.value })
               }
             />
           </div>
@@ -366,7 +360,7 @@ function AddAmortized() {
                 Receive Date
               </label>
               <DatePicker
-                selected={amortized.receivedate}
+                selected={amortized.hw_receivedate}
                 onChange={handleDateChange}
                 className="form-control rounded-0 borderc"
                 id="inputAmortiedDate"
@@ -385,9 +379,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputInvoiceNumber"
               placeholder="Enter Invoice Number"
-              value={amortized.invoicenumber}
+              value={amortized.hw_invoicenumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, invoicenumber: e.target.value })
+                setAmortized({ ...amortized, hw_invoicenumber: e.target.value })
               }
             />
           </div>
@@ -400,9 +394,9 @@ function AddAmortized() {
               className="form-control rounded-0 borderc"
               id="inputPONumber"
               placeholder="Enter PO Number"
-              value={amortized.ponumber}
+              value={amortized.hw_ponumber}
               onChange={(e) =>
-                setAmortized({ ...amortized, ponumber: e.target.value })
+                setAmortized({ ...amortized, hw_ponumber: e.target.value })
               }
             />
           </div>
