@@ -39,7 +39,7 @@ function ReadHardware() {
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/hwasset");
+        navigate("/dashboard/hardware");
       } else {
       }
     });
@@ -140,7 +140,7 @@ function ReadHardware() {
         </table>
         <div className="d-flex justify-content-end mb-3">
           <Link
-            to={`/dashboard/updatehwasset/${hardware.id}`}
+            to={`/dashboard/updatehardware/${hardware.id}`}
             className="btn btnedit btn-lg me-3"
           >
             Edit
@@ -151,7 +151,7 @@ function ReadHardware() {
           >
             Delete
           </button>
-          <Link to="/dashboard/hwasset" className="btn btndetail btn-lg">
+          <Link to="/dashboard/hardware" className="btn btndetail btn-lg">
             Back
           </Link>
         </div>

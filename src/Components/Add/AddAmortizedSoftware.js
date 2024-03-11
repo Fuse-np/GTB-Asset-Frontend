@@ -1,55 +1,58 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
+import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function UpdateSoftware() {
-  const { id } = useParams();
+function AddAmortizedSoftware() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    checkToken();
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/read-software/` + id)
-      .then((res) => {
-        console.log(res);
-        setSoftware({
-          ...software,
-          sw_assetnumber: res.data[0].sw_assetnumber,
-          sw_name: res.data[0].sw_name,
-          sw_serialnumber: res.data[0].sw_serialnumber,
-          sw_softwarekey: res.data[0].sw_softwarekey,
-          sw_user: res.data[0].sw_user,
-          sw_location: res.data[0].sw_location,
-          sw_price: res.data[0].sw_price,
-          sw_receivedate: res.data[0].sw_receivedate,
-          sw_invoicenumber: res.data[0].sw_invoicenumber,
-          sw_ponumber: res.data[0].sw_ponumber,
-        });
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   const [software, setSoftware] = useState({
-    sw_swassetnumber: "",
-    sw_name: "",
-    sw_serialnumber: "",
-    sw_softwarekey: "",
-    sw_user: "",
-    sw_location: "",
-    sw_price: "",
-    sw_receivedate: "",
-    sw_invoicenumber: "",
-    sw_ponumber: "",
+    sw_assetnumber: "",
+    sw_name: "-",
+    sw_serialnumber: "-",
+    sw_softwarekey: "-",
+    sw_user: "-",
+    sw_location: "-",
+    sw_department: "-",
+    sw_price: 0,
+    sw_receivedate: new Date(),
+    sw_invoicenumber: "-",
+    sw_ponumber: "-",
+    sw_amortizeddate: new Date(),
   });
 
-  //update
-  const handleUpdate = (event) => {
-    event.preventDefault();
+  //date
+  const handleDateChange = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setSoftware((prev) => ({
+        ...prev,
+        sw_receivedate: formattedDate,
+      }));
+    }
+  };
+
+  const handleDateChange2 = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setSoftware((prev) => ({
+        ...prev,
+        sw_amortizeddate: formattedDate,
+      }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const requiredFields = [
       `sw_assetnumber`,
       `sw_name`,
@@ -57,6 +60,7 @@ function UpdateSoftware() {
       `sw_softwarekey`,
       `sw_user`,
       `sw_location`,
+      `sw_department`,
       `sw_price`,
       `sw_receivedate`,
       `sw_invoicenumber`,
@@ -73,29 +77,26 @@ function UpdateSoftware() {
       }
     }
     Swal.fire({
-      title: "Confirm Update Data?",
+      title: `Confirm Add ${software.sw_assetnumber}?`,
       showCancelButton: true,
-      confirmButtonText: "Update",
+      confirmButtonText: "Add",
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(
-            `${process.env.REACT_APP_API_URL}/update-software/` + id,
-            software
-          )
+          .post(`${process.env.REACT_APP_API_URL}/add-amortizedoftware`, software)
           .then((res) => {
-            if (res.data.status === "error") {
+            if (res.data.status === "errorsoftware") {
               Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: `Asset number already exists.`,
               });
             } else {
-              Swal.fire("Updated!", "", "success").then(() => {
+              Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/readsoftware/" + id, software);
+                navigate("/dashboard/amortizedsoftware");
               });
             }
           })
@@ -109,20 +110,6 @@ function UpdateSoftware() {
           });
       }
     });
-  };
-
-  //date
-  const handleDateChange = (date) => {
-    if (date) {
-      const selectedDate = new Date(date);
-      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
-      selectedDate.setDate(selectedDate.getDate());
-      const formattedDate = selectedDate.toISOString().substring(0, 10);
-      setSoftware((prev) => ({
-        ...prev,
-        sw_receivedate: formattedDate,
-      }));
-    }
   };
 
   //authen
@@ -147,29 +134,48 @@ function UpdateSoftware() {
       });
   };
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
-      <div className="p-3 rounded w-50 border borderc bg-white">
-        <h2 className="text-center">Update Softwere Asset</h2>
-        <form className="row g-1" onSubmit={handleUpdate}>
+      <div className="p-3 rounded w-50 border bg-white borderc">
+        <h2 className="text-center">Add Softwere Asset</h2>
+        <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputAssetNumber" className="form-label fs-5">
-              Software Asset Number
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Amortized Date
+              </label>
+              <DatePicker
+                selected={software.sw_amortizeddate}
+                onChange={handleDateChange2}
+                className="form-control rounded-0 borderc"
+                id="inputReceiveDate"
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <label for="inputSoftwereAssetNumber" className="form-label fs-5">
+              Softwere Asset Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputAssetNumber"
-              placeholder="Enter Asset Number"
-              value={software.sw_assetnumber}
+              id="inputSoftwereAssetNumber"
+              placeholder="Enter Softwere Asset Number"
               onChange={(e) =>
                 setSoftware({ ...software, sw_assetnumber: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputSoftwereName" className="form-label fs-5">
-              Softwere Name
+            <label for="inputAssetID" className="form-label fs-5">
+              Software Name
             </label>
             <input
               type="text"
@@ -183,14 +189,14 @@ function UpdateSoftware() {
             />
           </div>
           <div className="col-12">
-            <label for="inputSerialNumber" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Serial Number
             </label>
             <input
               type="text"
               className="form-control rounded-0 borderc"
-              id="inputSerialNumber"
-              placeholder="Enter Serial Number"
+              id="inputSerialnumber"
+              placeholder="Enter Serialnumber"
               value={software.sw_serialnumber}
               onChange={(e) =>
                 setSoftware({ ...software, sw_serialnumber: e.target.value })
@@ -198,7 +204,7 @@ function UpdateSoftware() {
             />
           </div>
           <div className="col-12">
-            <label for="inputSoftwereKey" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Softwere Key
             </label>
             <input
@@ -213,7 +219,7 @@ function UpdateSoftware() {
             />
           </div>
           <div className="col-12">
-            <label for="inputUser" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               User
             </label>
             <input
@@ -228,7 +234,7 @@ function UpdateSoftware() {
             />
           </div>
           <div className="col-12">
-            <label for="inputLocation" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Location
             </label>
             <input
@@ -239,6 +245,21 @@ function UpdateSoftware() {
               value={software.sw_location}
               onChange={(e) =>
                 setSoftware({ ...software, sw_location: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-12">
+            <label for="inputDev" className="form-label fs-5">
+              Department
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-0 borderc"
+              id="inputDev"
+              placeholder="Enter Dev"
+              value={software.sw_department}
+              onChange={(e) =>
+                setSoftware({ ...software, sw_department: e.target.value })
               }
             />
           </div>
@@ -269,11 +290,12 @@ function UpdateSoftware() {
                 id="inputReceiveDate"
                 placeholderText="Enter Receive Date"
                 dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
               />
             </div>
           </div>
           <div className="col-12">
-            <label for="inputInvoiceNumber" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               Invoice Number
             </label>
             <input
@@ -288,7 +310,7 @@ function UpdateSoftware() {
             />
           </div>
           <div className="col-12">
-            <label for="inputPONumber" className="form-label fs-5">
+            <label for="inputAssetID" className="form-label fs-5">
               PO Number
             </label>
             <input
@@ -304,7 +326,7 @@ function UpdateSoftware() {
           </div>
           <p></p>
           <button className="btn btn-success w-100 rounded-0 mb-2 borderc">
-            Update Softwere Data
+            Add Softwere Asset
           </button>
         </form>
       </div>
@@ -312,4 +334,4 @@ function UpdateSoftware() {
   );
 }
 
-export default UpdateSoftware;
+export default AddAmortizedSoftware;

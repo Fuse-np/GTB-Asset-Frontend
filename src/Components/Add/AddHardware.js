@@ -110,7 +110,7 @@ function AddHardware() {
             } else {
               Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/hwasset");
+                navigate("/dashboard/hardware");
               });
             }
           })

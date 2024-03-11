@@ -136,7 +136,7 @@ function UpdateHardware() {
               } else {
                 Swal.fire("Updated!", "", "success").then(() => {
                   console.log(res);
-                  navigate("/dashboard/readhwasset/" + id, hardware);
+                  navigate("/dashboard/readhardware/" + id, hardware);
                 });
               }
             })

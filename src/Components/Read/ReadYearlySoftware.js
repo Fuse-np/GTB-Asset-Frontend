@@ -39,7 +39,7 @@ function ReadYeaylySoftware() {
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/swyearly");
+        navigate("/dashboard/yearlysoftware");
       } else {
       }
     });
@@ -122,7 +122,7 @@ function ReadYeaylySoftware() {
         </table>
         <div className="d-flex justify-content-end mb-3">
           <Link
-            to={`/dashboard/updateswyearly/${yearlySoftware.id}`}
+            to={`/dashboard/updateyearlysoftware/${yearlySoftware.id}`}
             className="btn btnedit btn-lg me-3"
           >
             Edit
@@ -133,7 +133,7 @@ function ReadYeaylySoftware() {
           >
             Delete
           </button>
-          <Link to="/dashboard/swyearly" className="btn btndetail btn-lg">
+          <Link to="/dashboard/yearlysoftware" className="btn btndetail btn-lg">
             Back
           </Link>
         </div>

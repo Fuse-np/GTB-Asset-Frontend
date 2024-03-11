@@ -12,6 +12,7 @@ function DashBoard() {
   const [softwaretotal, setSoftwaretotal] = useState();
   const [yearlysoftwaretotal, setYearlysoftwaretotal] = useState();
   const [amortizedtotal, setAmortizedtotal] = useState();
+  const [softwareamortizedtotal, setSoftwareAmortizedtotal] = useState();
   const [hardwareprice, setHardwareprice] = useState();
   const [accsprice, setAccsprice] = useState();
   const [softwareprice, setSoftwareprice] = useState();
@@ -24,6 +25,7 @@ function DashBoard() {
     softwarecount();
     yearlysoftwarecount();
     amortizedcount();
+    softwareamortizedcount();
     hardwarepricecount();
     accessoriespricecount();
     softwarepricecount();
@@ -98,6 +100,15 @@ function DashBoard() {
       })
       .catch((err) => console.log(err));
   };
+  const softwareamortizedcount = () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/amortizedsoftwaretotal`)
+      .then((res) => {
+        console.log(res);
+        setSoftwareAmortizedtotal(res.data[0].software);
+      })
+      .catch((err) => console.log(err));
+  };
 
   //Get Price
   const hardwarepricecount = () => {
@@ -144,16 +155,18 @@ function DashBoard() {
       "Software Asset",
       "Software Yearly",
       "Amortized Asset",
+      "Amortized Software"
     ],
     datasets: [
       {
-        data: [hardwaretotal, accstotal, softwaretotal, yearlysoftwaretotal, amortizedtotal],
+        data: [hardwaretotal, accstotal, softwaretotal, yearlysoftwaretotal, amortizedtotal, softwareamortizedtotal],
         backgroundColor: [
           "rgba(255, 99, 132, 0.7)",
           "rgba(54, 162, 235, 0.7)",
           "rgba(255, 206, 86, 0.7)",
           "rgba(75, 192, 192, 0.7)",
           "rgba(153, 102, 255, 0.7)",
+          "rgba(255, 159, 64, 0.7)",
         ],
         borderColor: [
           "rgba(255, 99, 132, 1)",
@@ -161,6 +174,7 @@ function DashBoard() {
           "rgba(255, 206, 86, 1)",
           "rgba(75, 192, 192, 1)",
           "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 0.7)",
         ],
         borderWidth: 1,
       },

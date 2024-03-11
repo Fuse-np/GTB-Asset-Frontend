@@ -105,6 +105,54 @@ function Software() {
     });
   };
 
+  const handleMove = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Data will be moved to Amortized",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Move",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(`${process.env.REACT_APP_API_URL}/software-amortized/${id}`)
+          .then((res) => {
+            if (res.data.status === "error") {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Asset number already exists.`,
+              });
+            } else {
+              Swal.fire({
+                title: "Success",
+                text: "Move to Amortized Asset successfully!",
+                icon: "success",
+                confirmButtonColor: "#28a745",
+              }).then((result) => {
+                if (result.isConfirmed || result.isDismissed) {
+                  window.location = "/dashboard/amortizedsoftware";
+                }
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Failed to move data to Amortized asset",
+              icon: "error",
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              confirmButtonColor: "#dc3545",
+            });
+          });
+      }
+    });
+  };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
@@ -163,7 +211,7 @@ function Software() {
         <h3 className="text-uppercase display-5">Software Asset List</h3>
       </div>
       <Link
-        to="/dashboard/addswasset"
+        to="/dashboard/addsoftware"
         className="btn btn-success mb-3 custom-card"
       >
         Add Software
@@ -205,16 +253,22 @@ function Software() {
                   <td>{software.pcinstall}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readswasset/${software.id}`}
+                      to={`/dashboard/readsoftware/${software.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
                       onClick={() => handleDelete(software.id)}
-                      className="btn btndelete btn-sm"
+                      className="btn btndelete btn-sm me-3"
                     >
                       Delete
+                    </button>
+                    <button
+                      onClick={() => handleMove(software.id)}
+                      className="btn btnedit btn-sm"
+                    >
+                      Amortized
                     </button>
                   </td>
                 </tr>

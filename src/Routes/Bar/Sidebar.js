@@ -79,10 +79,10 @@ function Sidebar() {
           <li className="w-100">
             <Link
               onClick={() =>
-                window.location.pathname === "/dashboard/hwasset" &&
+                window.location.pathname === "/dashboard/hardware" &&
                 window.location.reload()
               }
-              to="/dashboard/hwasset"
+              to="/dashboard/hardware"
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill ms-2"></i>
@@ -93,10 +93,10 @@ function Sidebar() {
           <li className="w-100">
             <Link
               onClick={() =>
-                window.location.pathname === "/dashboard/swasset" &&
+                window.location.pathname === "/dashboard/software" &&
                 window.location.reload()
               }
-              to="/dashboard/swasset"
+              to="/dashboard/software"
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-card-list ms-2"></i>
@@ -121,14 +121,14 @@ function Sidebar() {
           <li className="w-100">
             <Link
               onClick={() =>
-                window.location.pathname === "/dashboard/swyearly" &&
+                window.location.pathname === "/dashboard/yearlysoftware" &&
                 window.location.reload()
               }
-              to="/dashboard/swyearly"
+              to="/dashboard/yearlysoftware"
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-card-checklist ms-2"></i>
-              <span className="ms-2 d-none d-sm-inline">Software Yearly</span>
+              <span className="ms-2 d-none d-sm-inline">YearlySoftware</span>
             </Link>
           </li>
 
@@ -149,10 +149,10 @@ function Sidebar() {
           <li className="w-100">
             <Link
               onClick={() =>
-                window.location.pathname === "/dashboard/amortized" &&
+                window.location.pathname === "/dashboard/amortizedsoftware" &&
                 window.location.reload()
               }
-              to="/dashboard/amortized"
+              to="/dashboard/amortizedsoftware"
               className="nav-link whitetext px-0 align-middle"
             >
               <i className="fs-4 bi-database-fill-x ms-2"></i>

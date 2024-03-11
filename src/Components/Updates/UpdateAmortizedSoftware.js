@@ -7,7 +7,7 @@ import "./style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function UpdateSoftware() {
+function UpdateAmortizedSoftware() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,6 +19,7 @@ function UpdateSoftware() {
         console.log(res);
         setSoftware({
           ...software,
+          sw_amortizeddate:res.data[0].sw_amortizeddate,
           sw_assetnumber: res.data[0].sw_assetnumber,
           sw_name: res.data[0].sw_name,
           sw_serialnumber: res.data[0].sw_serialnumber,
@@ -35,6 +36,7 @@ function UpdateSoftware() {
   }, []);
 
   const [software, setSoftware] = useState({
+    sw_amortizeddate: "",
     sw_swassetnumber: "",
     sw_name: "",
     sw_serialnumber: "",
@@ -51,6 +53,7 @@ function UpdateSoftware() {
   const handleUpdate = (event) => {
     event.preventDefault();
     const requiredFields = [
+      `sw_amortizeddate`,
       `sw_assetnumber`,
       `sw_name`,
       `sw_serialnumber`,
@@ -82,7 +85,7 @@ function UpdateSoftware() {
       if (result.isConfirmed) {
         axios
           .put(
-            `${process.env.REACT_APP_API_URL}/update-software/` + id,
+            `${process.env.REACT_APP_API_URL}/update-amortizedoftware/` + id,
             software
           )
           .then((res) => {
@@ -95,7 +98,7 @@ function UpdateSoftware() {
             } else {
               Swal.fire("Updated!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/readsoftware/" + id, software);
+                navigate("/dashboard/read-amortizedoftware/" + id, software);
               });
             }
           })
@@ -113,6 +116,20 @@ function UpdateSoftware() {
 
   //date
   const handleDateChange = (date) => {
+    if (date) {
+      const selectedDate = new Date(date);
+      selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
+      selectedDate.setDate(selectedDate.getDate());
+      const formattedDate = selectedDate.toISOString().substring(0, 10);
+      setSoftware((prev) => ({
+        ...prev,
+        sw_receivedate: formattedDate,
+      }));
+    }
+  };
+
+  //date
+  const handleDateChange2 = (date) => {
     if (date) {
       const selectedDate = new Date(date);
       selectedDate.setUTCHours(selectedDate.getUTCHours() + 7);
@@ -152,6 +169,22 @@ function UpdateSoftware() {
       <div className="p-3 rounded w-50 border borderc bg-white">
         <h2 className="text-center">Update Softwere Asset</h2>
         <form className="row g-1" onSubmit={handleUpdate}>
+          <div className="col-12">
+            <div className="d-flex flex-column">
+              <label htmlFor="inputReceiveDate" className="form-label fs-5">
+                Amortized Date
+              </label>
+              <DatePicker
+                selected={software.sw_amortizeddate}
+                onChange={handleDateChange2}
+                className="form-control rounded-0 borderc"
+                id="inputReceiveDate"
+                placeholderText="Enter Receive Date"
+                dateFormat="dd/MM/yyyy"
+                maxDate={new Date()}
+              />
+            </div>
+          </div>
           <div className="col-12">
             <label for="inputAssetNumber" className="form-label fs-5">
               Software Asset Number
@@ -312,4 +345,4 @@ function UpdateSoftware() {
   );
 }
 
-export default UpdateSoftware;
+export default UpdateAmortizedSoftware;

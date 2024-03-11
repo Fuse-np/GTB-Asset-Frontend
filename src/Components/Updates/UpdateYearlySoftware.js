@@ -89,7 +89,7 @@ function UpdateYearlySoftware() {
               } else {
                 Swal.fire("Updated!", "", "success").then(() => {
                   console.log(res);
-                  navigate("/dashboard/readswyearly/" + id, yearlysoftware);
+                  navigate("/dashboard/readyearlysoftware/" + id, yearlysoftware);
                 });
               }
             })

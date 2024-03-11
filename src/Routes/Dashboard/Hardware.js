@@ -208,7 +208,7 @@ function Hardware() {
         <h3 className="text-uppercase display-5">Hardware Asset List</h3>
       </div>
       <Link
-        to="/dashboard/addhwasset"
+        to="/dashboard/addhardware"
         className="btn btn-success mb-3 mr-3 custom-card"
       >
         Add Asset
@@ -250,7 +250,7 @@ function Hardware() {
                   <td>{hardware.softwareinstall}</td>
                   <td>
                     <Link
-                      to={`/dashboard/readhwasset/${hardware.id}`}
+                      to={`/dashboard/readhardware/${hardware.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
@@ -265,7 +265,7 @@ function Hardware() {
                       onClick={() => handleMove(hardware.id)}
                       className="btn btnedit btn-sm"
                     >
-                      Move
+                      Amortized
                     </button>
                   </td>
                 </tr>

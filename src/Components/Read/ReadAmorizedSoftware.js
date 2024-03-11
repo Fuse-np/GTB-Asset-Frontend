@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function ReadSoftware() {
+function ReadAmorizedSoftware() {
   const { id } = useParams();
   const [software, setSoftware] = useState([]);
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function ReadSoftware() {
   useEffect(() => {
     checkToken();
     axios
-      .get(`${process.env.REACT_APP_API_URL}/read-software/` + id)
+      .get(`${process.env.REACT_APP_API_URL}/read-amortizedoftware/` + id)
       .then((res) => {
         console.log(res);
         setSoftware(res.data[0]);
@@ -33,13 +33,13 @@ function ReadSoftware() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${process.env.REACT_APP_API_URL}/delete-software/` + id);
+        axios.delete(`${process.env.REACT_APP_API_URL}/delete-amortizedoftware/` + id);
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
           icon: "success",
         });
-        navigate("/dashboard/software");
+        navigate("/dashboard/amortizedsoftware");
       } else {
       }
     });
@@ -78,6 +78,11 @@ function ReadSoftware() {
           style={{ borderColor: "#007bff" }}
         >
           <tbody>
+          <tr>
+              <th className="text-center">Amortized Date</th>
+              <td className="text-center fs-5">
+              {new Date(software.sw_amortizeddate).toLocaleDateString("en-GB")}</td>
+            </tr>
             <tr>
               <th className="text-center">Softwere Asset Number</th>
               <td className="text-center fs-5">{software.sw_assetnumber}</td>
@@ -136,7 +141,7 @@ function ReadSoftware() {
         </table>
         <div className="d-flex justify-content-end mb-3">
           <Link
-            to={`/dashboard/updatesoftware/${software.id}`}
+            to={`/dashboard/updateamortizedsoftware/${software.id}`}
             className="btn btnedit btn-lg me-3"
           >
             Edit
@@ -147,7 +152,7 @@ function ReadSoftware() {
           >
             Delete
           </button>
-          <Link to="/dashboard/software" className="btn btndetail btn-lg">
+          <Link to="/dashboard/amortizedsoftware" className="btn btndetail btn-lg">
             Back
           </Link>
         </div>
@@ -155,5 +160,4 @@ function ReadSoftware() {
     </div>
   );
 }
-
-export default ReadSoftware;
+export default ReadAmorizedSoftware;

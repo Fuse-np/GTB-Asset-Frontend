@@ -82,7 +82,7 @@ function AddSoftware() {
             } else {
               Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/swasset");
+                navigate("/dashboard/software");
               });
             }
           })

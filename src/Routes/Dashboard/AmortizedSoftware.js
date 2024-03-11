@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-function YearlySoftware() {
+function AmortizedSoftware() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -13,14 +13,19 @@ function YearlySoftware() {
 
   useEffect(() => {
     checkToken();
+    software();
+  }, []);
+
+  //Software
+  const software = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/get-yearlysoftware`)
+      .get(`${process.env.REACT_APP_API_URL}/get-amortizedoftware`)
       .then((res) => {
         setData(res.data);
         console.log(data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
 
   //authen
   const checkToken = () => {
@@ -48,7 +53,7 @@ function YearlySoftware() {
   const handleDelete = (id) => {
     Swal.fire({
       title: "Confirm",
-      text: "Data will be delete from Softwere Yearly?",
+      text: "Data will be delete from Softwere Asset?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#dc3545",
@@ -60,18 +65,18 @@ function YearlySoftware() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/delete-yearlysoftware/` + id)
+          .delete(`${process.env.REACT_APP_API_URL}/delete-software/` + id)
           .then((res) => {
             console.log(res);
             Swal.fire({
               title: "Success",
-              text: "Softwere Yearly delete successfully!",
+              text: "Softwere asset delete successfully!",
               icon: "success",
               confirmButtonColor: "#28a745",
             }).then((result) => {
               if (result.isConfirmed || result.isDismissed) {
                 axios
-                  .get(`${process.env.REACT_APP_API_URL}/get-yearlysoftware`)
+                  .get(`${process.env.REACT_APP_API_URL}/get-software`)
                   .then((res) => {
                     setData(res.data);
                     const totalPagesAfterDeletion = Math.ceil(
@@ -89,7 +94,7 @@ function YearlySoftware() {
             console.log(err);
             Swal.fire({
               title: "Error",
-              text: "Failed to delete Softwere Yearly",
+              text: "Failed to delete Softwere asset",
               icon: "error",
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -100,19 +105,69 @@ function YearlySoftware() {
     });
   };
 
+    //moveback
+    const handleMove = (id) => {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Data will be moved back to Hardware Asset",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Move Back",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios
+              .post(`${process.env.REACT_APP_API_URL}/amortized-software/${id}`)
+              .then((res) => {
+                if (res.data.status === "error") {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Asset number already exists.`,
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Success",
+                    text: "Move back to Hardware Asset successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#28a745",
+                  }).then(() => {
+                    window.location = "/dashboard/software";
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                Swal.fire({
+                  title: "Error",
+                  text: "Failed to move back to Hardware asset",
+                  icon: "error",
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  confirmButtonColor: "#dc3545",
+                });
+              });
+          }
+        });
+      };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
-  const filteredData = data.filter((Yearlysoftware) => {
-    return Object.values(Yearlysoftware).some((value) => {
+
+  const filteredData = data.filter((software) => {
+    return Object.values(software).some((value) => {
       if (value !== null && value !== undefined) {
-        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+        return value
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
       }
       return false;
     });
   });
-
   const reversedData = filteredData.slice().reverse();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -135,6 +190,7 @@ function YearlySoftware() {
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
+
     return pageNumbers;
   };
 
@@ -150,16 +206,13 @@ function YearlySoftware() {
     setSearchTerm("");
   };
 
-
   return (
     <div className="container px-5 mt-3">
       <div className="d-flex justify-content-center shadow p-3 mb-3 bg-white rounded">
-        <h3 className="text-uppercase display-5">
-        Yearly Software Asset List
-        </h3>
+        <h3 className="text-uppercase display-5">Software Asset List</h3>
       </div>
       <Link
-        to="/dashboard/addyearlysoftware"
+        to="/dashboard/addamortizedsoftware"
         className="btn btn-success mb-3 custom-card"
       >
         Add Software
@@ -186,46 +239,54 @@ function YearlySoftware() {
         <table className="table table-bordered custom-table">
           <thead className="bg-primary text-white text-center">
             <tr>
+              <th className="text-danger fs-5">Software Asset Number</th>
               <th className="text-danger fs-5">Name</th>
-              <th className="text-danger fs-5">Asset Install</th>
               <th className="text-danger fs-5">Receive Date</th>
-              <th className="text-danger fs-5">Expire Date</th>
+              <th className="text-danger fs-5">Amortized Date</th>
               <th className="text-danger fs-5">Action</th>
             </tr>
           </thead>
           <tbody className="text-center">
             {currentData && currentData.length > 0 ? (
-              currentData.map((yearlysoftware, index) => (
+              currentData.map((software, index) => (
                 <tr key={index}>
-                  <td>{yearlysoftware.ys_name}</td>
-                  <td>{yearlysoftware.ys_assetinstall}</td>
+                  <td>{software.sw_assetnumber}</td>
+                  <td>{software.sw_name}</td>
                   <td>
-                    {new Date(yearlysoftware.ys_receivedate).toLocaleDateString(
+                    {new Date(software.sw_receivedate).toLocaleDateString(
                       "en-GB"
                     )}
                   </td>
                   <td>
-                    {new Date(yearlysoftware.ys_expiredate).toLocaleDateString("en-GB")}
+                    {new Date(software.sw_amortizeddate).toLocaleDateString(
+                      "en-GB"
+                    )}
                   </td>
                   <td>
                     <Link
-                      to={`/dashboard/readyearlysoftware/${yearlysoftware.id}`}
+                      to={`/dashboard/readamortizedsoftware/${software.id}`}
                       className="btn btndetail btn-sm me-3"
                     >
                       Detail
                     </Link>
                     <button
-                      onClick={() => handleDelete(yearlysoftware.id)}
-                      className="btn btndelete btn-sm"
+                      onClick={() => handleDelete(software.id)}
+                      className="btn btndelete btn-sm me-3"
                     >
                       Delete
+                    </button>
+                    <button
+                      onClick={() => handleMove(software.id)}
+                      className="btn btnedit btn-sm"
+                    >
+                      Move Back
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5">No software assets available</td>
+                <td colSpan="6">No software assets available</td>
               </tr>
             )}
           </tbody>
@@ -278,4 +339,4 @@ function YearlySoftware() {
   );
 }
 
-export default YearlySoftware;
+export default AmortizedSoftware;

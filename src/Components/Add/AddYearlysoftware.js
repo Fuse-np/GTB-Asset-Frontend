@@ -89,7 +89,7 @@ function AddYearlysoftware() {
             } else {
               Swal.fire("Add!", "", "success").then(() => {
                 console.log(res);
-                navigate("/dashboard/swyearly");
+                navigate("/dashboard/yearlysoftware");
               });
             }
           })
